@@ -25,6 +25,13 @@ export class AuthService {
           this.loggedIn ? this.router.navigate(['']) : alert("incorrect details, try again");
       });      
 }
+
+  logout() {
+    this.user = null;
+    this.loggedIn = false;
+    sessionStorage.clear();
+    this.router.navigate(['/auth']);
+  }
   isLogged(): boolean {
     return this.loggedIn
   }

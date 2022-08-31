@@ -37,4 +37,7 @@ export class ChatPage {
 
       });
   }
+  logout(){
+    this.authService.logout()
+  }
 }
