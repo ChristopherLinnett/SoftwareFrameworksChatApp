@@ -30,7 +30,7 @@
           </ion-col>
           
           <ion-col>
-          <ion-button (click)="login(userInput.value,passwordInput.value)" fill="clear">Login</ion-button>
+          <ion-button (click)="login(userInput.value,passwordInput.value); userInput.value = '' ; passwordInput.value = '';" fill="clear">Login</ion-button>
         </ion-col>
         <ion-col>
 
