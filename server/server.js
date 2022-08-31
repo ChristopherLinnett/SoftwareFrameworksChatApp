@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 var cors = require('cors');
 var http = require('http').Server(app);
-const bodyparser = require('body-parser')
+const bodyParser = require('body-parser')
 const io = require('socket.io')(http, {
     cors: {
         origin: '*',
@@ -25,6 +25,7 @@ socket.connect(io,PORT);
 server.listen(http, PORT);
 
 app.post('/auth', (req,res)=>{
+    console.log('message received')
     username = req.body.username
     password = req.body.password
     for (const [key, value] of Object.entries(dummyData.users)) {
