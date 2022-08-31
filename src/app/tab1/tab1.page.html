@@ -1,23 +1,27 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Ionic Template</ion-title>
+    <ion-title>Chat Page</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-item *ngFor="let message of messages">
-    <div>
-      <span>{{ message.text }}</span>
-    </div>
-    <div >{{message.time}}</div>
-  </ion-item>
+  <div *ngFor="let message of messageList">
+  <ion-card (click)="message.timeVisible = !message.timeVisible">
+    <ion-card-header>user52</ion-card-header>
+    <ion-card-content>
+      {{ message.message }}
+    </ion-card-content>
+  </ion-card>
+  <p class="timetext" *ngIf="message.timeVisible">{{message.time}}></p>
+
+  </div>
 </ion-content>
 
 <ion-footer>
   <ion-item>
-  <ion-input #messageInput minLength="1" type="text" required class="ion-padding" placeholder="Type your message" (keyup.enter)="sendMessage(messageInput.value); messageInput.value = ''">
+  <ion-input #messageInput minLength="1" type="text" required class="ion-padding" placeholder="Type your message" (keyup.enter)="sendMessage(messageInput.value); messageInput.value = null">
   </ion-input>
-  <ion-button fill="clear" (click)="sendMessage(messageInput); messageInput.value = ''">
+  <ion-button fill="clear" (click)="sendMessage(messageInput.value); messageInput.value = null">
     <ion-icon slot="icon-only" color="dark" name="send-sharp"></ion-icon>
   </ion-button>
   </ion-item>
