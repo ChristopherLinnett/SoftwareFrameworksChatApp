@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content #chatWindow>
-  <div *ngFor="let message of messageList">
+  <div *ngFor="let message of messageList" [ngClass]="{'rightAlign' : message.user == authService.getUser()}">
   <ion-card (mouseup)="message.timeVisible = false" (mousedown)="message.timeVisible = true">
     <ion-card-header>{{message.user}}</ion-card-header>
     <ion-card-content>
@@ -15,8 +15,8 @@
       <p class="timetext" *ngIf="message.timeVisible">{{message.time}}</p>
         </div>
   </ion-card>
-
   </div>
+  <div style="height:10%"></div>
 </ion-content>
 
 <ion-footer>

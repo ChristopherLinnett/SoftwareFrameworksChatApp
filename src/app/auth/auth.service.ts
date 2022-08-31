@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AuthService {  
   loggedIn = false;
+  user;
   savedUser = {}
     constructor(private httpClient: HttpClient, private router: Router, private activatedRoute: ActivatedRoute) { }
     
@@ -19,6 +20,7 @@ export class AuthService {
             this.loggedIn = true;
             this.savedUser = {username: res.username, email: res.email, id: res.id}
             sessionStorage.setItem('savedUser', JSON.stringify(res));
+            this.user = res.username
           }
           this.loggedIn ? this.router.navigate(['']) : alert("incorrect details, try again");
       });      
@@ -26,5 +28,7 @@ export class AuthService {
   isLogged(): boolean {
     return this.loggedIn
   }
-
+  getUser(): string {
+    return this.user
+  }
 }
