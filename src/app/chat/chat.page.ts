@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SocketService } from './socket.service';
+import { IonContent } from '@ionic/angular';
+
 @Component({
   selector: 'app-chat',
   templateUrl: 'chat.page.html',
   styleUrls: ['chat.page.scss'],
 })
 export class ChatPage {
+  @ViewChild('chatWindow') chatWindow: IonContent;
   hideTime = true;
   messageList: any[] = [];
   ioConnection: any;
@@ -26,7 +29,10 @@ export class ChatPage {
     this.ioConnection = this.socketService
       .getMessage()
       .subscribe((message: {message: string, time: Date}) => {
-        this.messageList.push({message: message.message, time: String(new Date(message.time).toTimeString().slice(0,8)), timeVisible: false});
+        this.messageList.push({message: message.message, 
+          time: `${new Date(message.time).getDate()}-${new Date(message.time).getMonth()}-${new Date(message.time).getFullYear().toString().slice(2,4)}`, 
+          timeVisible: false});
+          this.chatWindow.scrollToBottom()
       });
   }
 }
