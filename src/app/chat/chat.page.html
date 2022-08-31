@@ -6,13 +6,15 @@
 
 <ion-content>
   <div *ngFor="let message of messageList">
-  <ion-card (click)="message.timeVisible = !message.timeVisible">
+  <ion-card (mouseup)="message.timeVisible = false" (mousedown)="message.timeVisible = true">
     <ion-card-header>user52</ion-card-header>
     <ion-card-content>
       {{ message.message }}
     </ion-card-content>
+    <div class="matching">
+      <p class="timetext" *ngIf="message.timeVisible">{{message.time}}></p>
+        </div>
   </ion-card>
-  <p class="timetext" *ngIf="message.timeVisible">{{message.time}}></p>
 
   </div>
 </ion-content>
