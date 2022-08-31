@@ -18,7 +18,7 @@ export class AuthService {
           console.log('message received')
             this.loggedIn = true;
             this.savedUser = {username: res.username, email: res.email, id: res.id}
-            localStorage.setItem('savedUser', JSON.stringify(res));
+            sessionStorage.setItem('savedUser', JSON.stringify(res));
           }
           this.loggedIn ? this.router.navigate(['']) : alert("incorrect details, try again");
       });      

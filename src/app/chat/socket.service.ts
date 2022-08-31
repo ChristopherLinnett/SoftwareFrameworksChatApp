@@ -16,7 +16,7 @@ initSocket() {
 }
 
   sendMessage(messageText: string) {
-    this.socket.emit('message', {message: messageText, user: JSON.parse(localStorage.getItem('savedUser')).username})
+    this.socket.emit('message', {message: messageText, user: JSON.parse(sessionStorage.getItem('savedUser')).username})
     }
     
   getMessage() {
