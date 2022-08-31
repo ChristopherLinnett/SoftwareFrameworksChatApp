@@ -28,10 +28,10 @@ export class ChatPage {
     this.socketService.initSocket();
     this.ioConnection = this.socketService
       .getMessage()
-      .subscribe((message: {message: string, time: Date}) => {
+      .subscribe((message: {message: string, time: Date, user: string}) => {
         this.messageList.push({message: message.message, 
           time: `${new Date(message.time).getDate()}-${new Date(message.time).getMonth()}-${new Date(message.time).getFullYear().toString().slice(2,4)}`, 
-          timeVisible: false});
+          timeVisible: false, user: message.user});
           this.chatWindow.scrollToBottom()
       });
   }

@@ -7,7 +7,7 @@
 <ion-content #chatWindow>
   <div *ngFor="let message of messageList">
   <ion-card (mouseup)="message.timeVisible = false" (mousedown)="message.timeVisible = true">
-    <ion-card-header>user52</ion-card-header>
+    <ion-card-header>{{message.user}}</ion-card-header>
     <ion-card-content>
       {{ message.message }}
     </ion-card-content>
