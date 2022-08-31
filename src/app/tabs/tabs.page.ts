@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
-
+openChats = ['chat1','chat2','chat3']
   constructor() {}
 
 }
