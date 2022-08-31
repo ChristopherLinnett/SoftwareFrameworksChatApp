@@ -1,0 +1,7 @@
+{
+  "name": "SFchatAssignment",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
