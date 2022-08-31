@@ -14,11 +14,11 @@
   <ion-card-content>
     <ion-item>
       <ion-label for="username" position="floating">username</ion-label>
-      <ion-input id="username"></ion-input>
+      <ion-input #userInput id="username"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label for="password" position="floating">password</ion-label>
-      <ion-input type="password" id="password"></ion-input>
+      <ion-input #passwordInput type="password" id="password"></ion-input>
     </ion-item>
     <ion-grid>
       <ion-row>
@@ -30,7 +30,7 @@
           </ion-col>
           
           <ion-col>
-          <ion-button fill="clear">Login</ion-button>
+          <ion-button (click)="login(userInput.value,passwordInput.value)" fill="clear">Login</ion-button>
         </ion-col>
         <ion-col>
 
