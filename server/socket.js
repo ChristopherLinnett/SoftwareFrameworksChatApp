@@ -5,7 +5,8 @@ module.exports = {
             console.log(`user connection on port ${PORT}: ${socket.id}`);
 
             socket.on('message',(message)=> {
-                io.emit('message', message);
+                time = Date.now()
+                io.emit('message', {message: message, time: time});
             })
         })
     }
