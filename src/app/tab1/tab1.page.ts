@@ -6,7 +6,15 @@ import { Component } from '@angular/core';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-
-  constructor() {}
-
-}
+  hideTime = true;
+  message;
+  messages: {text: string, time: string}[]
+  data: {message: string, time: string}
+    constructor() {}
+  
+    sendMessage(inputField){
+      console.log(inputField)
+    }
+  
+  }
+  
