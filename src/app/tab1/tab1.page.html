@@ -1,17 +1,24 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+    <ion-title>Ionic Template</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+<ion-content>
+  <ion-item *ngFor="let message of messages">
+    <div>
+      <span>{{ message.text }}</span>
+    </div>
+    <div >{{message.time}}</div>
+  </ion-item>
 </ion-content>
+
+<ion-footer>
+  <ion-item>
+  <ion-input #messageInput minLength="1" type="text" required class="ion-padding" placeholder="Type your message" (keyup.enter)="sendMessage(messageInput.value); messageInput.value = ''">
+  </ion-input>
+  <ion-button fill="clear" (click)="sendMessage(messageInput); messageInput.value = ''">
+    <ion-icon slot="icon-only" color="dark" name="send-sharp"></ion-icon>
+  </ion-button>
+  </ion-item>
+</ion-footer>
