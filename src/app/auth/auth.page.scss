@@ -5,13 +5,23 @@ ion-input {
     margin: 0%;
 
 }
-.stretch {
-    display:block;
-    width:100%;
-    align-self: center;
-    justify-self: center;;
-    align-items:center;
+ion-checkbox {
+    display:flex;
 }
+.matching {
+    font-size:x-small;
+    padding: 0%;
+    margin: 15%;
+    border:0%;
+    overflow: hidden;
+    text-overflow:clip;
+    white-space: nowrap;
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    bottom: 0%;
+    top: -0%;
+    }
 ion-item {
     width:100%;
     padding: 0%;
