@@ -6,7 +6,9 @@ module.exports = {
 
             socket.on('message',(message)=> {
                 time = Date.now()
-                io.emit('message', {message: message, time: time});
+                downMessage = message.message
+                downUser = message.user
+                io.emit('message', {message: downMessage, user: downUser, time: time});
             })
         })
     }
