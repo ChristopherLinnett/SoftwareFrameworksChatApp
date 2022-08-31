@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from './socket.service';
 @Component({
-  selector: 'app-tab1',
-  templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss'],
+  selector: 'app-chat',
+  templateUrl: 'chat.page.html',
+  styleUrls: ['chat.page.scss'],
 })
-export class Tab1Page {
+export class ChatPage {
   hideTime = true;
   messageList: any[] = [];
   ioConnection: any;
