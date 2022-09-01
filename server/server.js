@@ -25,16 +25,15 @@ socket.connect(io,PORT);
 server.listen(http, PORT);
 
 app.post('/auth', (req,res)=>{
-    console.log('message received')
     username = req.body.username
     password = req.body.password
-    for (const [key, value] of Object.entries(dummyData.users)) {
-        if (username && username == value.username && password == value.password){
-        console.log("success")
-       return res.send({username: value.username, id: value.ID, email: value.email, loginSuccess: true});
+    if (dummyData.users[username]) {
+        savedUser = dummyData.users[username]
+        if (password == savedUser.password){
+           return res.send({username: savedUser.username, id: savedUser.id, email: savedUser.email, loginSuccess: true});
     }
-}
-    console.log("fail")
+    }
+       
     res.send({loginSuccess: false});
 })
 
