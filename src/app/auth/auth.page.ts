@@ -13,6 +13,12 @@ export class AuthPage implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * The login function takes two parameters, usernameInput and passwordInput, and converts them to
+   * strings before passing them to the authService.login function
+   * @param {string|number} usernameInput - string|number
+   * @param {string|number} passwordInput - string|number
+   */
   login(usernameInput: string|number, passwordInput: string|number) {
     this.authService.login(usernameInput.toString(), passwordInput.toString())
   }
