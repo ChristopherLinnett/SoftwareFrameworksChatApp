@@ -11,17 +11,17 @@
     </ion-card-header>
     <ion-card-content>
       <ion-item>
-        <ion-label class="ion-text-center" position="floating" for="modUser">username or email</ion-label>
-        <ion-input id="modUser"></ion-input>
+        <ion-label class="ion-text-center" [hidden]="currentState!='unchecked'" position="floating" for="modUser">username or email</ion-label>
+        <ion-input #userToCheck id="modUser" [disabled]="currentState!='unchecked'"></ion-input>
       </ion-item>
-      <ion-item *ngIf="false">
-        <ion-label class="ion-text-center" position="floating" for="secondaryInput">username or email</ion-label>
-        <ion-input id="secondaryInput"></ion-input>
+      <ion-item>
+        <ion-label class="ion-text-center" [hidden]="currentState!='createMode'" position="floating" for="secondaryInput">{{secondaryInput}}</ion-label>
+        <ion-input id="secondaryInput" [hidden]="currentState!='createMode'"></ion-input>
       </ion-item>
       <div></div>
-      <ion-button fill="clear" expand="block" color="warning">Check User</ion-button>
-      <ion-button fill="clear" expand="block">Add New User</ion-button>
-      <ion-button fill="clear" expand="block" color="danger">Remove User</ion-button>
+      <ion-button fill="clear" expand="block" color="warning" (click)="checkUser(userToCheck.value)" [disabled]="currentState!='unchecked'">Check User</ion-button>
+      <ion-button fill="clear" expand="block" [disabled]="currentState!='createMode'">Add New User</ion-button>
+      <ion-button fill="clear" expand="block" color="danger" [disabled]="currentState!='deleteMode'">Remove User</ion-button>
     </ion-card-content>
   </ion-card>
 </ion-content>
