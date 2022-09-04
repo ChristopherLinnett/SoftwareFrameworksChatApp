@@ -27,3 +27,4 @@ server.listen(http, PORT);
 var usercheck = require('./routes/usercheck')(app, dummyData);
 var auth = require('./routes/auth')(app, dummyData);
 var newuser = require('./routes/newuser')(app,dummyData,fs)
+var deleteuser = require('./routes/deleteuser')(app,dummyData,fs)

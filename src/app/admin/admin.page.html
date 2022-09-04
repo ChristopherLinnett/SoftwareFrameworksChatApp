@@ -21,7 +21,7 @@
       <div></div>
       <ion-button fill="clear" expand="block" color="warning" (click)="checkUser(userToCheck.value)" [disabled]="currentState!='unchecked'">Check User</ion-button>
       <ion-button fill="clear" expand="block" [disabled]="currentState!='createMode'" (click)="createUser(userToCheck.value, input2.value)">Add New User</ion-button>
-      <ion-button fill="clear" expand="block" color="danger" [disabled]="currentState!='deleteMode'">Remove User</ion-button>
+      <ion-button fill="clear" expand="block" color="danger" [disabled]="currentState!='deleteMode'" (click)="deleteUser(userToCheck.value)">Remove User</ion-button>
     </ion-card-content>
   </ion-card>
 </ion-content>

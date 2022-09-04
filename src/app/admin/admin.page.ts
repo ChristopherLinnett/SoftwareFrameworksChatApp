@@ -15,6 +15,12 @@ secondaryInput = "username"
   ngOnInit() {
   }
 
+  resetform(){
+    this.currentState="unchecked"
+    this.queryUser = undefined
+    this.secondaryInput = "username"
+  }
+
   checkUser(user): void {
     this.httpClient.post<any>('http://localhost:3000/admin/usercheck', 
     {username: user.toLowerCase()}).subscribe((res: {username: string, id: string, email: string, validUser: boolean}) => {
@@ -32,6 +38,13 @@ secondaryInput = "username"
     });      
 }
 
+deleteUser(user){
+  this.httpClient.post<any>('http://localhost:3000/admin/deleteuser', 
+    {user: user}).subscribe((res: {success: Boolean}) => {
+      res.success ?   console.log('success') : console.log('failed')
+  })
+}
+
 createUser(input1,input2){
   console.log('buton pressed')
   var newUser;
@@ -46,5 +59,7 @@ createUser(input1,input2){
     newUser).subscribe((res: {success: Boolean}) => {
       res.success ? console.log("added new user") : console.log('failed')
   })
+  this.resetform()
 }
+
 }
