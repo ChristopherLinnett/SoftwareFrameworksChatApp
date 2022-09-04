@@ -31,4 +31,20 @@ secondaryInput = "username"
       }
     });      
 }
+
+createUser(input1,input2){
+  console.log('buton pressed')
+  var newUser;
+  if (this.secondaryInput == 'email'){
+    newUser = {username: input1.toLowerCase(), email: input2.toLowerCase()}
+  }
+    else {
+      newUser = {username: input2.toLowerCase(), email: input1.toLowerCase()}
+    }
+    console.log(newUser)
+    this.httpClient.post<any>('http://localhost:3000/admin/newuser', 
+    newUser).subscribe((res: {success: Boolean}) => {
+      res.success ? console.log("added new user") : console.log('failed')
+  })
+}
 }

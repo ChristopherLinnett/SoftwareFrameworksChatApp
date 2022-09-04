@@ -16,11 +16,11 @@
       </ion-item>
       <ion-item>
         <ion-label class="ion-text-center" [hidden]="currentState!='createMode'" position="floating" for="secondaryInput">{{secondaryInput}}</ion-label>
-        <ion-input id="secondaryInput" [hidden]="currentState!='createMode'"></ion-input>
+        <ion-input #input2 id="secondaryInput" [hidden]="currentState!='createMode'" ></ion-input>
       </ion-item>
       <div></div>
       <ion-button fill="clear" expand="block" color="warning" (click)="checkUser(userToCheck.value)" [disabled]="currentState!='unchecked'">Check User</ion-button>
-      <ion-button fill="clear" expand="block" [disabled]="currentState!='createMode'">Add New User</ion-button>
+      <ion-button fill="clear" expand="block" [disabled]="currentState!='createMode'" (click)="createUser(userToCheck.value, input2.value)">Add New User</ion-button>
       <ion-button fill="clear" expand="block" color="danger" [disabled]="currentState!='deleteMode'">Remove User</ion-button>
     </ion-card-content>
   </ion-card>
