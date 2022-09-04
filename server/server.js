@@ -1,3 +1,4 @@
+const fs = require("fs");
 const express = require("express");
 const app = express();
 var cors = require("cors");
@@ -11,8 +12,9 @@ const io = require("socket.io")(http, {
 });
 const socket = require("./socket.js");
 const server = require("./listen.js");
-const dummyData = require("./dummydb.js");
-
+var dummyData = fs.readFileSync('dummydb.json');
+dummyData = JSON.parse(dummyData)
+console.log(dummyData)
 const PORT = 3000;
 
 app.use(cors());
