@@ -1,9 +1,27 @@
-<ion-header>
+<ion-header class="ion-text-center">
   <ion-toolbar>
     <ion-title>admin</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-card class="ion-text-center">
+    <ion-card-header>
+      <ion-card-title><h3>User Management</h3></ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label class="ion-text-center" position="floating" for="modUser">username or email</ion-label>
+        <ion-input id="modUser"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="false">
+        <ion-label class="ion-text-center" position="floating" for="secondaryInput">username or email</ion-label>
+        <ion-input id="secondaryInput"></ion-input>
+      </ion-item>
+      <div></div>
+      <ion-button fill="clear" expand="block" color="warning">Check User</ion-button>
+      <ion-button fill="clear" expand="block">Add New User</ion-button>
+      <ion-button fill="clear" expand="block" color="danger">Remove User</ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
