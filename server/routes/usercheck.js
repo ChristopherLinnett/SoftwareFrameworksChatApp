@@ -30,13 +30,14 @@ module.exports = (app, dummyData) => {
       if (username == email[0]) {
         console.log('reached here')
         savedUser = dummyData.users[email[1]];
+        var role;
         if (dummyData["superUsers"].includes(savedUser.ID)) {
           role = "superuser";
         }
         if (dummyData["groupUsers"].includes(savedUser.ID)) {
           role = "groupuser";
         }
-        if (!role) {
+        if (role == undefined) {
           role = "user";
         }
         return res.send({

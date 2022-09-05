@@ -13,7 +13,7 @@
       <ion-card-title #title>User Management </ion-card-title>
     </ion-card-header>
     <ion-item>
-      <ion-label class="ion-text-center" [hidden]="currentState!='unchecked'" position="floating" for="modUser">
+      <ion-label [hidden]="currentState!='unchecked'" position="floating" for="modUser">
         username or email</ion-label>
       <ion-input #userToCheck id="modUser" clearInput="true" [disabled]="currentState!='unchecked'"></ion-input>
     </ion-item>
