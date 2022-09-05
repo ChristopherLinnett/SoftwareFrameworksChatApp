@@ -12,11 +12,11 @@
     <ion-card-content>
       <ion-item>
         <ion-label class="ion-text-center" [hidden]="currentState!='unchecked'" position="floating" for="modUser">username or email</ion-label>
-        <ion-input #userToCheck id="modUser" [disabled]="currentState!='unchecked'"></ion-input>
+        <ion-input #userToCheck id="modUser" clearInput="true" [disabled]="currentState!='unchecked'"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label class="ion-text-center" [hidden]="currentState!='createMode'" position="floating" for="secondaryInput">{{secondaryInput}}</ion-label>
-        <ion-input #input2 id="secondaryInput" [hidden]="currentState!='createMode'" ></ion-input>
+        <ion-input #input2 id="secondaryInput" clearInput="true" [hidden]="currentState!='createMode'" ></ion-input>
       </ion-item>
       <div></div>
       <ion-button fill="clear" expand="block" color="warning" (click)="checkUser(userToCheck.value)" [disabled]="currentState!='unchecked'">Check User</ion-button>
