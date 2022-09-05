@@ -56,4 +56,8 @@ export class ChatPage {
   logout(){
     this.authService.logout()
   }
+
+  checkRole(){
+    return this.authService.getRole()
+  }
 }

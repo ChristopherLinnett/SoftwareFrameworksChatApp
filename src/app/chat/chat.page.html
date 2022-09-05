@@ -1,16 +1,21 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Chat Page</ion-title>
-    <ion-button slot="end" fill="clear" (click)="logout()">
+    <ion-buttons slot="end">
+    <ion-button *ngIf="checkRole()=='superuser'" slot="end" size='small' fill="clear" [routerLink]="'../../admin'">
+      <ion-icon slot="icon-only" name="settings"></ion-icon>
+    </ion-button>
+    <ion-button slot="end" size="small" fill="clear" (click)="logout()">
       <ion-icon slot="icon-only" name="person-remove-sharp"></ion-icon>
     </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content #chatWindow>
   <div *ngFor="let message of messageList,index as i" [ngClass]="{'rightAlign' : message.user == authService.getUser()}">
-  <ion-card style="border-radius:20%;" (mouseup)="message.timeVisible = false" (mousedown)="message.timeVisible = true">
-    <ion-card-header *ngIf="i<1 || message.user != messageList[i-1].user">{{message.user == authService.getUser() ? 'You' : message.user}}</ion-card-header>
+  <ion-card (mouseup)="message.timeVisible = false" (mousedown)="message.timeVisible = true">
+    <ion-card-header class="ion-text-center" *ngIf="i<1 || message.user != messageList[i-1].user">{{message.user == authService.getUser() ? 'You' : message.user}}</ion-card-header>
     <ion-card-content>
       {{ message.message }}
     </ion-card-content>

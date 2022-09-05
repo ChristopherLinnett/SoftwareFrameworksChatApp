@@ -1,5 +1,8 @@
-<ion-header class="ion-text-center">
+<ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button size="small" defaultHref="''"></ion-back-button>
+    </ion-buttons>
     <ion-title>admin</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -16,7 +19,7 @@
       </ion-item>
       <ion-item>
         <ion-label class="ion-text-center" [hidden]="currentState!='createMode'" position="floating" for="secondaryInput">{{secondaryInput}}</ion-label>
-        <ion-input #input2 id="secondaryInput" clearInput="true" [hidden]="currentState!='createMode'" ></ion-input>
+        <ion-input #input2 id="secondaryInput" clearInput="true" [disabled]="currentState=='deleteMode'" [hidden]="currentState!='createMode' && currentState!='deleteMode'" ></ion-input>
       </ion-item>
       <div></div>
       <ion-button fill="clear" expand="block" color="warning" (click)="checkUser(userToCheck.value)" [disabled]="currentState!='unchecked'">Check User</ion-button>

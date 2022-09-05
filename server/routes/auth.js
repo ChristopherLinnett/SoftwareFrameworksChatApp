@@ -5,10 +5,19 @@ module.exports = (app, dummyData)=> {
         if (dummyData.users[username]) {
           savedUser = dummyData.users[username];
           if (password == savedUser.password) {
+            if (dummyData['superUsers'].includes(savedUser.ID)){
+              role = 'superuser'
+            } else {
+              if (dummyData['groupUsers'].includes(savedUser.ID)){
+                role = 'groupuser'
+            }
+            else { role = 'user'}
+          }
             return res.send({
               username: savedUser.username,
-              id: savedUser.id,
+              id: savedUser.ID,
               email: savedUser.email,
+              role: role,
               loginSuccess: true,
             });
           }
