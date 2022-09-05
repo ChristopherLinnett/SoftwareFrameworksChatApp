@@ -14,7 +14,6 @@ const socket = require("./socket.js");
 const server = require("./listen.js");
 var dummyData = fs.readFileSync('dummydb.json');
 dummyData = JSON.parse(dummyData)
-console.log(dummyData)
 const PORT = 3000;
 
 app.use(cors());
