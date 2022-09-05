@@ -1,9 +1,15 @@
-div {
-    height:30%;
-    margin:30%;
-}
 ion-input {
     text-align: center;
+    margin:0%;
+    padding: 0%;
+    border:0%;
+}
+ion-label {
+    margin:0%;
+    padding: 0%;
+    border:0%;
+}
+ion-item {
     margin:0%;
     padding: 0%;
     border:0%;
@@ -15,4 +21,22 @@ ion-card {
     padding:0%;
     margin: 5%;
     border: 0%;
+}
+ion-button {
+    padding:0%;
+    margin: 0%;
+    border: 0%;
+}
+ion-col {
+margin:0%;
+border:0%;
+padding:0%;
+}
+ion-grid {
+    margin: 0%;
+    border:0%;
+    padding:0%;
+}
+.upgrade {
+    margin-top:25%;
 }

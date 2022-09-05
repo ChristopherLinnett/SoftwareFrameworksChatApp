@@ -10,21 +10,46 @@
 <ion-content>
   <ion-card class="ion-text-center">
     <ion-card-header>
-      <ion-card-title><h3>User Management</h3></ion-card-title>
+      <ion-card-title #title>User Management </ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label class="ion-text-center" [hidden]="currentState!='unchecked'" position="floating" for="modUser">username or email</ion-label>
-        <ion-input #userToCheck id="modUser" clearInput="true" [disabled]="currentState!='unchecked'"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label class="ion-text-center" [hidden]="currentState!='createMode'" position="floating" for="secondaryInput">{{secondaryInput}}</ion-label>
-        <ion-input #input2 id="secondaryInput" clearInput="true" [disabled]="currentState=='deleteMode'" [hidden]="currentState!='createMode' && currentState!='deleteMode'" ></ion-input>
-      </ion-item>
-      <div></div>
-      <ion-button fill="clear" expand="block" color="warning" (click)="checkUser(userToCheck.value)" [disabled]="currentState!='unchecked'">Check User</ion-button>
-      <ion-button fill="clear" expand="block" [disabled]="currentState!='createMode'" (click)="createUser(userToCheck.value, input2.value)">Add New User</ion-button>
-      <ion-button fill="clear" expand="block" color="danger" [disabled]="currentState!='deleteMode'" (click)="deleteUser(userToCheck.value)">Remove User</ion-button>
-    </ion-card-content>
-  </ion-card>
+    <ion-item>
+      <ion-label class="ion-text-center" [hidden]="currentState!='unchecked'" position="floating" for="modUser">
+        username or email</ion-label>
+      <ion-input #userToCheck id="modUser" clearInput="true" [disabled]="currentState!='unchecked'"></ion-input>
+    </ion-item>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="2" *ngIf="currentState=='deleteMode' || currentState=='roleChange'">
+        <ion-button class="upgrade" fill="clear" size='small' (click)="upgradeUser('-')">
+          <ion-icon name="remove-circle"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-label class="ion-text-center" [hidden]="currentState!='createMode'" position="floating" for="secondaryInput">
+            {{secondaryInput}}</ion-label>
+          <ion-input #input2 id="secondaryInput" clearInput="true" [disabled]="currentState=='deleteMode' || currentState=='roleChange'"
+            [hidden]="currentState!='createMode' && currentState!='deleteMode' && currentState!='roleChange'"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="2" *ngIf="currentState=='deleteMode'|| currentState=='roleChange'">
+        <ion-button class="upgrade" fill="clear" size="small" (click)="upgradeUser('+')">
+          <ion-icon name="add-circle"></ion-icon>
+        </ion-button>
+      </ion-col>
+    
+    
+    
+  </ion-row>
+  </ion-grid>
+    <ion-button fill="clear" expand="block" color="primary" (click)="checkUser(userToCheck.value)"
+      *ngIf="currentState=='unchecked'">Check User</ion-button>
+    <ion-button fill="clear" expand="block" *ngIf="currentState=='createMode'"
+      (click)="createUser(userToCheck.value, input2.value)">Add New User</ion-button>
+    <ion-button fill="clear" expand="block" color="danger" *ngIf="currentState=='deleteMode'"
+      (click)="deleteUser(userToCheck.value)">Remove User</ion-button>
+      <ion-button fill="clear" expand="block" color="warning" (click)="checkUser(userToCheck.value)"
+      *ngIf="currentState=='roleChange'">Update Role</ion-button>
+  
+    </ion-card>
 </ion-content>
