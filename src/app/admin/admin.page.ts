@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-admin',
@@ -15,7 +16,7 @@ export class AdminPage implements OnInit {
   @ViewChild('userToCheck') input1;
   @ViewChild('input2') input2;
   @ViewChild('title') title;
-  constructor(private httpClient: HttpClient, private alertController: AlertController) {}
+  constructor(private httpClient: HttpClient, private alertController: AlertController, private authService: AuthService) {}
 
   ngOnInit() {}
 
@@ -39,6 +40,7 @@ export class AdminPage implements OnInit {
 }
 
   checkUser(user): void {
+    if (user!= this.authService.getUser()){
     this.httpClient
       .post<any>('http://localhost:3000/admin/usercheck', {
         username: user.toLowerCase(),
@@ -72,6 +74,10 @@ export class AdminPage implements OnInit {
           }
         }
       );
+    } else {
+      this.presentAlert('Invalid Action', 'You cannot modify your own credentials')
+      this.resetform()
+    }
   }
   async upgradeUser(direction) {
     this.currentState='roleChange'

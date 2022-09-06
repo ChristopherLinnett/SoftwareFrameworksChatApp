@@ -1,5 +1,6 @@
-module.exports = (app, dummyData) => {
+module.exports = (app, fs) => {
   app.post("/admin/usercheck", (req, res) => {
+    dummyData = JSON.parse(fs.readFileSync('./dummydb.json'));    
     username = req.body.username;
     if (!username.includes("@") && dummyData.users[username]) {
       savedUser = dummyData.users[username];

@@ -1,5 +1,6 @@
-module.exports = (app, dummyData, fs)=> {
+module.exports = (app, fs)=> {
     app.post("/admin/newuser", (req, res) => {
+        dummyData = JSON.parse(fs.readFileSync('./dummydb.json'));    
         username = req.body.username;
         email = req.body.email
         password = username

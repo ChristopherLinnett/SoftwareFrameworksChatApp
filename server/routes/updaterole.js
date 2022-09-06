@@ -1,5 +1,6 @@
-module.exports = (app, dummyData, fs) => {
+module.exports = (app, fs) => {
   app.post("/admin/updaterole", (req, res) => {
+        dummyData = JSON.parse(fs.readFileSync('./dummydb.json'));    
         username = req.body.username
         userID = dummyData.users[`${username}`].ID
         oldRole = req.body.oldRole
@@ -8,7 +9,7 @@ module.exports = (app, dummyData, fs) => {
           delete dummyData.superUsers[`${userID}`]
         } 
         if (oldRole == 'groupuser'){
-          delete dummyData.superUsers[`${userID}`]
+          delete dummyData.groupUsers[`${userID}`]
         } 
         if (role == 'superuser'){
         dummyData.superUsers[`${userID}`]=username
