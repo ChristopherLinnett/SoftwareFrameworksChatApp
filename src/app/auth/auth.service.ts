@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AuthService {  
   loggedIn = false;
-  savedUser : {username: string, id: string, email: string, role: string};
+  savedUser : {username: string, id: string, email: string, role: string, access: any};
     constructor(private httpClient: HttpClient, private router: Router, private activatedRoute: ActivatedRoute) { }
     
     /**
@@ -19,11 +19,12 @@ export class AuthService {
      */
     login(usernameInput, passwordInput): void {
       this.httpClient.post<any>('http://localhost:3000/auth', 
-      {username: usernameInput.toLowerCase(), password: passwordInput.toLowerCase() }).subscribe((res: {username: string, id: string, email: string, role: string, loginSuccess: boolean}) => {
+      {username: usernameInput.toLowerCase(), password: passwordInput.toLowerCase() }).subscribe((res: {username: string, id: string, email: string, role: string, access: any, loginSuccess: boolean}) => {
         if (res.loginSuccess) {
             this.loggedIn = true;
-            this.savedUser = {username: res.username, email: res.email, id: res.id, role: res.role}
+            this.savedUser = {username: res.username, email: res.email, id: res.id, role: res.role, access: res.access}
             sessionStorage.setItem('savedUser', JSON.stringify(res));
+            console.log(res.access)
           }
           this.loggedIn ? this.router.navigate(['']) : alert("incorrect details, try again");
       });      

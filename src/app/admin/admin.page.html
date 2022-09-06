@@ -46,7 +46,7 @@
       *ngIf="currentState=='unchecked'">Check User</ion-button>
     <ion-button fill="clear" expand="block" *ngIf="currentState=='createMode'"
       (click)="createUser(userToCheck.value, input2.value)">Add New User</ion-button>
-    <ion-button fill="clear" expand="block" color="danger" *ngIf="currentState=='deleteMode'"
+    <ion-button fill="clear" expand="block" color="danger" *ngIf="currentState=='deleteMode' && role=='superuser'"
       (click)="deleteUser()">Remove User</ion-button>
       <ion-button fill="clear" expand="block" color="warning" (click)="updateRole()"
       *ngIf="currentState=='roleChange'">Update Role</ion-button>

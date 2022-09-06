@@ -24,8 +24,24 @@ socket.connect(io, PORT);
 server.listen(http, PORT);
 
 var usercheck = require('./routes/usercheck')(app, fs);
-var auth = require('./routes/auth')(app, fs);
+var auth = require('./routes/auth')(app, fs, sendAccess);
 var newuser = require('./routes/newuser')(app,fs);
 var deleteuser = require('./routes/deleteuser')(app,fs);
 var updaterole = require('./routes/updaterole')(app,fs);
 
+function sendAccess(userID, db){
+infoToSend = {groups: []}
+  for (let group of db.groups){
+    if (!group.users[`${userID}`]){
+      continue
+    }
+    infoToSend.groups.push({name: group.name, id: group.id, rooms: []})
+      for (let room of group.rooms){
+        if (!room.users[`${userID}`]){
+          continue
+        }
+        infoToSend.groups[infoToSend.groups.length-1].rooms.push({name: room.name, id: room.id})
+      }
+  }
+  return infoToSend
+}

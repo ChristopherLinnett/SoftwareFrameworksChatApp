@@ -1,4 +1,4 @@
-module.exports = (app, fs)=> {
+module.exports = (app, fs, sendAccess)=> {
     app.post("/auth", (req, res) => {
         dummyData = JSON.parse(fs.readFileSync('./dummydb.json'));    
         username = req.body.username;
@@ -14,11 +14,13 @@ module.exports = (app, fs)=> {
             }
             else { role = 'user'}
           }
+          accessInfo = sendAccess(savedUser.ID, dummyData)
             return res.send({
               username: savedUser.username,
               id: savedUser.ID,
               email: savedUser.email,
               role: role,
+              access: accessInfo,
               loginSuccess: true,
             });
           }

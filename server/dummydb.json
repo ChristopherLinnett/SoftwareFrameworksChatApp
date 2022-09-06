@@ -1,1 +1,46 @@
-{"users":{"superuser":{"username":"superuser","email":"superuser@gmail.com","ID":"1","password":"superuser"},"groupuser":{"username":"groupuser","email":"groupuser@gmail.com","ID":"2","password":"groupuser"},"assistantuser":{"username":"assistantuser","email":"assistantuser@gmail.com","ID":"3","password":"assistantuser"},"tommy":{"username":"tommy","email":"tommer","ID":"4","password":"tommy"}},"superUsers":{"1":"superuser"},"groupUsers":{"2":"groupuser"}}
+{
+  "users": {
+    "superuser": {
+      "username": "superuser",
+      "email": "superuser@gmail.com",
+      "ID": "1",
+      "password": "superuser"
+    },
+    "groupuser": {
+      "username": "groupuser",
+      "email": "groupuser@gmail.com",
+      "ID": "2",
+      "password": "groupuser"
+    },
+    "assistantuser": {
+      "username": "assistantuser",
+      "email": "assistantuser@gmail.com",
+      "ID": "3",
+      "password": "assistantuser"
+    },
+    "tommy": {
+      "username": "tommy",
+      "email": "tommer",
+      "ID": "4",
+      "password": "tommy"
+    }
+  },
+  "superUsers": { "1": "superuser" },
+  "groupUsers": { "2": "groupuser" },
+  "groups": [
+    {
+      "name": "first group",
+      "rooms": [{"name": "channel1", "id": "1", "users":{"1":"superuser"}}],
+      "id": "1",
+      "users": { "1": "superuser" },
+      "assistants": {}
+    },
+    {
+      "name": "second group",
+      "rooms": [{"name": "channel2", "id":"2", "users":{"2":"groupuser"}}],
+      "id": "2",
+      "users": { "2": "groupuser" },
+      "assistants": {}
+    }
+  ]
+}

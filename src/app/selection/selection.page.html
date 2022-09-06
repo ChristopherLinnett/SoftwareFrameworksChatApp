@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>selection</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-accordion-group>
+    <ion-accordion *ngFor="let group of groups">
+      <ion-item slot="header" color="light">
+        <ion-label>{{group.name}}</ion-label>
+      </ion-item>
+      <ion-list  slot="content">
+      <div *ngFor="let room of group['rooms']" class="ion-padding">
+        {{room.name}}
+      </div>
+    </ion-list>
+    </ion-accordion>
+  </ion-accordion-group>
+</ion-content>

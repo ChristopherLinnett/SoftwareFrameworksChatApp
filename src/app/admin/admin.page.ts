@@ -9,6 +9,7 @@ import { AuthService } from '../auth/auth.service';
   styleUrls: ['./admin.page.scss'],
 })
 export class AdminPage implements OnInit {
+  role: string;
   usertypes = ['user', 'groupuser', 'superuser'];
   currentState = 'unchecked';
   queryUser: { username: string; email: string; id: string; role: string };
@@ -18,7 +19,9 @@ export class AdminPage implements OnInit {
   @ViewChild('title') title;
   constructor(private httpClient: HttpClient, private alertController: AlertController, private authService: AuthService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.role = this.authService.getRole()
+  }
 
   resetform() {
     this.currentState = 'unchecked';
