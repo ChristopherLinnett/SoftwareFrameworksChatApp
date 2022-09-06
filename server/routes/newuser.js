@@ -3,9 +3,9 @@ module.exports = (app, dummyData, fs)=> {
         username = req.body.username;
         email = req.body.email
         password = username
-        newUser = {username: username, email: email, ID: Object.keys(dummyData['users']).length+1, password: password}
+        newUser = {username: username, email: email, ID: String(Object.keys(dummyData['users']).length+1), password: password}
         dummyData.users[`${username}`] = newUser
-        var testWrite = fs.writeFileSync('./dummydb.json', JSON.stringify(dummyData))
+        fs.writeFileSync('./dummydb.json', JSON.stringify(dummyData))
 
         res.send({ success: true });
       });

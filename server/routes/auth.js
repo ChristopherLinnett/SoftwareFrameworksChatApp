@@ -5,10 +5,10 @@ module.exports = (app, dummyData)=> {
         if (dummyData.users[username]) {
           savedUser = dummyData.users[username];
           if (password == savedUser.password) {
-            if (dummyData['superUsers'].includes(savedUser.ID)){
+            if (dummyData.superUsers[`${savedUser.ID}`]){
               role = 'superuser'
             } else {
-              if (dummyData['groupUsers'].includes(savedUser.ID)){
+              if (dummyData.groupUsers[`${savedUser.ID}`]){
                 role = 'groupuser'
             }
             else { role = 'user'}

@@ -3,10 +3,10 @@ module.exports = (app, dummyData) => {
     username = req.body.username;
     if (!username.includes("@") && dummyData.users[username]) {
       savedUser = dummyData.users[username];
-      if (dummyData["superUsers"].includes(savedUser.ID)) {
+      if (dummyData["superUsers"][savedUser.ID]) {
         role = "superuser";
       }
-      if (dummyData["groupUsers"].includes(savedUser.ID)) {
+      if (dummyData["groupUsers"][savedUser.ID]) {
         role = "groupuser";
       }
       if (!role) {
@@ -31,10 +31,10 @@ module.exports = (app, dummyData) => {
         console.log('reached here')
         savedUser = dummyData.users[email[1]];
         var role;
-        if (dummyData["superUsers"].includes(savedUser.ID)) {
+        if (dummyData.superUsers[`${savedUser.ID}`]) {
           role = "superuser";
         }
-        if (dummyData["groupUsers"].includes(savedUser.ID)) {
+        if (dummyData.groupUsers[`${savedUser.ID}`]) {
           role = "groupuser";
         }
         if (role == undefined) {

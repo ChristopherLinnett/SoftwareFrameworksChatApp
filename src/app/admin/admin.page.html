@@ -47,8 +47,8 @@
     <ion-button fill="clear" expand="block" *ngIf="currentState=='createMode'"
       (click)="createUser(userToCheck.value, input2.value)">Add New User</ion-button>
     <ion-button fill="clear" expand="block" color="danger" *ngIf="currentState=='deleteMode'"
-      (click)="deleteUser(userToCheck.value)">Remove User</ion-button>
-      <ion-button fill="clear" expand="block" color="warning" (click)="checkUser(userToCheck.value)"
+      (click)="deleteUser()">Remove User</ion-button>
+      <ion-button fill="clear" expand="block" color="warning" (click)="updateRole()"
       *ngIf="currentState=='roleChange'">Update Role</ion-button>
   
     </ion-card>
