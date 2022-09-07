@@ -51,6 +51,7 @@ testbutton(){
     this.input1.value = '';
     this.input2.value = '';
     this.title.el.textContent= 'User Management'
+    this.queryPath = undefined;
   }
 
   addRemoveGroup(username,groupid,addTrue){
