@@ -32,7 +32,7 @@
   <ion-input #messageInput minLength="1" type="text" required class="ion-padding" placeholder="Type your message" (keyup.enter)="sendMessage(messageInput.value); messageInput.value = null">
   </ion-input>
   <ion-button fill="clear" (click)="sendMessage(messageInput.value); messageInput.value = null">
-    <ion-icon slot="icon-only" color="dark" name="send-sharp"></ion-icon>
+    <ion-icon slot="icon-only" name="send-sharp"></ion-icon>
   </ion-button>
   </ion-item>
 </ion-footer>
