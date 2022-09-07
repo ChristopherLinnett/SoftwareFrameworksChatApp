@@ -45,6 +45,20 @@ export class AdminPage implements OnInit {
       );
   }
 
+  deleteGroup(id){
+    this.httpClient
+      .post<any>('http://localhost:3000/admin/newordeletegroup', {
+        groupName: 'nil', id: id, add: false
+      })
+      .subscribe((res: { success: Boolean }) => {
+        if (res.success) {
+          this.ngOnInit();
+          this.addGroup = false;
+        } else {
+          console.log('bad response');
+        }
+      });
+  }
 
   createGroup(name){
       this.httpClient

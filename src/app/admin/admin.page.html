@@ -56,10 +56,16 @@
               <ion-fab-button translucent="true" color="danger" *ngIf="checkGroup(group) && queryPath" size="small" (click)="addRemoveGroup(queryUser.username,group.id,false)" slot="start"><ion-icon name="person-remove"></ion-icon></ion-fab-button>
               <ion-label>{{group.name}}</ion-label>
             </ion-item>
-            <ion-list slot="content" *ngIf="checkGroup(group)" style="padding: 0%;margin:0%;border:0%;">
-            <div *ngFor="let room of group.rooms" style="padding: 0%;margin:0%;border:0%;">
+            <ion-list slot="content" style="padding: 0%;margin:0%;border:0%;">
+            <div *ngIf="checkGroup(group)" style="padding: 5%;margin:0%;border:10%;">
+              <div *ngFor="let room of group.rooms">
               {{room.name}}
             </div>
+            </div>
+            <ion-item slot="start" class="ion-text-right" >
+              <ion-label style="max-width:70%;">Delete Group</ion-label>
+              <ion-fab-button color="danger" size="small" (click)="deleteGroup(group.id)"><ion-icon name="trash"></ion-icon></ion-fab-button>
+            </ion-item>
           </ion-list>
           </ion-accordion>
           <ion-accordion toggleIcon="options" *ngIf="!addGroup">
@@ -68,11 +74,11 @@
             </ion-item>
           </ion-accordion>
           <ion-item *ngIf="addGroup==true">
-            <ion-item slot="start" class="ion-text-left" style="max-width:80%;">
+            <ion-item slot="start" class="ion-text-left" style="max-width:70%;">
             <ion-label position="floating">Group Name</ion-label>
             <ion-input #newGroup class="ion-text-left"></ion-input>
             </ion-item>
-            <ion-fab-button (click)="createGroup(newGroup.value)"><ion-icon name="plus"></ion-icon></ion-fab-button>
+            <ion-fab-button color="success" size="small" (click)="createGroup(newGroup.value)"><ion-icon name="checkmark"></ion-icon></ion-fab-button>
           </ion-item>
         </ion-accordion-group>
       </ion-card>
