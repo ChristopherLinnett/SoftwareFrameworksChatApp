@@ -19,8 +19,10 @@ const PORT = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+/* Connecting to the socket.js file. */
 socket.connect(io, PORT);
 
+/* Listening for a connection on port 3000. */
 server.listen(http, PORT);
 
 var usercheck = require('./routes/usercheck')(app, fs, sendAccess);
@@ -33,6 +35,15 @@ var inviteremove = require('./routes/addremovegroup')(app,fs);
 
 
 
+/**
+ * It takes a userID and a database, and returns an object containing the groups and rooms that the
+ * user has access to
+ * @param userID - The user's ID
+ * @param db - the database
+ * @returns An object with a groups property that is an array of objects. Each object in the array has
+ * a name, id, and rooms property. The rooms property is an array of objects. Each object in the rooms
+ * array has a name and id property.
+ */
 function sendAccess(userID, db){
 infoToSend = {groups: []}
   for (let group of db.groups){

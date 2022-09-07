@@ -10,7 +10,7 @@ export class SelectionPage implements OnInit {
   constructor() {}
 
  async ngOnInit() {
-  var wholeUser = await JSON.parse(sessionStorage.getItem('savedUser'))
+  var wholeUser = await JSON.parse(localStorage.getItem('savedUser'))
   this.groups = wholeUser.access.groups
   console.log('groups',this.groups)
   console.log('rooms',this.groups[0].rooms)

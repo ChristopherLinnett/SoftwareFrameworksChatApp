@@ -10,12 +10,13 @@ export class AuthService {
   savedUser : {username: string, id: string, email: string, role: string, access: any};
     constructor(private httpClient: HttpClient, private router: Router, private activatedRoute: ActivatedRoute) { }
     
+  
     /**
-     * The function takes in two strings, usernameInput and passwordInput, and sends a post request to
-     * the server with the username and password. If the login is successful, the user is saved to
-     * session storage and the user is navigated to the home page
-     * @param usernameInput - the username input from the login form
-     * @param passwordInput - the password the user has entered
+     * It takes two inputs, sends them to the server, and if the server returns a successful login, it
+     * sets the loggedIn variable to true, saves the user's details in the savedUser variable, and
+     * navigates to the home page.
+     * @param usernameInput - string
+     * @param passwordInput - string
      */
     login(usernameInput, passwordInput): void {
       this.httpClient.post<any>('http://localhost:3000/auth', 
@@ -23,7 +24,7 @@ export class AuthService {
         if (res.loginSuccess) {
             this.loggedIn = true;
             this.savedUser = {username: res.username, email: res.email, id: res.id, role: res.role, access: res.access}
-            sessionStorage.setItem('savedUser', JSON.stringify(res));
+            localStorage.setItem('savedUser', JSON.stringify(res));
             console.log(res.access)
           }
           this.loggedIn ? this.router.navigate(['']) : alert("incorrect details, try again");
@@ -32,12 +33,12 @@ export class AuthService {
 
   /**
    * The logout function clears the user object, sets the loggedIn variable to false, clears the
-   * session storage, and navigates to the auth route
+   * local storage, and navigates to the auth route
    */
   logout() {
     this.savedUser = null;
     this.loggedIn = false;
-    sessionStorage.clear();
+    localStorage.clear();
     this.router.navigate(['/auth']);
   }
   /**
@@ -55,6 +56,10 @@ export class AuthService {
     return this.savedUser.username
   }
 
+  /**
+   * It returns the role of the user.
+   * @returns The savedUser.role property.
+   */
   getRole(): string {
     return this.savedUser.role
   }
