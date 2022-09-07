@@ -18,14 +18,10 @@ const routes: Routes = [
       }
     ]
   },
-  {
-    path: '',
-    redirectTo: '/tabs/chat',
-    pathMatch: 'full'
-  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
+
 })
 export class TabsPageRoutingModule {}

@@ -7,8 +7,7 @@ const routes: Routes = [
   {
     path: '',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
-    // loadChildren: () => import('./selection/selection.module').then( m => m.SelectionPageModule)
+    loadChildren: () => import('./selection/selection.module').then( m => m.SelectionPageModule)
 
   },
   {
@@ -18,8 +17,8 @@ const routes: Routes = [
     loadChildren: () => import('./admin/admin.module').then( m => m.AdminPageModule)
   },
   {
-    path: 'selection',
-    loadChildren: () => import('./selection/selection.module').then( m => m.SelectionPageModule)
+    path: 'tabs',
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   }
 
 ];

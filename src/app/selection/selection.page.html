@@ -1,17 +1,22 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>selection</ion-title>
+    <ion-buttons slot="end">
+    <ion-button *ngIf="checkRole()!='user'" slot="end" size='small' fill="clear" [routerLink]="'../../admin'">
+      <ion-icon slot="icon-only" name="settings"></ion-icon>
+    </ion-button>
+  </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-accordion-group>
-    <ion-accordion *ngFor="let group of groups">
-      <ion-item slot="header" color="light">
+  <ion-accordion-group style="width:100%; margin-left: 0%; margin-right:0%;">
+    <ion-accordion *ngFor="let group of userPath">
+      <ion-item slot="header" class="ion-text-center">
         <ion-label>{{group.name}}</ion-label>
       </ion-item>
-      <ion-list  slot="content">
-      <div *ngFor="let room of group['rooms']" class="ion-padding">
+      <ion-list slot="content">
+      <div *ngFor="let room of group.rooms" class="ion-padding" (click)="navigateaway()">
         {{room.name}}
       </div>
     </ion-list>
