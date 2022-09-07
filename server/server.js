@@ -23,11 +23,15 @@ socket.connect(io, PORT);
 
 server.listen(http, PORT);
 
-var usercheck = require('./routes/usercheck')(app, fs);
+var usercheck = require('./routes/usercheck')(app, fs, sendAccess);
 var auth = require('./routes/auth')(app, fs, sendAccess);
 var newuser = require('./routes/newuser')(app,fs);
 var deleteuser = require('./routes/deleteuser')(app,fs);
 var updaterole = require('./routes/updaterole')(app,fs);
+var getgroups = require('./routes/getgroups')(app,fs);
+var inviteremove = require('./routes/addremovegroup')(app,fs);
+
+
 
 function sendAccess(userID, db){
 infoToSend = {groups: []}

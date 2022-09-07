@@ -1,4 +1,4 @@
-module.exports = (app, fs) => {
+module.exports = (app, fs, sendAccess) => {
   app.post("/admin/usercheck", (req, res) => {
     dummyData = JSON.parse(fs.readFileSync('./dummydb.json'));    
     username = req.body.username;
@@ -13,12 +13,14 @@ module.exports = (app, fs) => {
       if (!role) {
         role = "user";
       }
+      accessPath = sendAccess(savedUser.ID, dummyData)
       return res.send({
         username: savedUser.username,
         id: savedUser.id,
         email: savedUser.email,
         role: role,
         validUser: true,
+        access: accessPath
       });
     }
     processList = Object.keys(dummyData.users).map((username) => {

@@ -7,49 +7,63 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-card class="ion-text-center">
+<ion-content class="ion-text-center">
+  <ion-card style="height:50%;">
     <ion-card-header>
       <ion-card-title #title>User Management </ion-card-title>
     </ion-card-header>
+
     <ion-item>
       <ion-label [hidden]="currentState!='unchecked'" position="floating" for="modUser">
-        username or email</ion-label>
+        enter username or email</ion-label>
       <ion-input #userToCheck id="modUser" clearInput="true" [disabled]="currentState!='unchecked'"></ion-input>
     </ion-item>
   <ion-grid>
     <ion-row>
-      <ion-col size="2" *ngIf="currentState=='deleteMode' || currentState=='roleChange'">
-        <ion-button class="upgrade" fill="clear" size='small' (click)="upgradeUser('-')">
+      <ion-col size="2" *ngIf="role =='superuser' && currentState=='deleteMode' || currentState=='roleChange'">
+        <ion-fab-button color="warning" size='small' (click)="upgradeUser('-')">
           <ion-icon name="remove-circle"></ion-icon>
-        </ion-button>
+        </ion-fab-button>
       </ion-col>
       <ion-col>
-        <ion-item>
-          <ion-label class="ion-text-center" [hidden]="currentState!='createMode'" position="floating" for="secondaryInput">
-            {{secondaryInput}}</ion-label>
-          <ion-input #input2 id="secondaryInput" clearInput="true" [disabled]="currentState=='deleteMode' || currentState=='roleChange'"
-            [hidden]="currentState!='createMode' && currentState!='deleteMode' && currentState!='roleChange'"></ion-input>
-        </ion-item>
+          <ion-input #input2 id="secondaryInput" clearInput="true" [placeholder]="secondaryInput" [disabled]="currentState=='deleteMode' || currentState=='roleChange'"
+            [hidden]="currentState!='createMode' && currentState!='deleteMode' && currentState!='roleChange'" style="color:white;"></ion-input>
       </ion-col>
-      <ion-col size="2" *ngIf="currentState=='deleteMode'|| currentState=='roleChange'">
-        <ion-button class="upgrade" fill="clear" size="small" (click)="upgradeUser('+')">
+      <ion-col size="2" *ngIf="role =='superuser' && currentState=='deleteMode'|| currentState=='roleChange'">
+        <ion-fab-button color="warning" size="small" (click)="upgradeUser('+')">
           <ion-icon name="add-circle"></ion-icon>
-        </ion-button>
+        </ion-fab-button>
       </ion-col>
-    
-    
-    
   </ion-row>
   </ion-grid>
-    <ion-button fill="clear" expand="block" color="primary" (click)="checkUser(userToCheck.value)"
+ 
+    <ion-button expand="block" color="primary" (click)="checkUser(userToCheck.value)"
       *ngIf="currentState=='unchecked'">Check User</ion-button>
-    <ion-button fill="clear" expand="block" *ngIf="currentState=='createMode'"
+    <ion-button expand="block" *ngIf="currentState=='createMode'"
       (click)="createUser(userToCheck.value, input2.value)">Add New User</ion-button>
-    <ion-button fill="clear" expand="block" color="danger" *ngIf="currentState=='deleteMode' && role=='superuser'"
+    <ion-button expand="block" color="danger" *ngIf="currentState=='deleteMode' && role=='superuser'"
       (click)="deleteUser()">Remove User</ion-button>
-      <ion-button fill="clear" expand="block" color="warning" (click)="updateRole()"
-      *ngIf="currentState=='roleChange'">Update Role</ion-button>
-  
+      <ion-button expand="block" color="warning" (click)="updateRole()"
+      *ngIf="currentState=='roleChange' && role =='superuser'">Update Role</ion-button>
     </ion-card>
+
+      <ion-content style="height:35%; background-color:darkgray; align-items: center; border:0%; padding:0%;">
+        <ion-card>
+        <ion-accordion-group style="width:100%; margin-left: 0%; margin-right:0%;">
+          <ion-accordion *ngFor="let group of totalPath">
+            <ion-item slot="header" class="ion-text-center">
+              <ion-fab-button translucent="true" color="success" *ngIf="!checkGroup(group) && queryPath" size="small" (click)="addRemoveGroup(queryUser.username,group.id,true)" slot="start"><ion-icon name="person-add"></ion-icon></ion-fab-button>
+              <ion-fab-button translucent="true" color="danger" *ngIf="checkGroup(group) && queryPath" size="small" (click)="addRemoveGroup(queryUser.username,group.id,false)" slot="start"><ion-icon name="person-remove"></ion-icon></ion-fab-button>
+              <ion-label>{{group.name}}</ion-label>
+            </ion-item>
+            <ion-list slot="content" *ngIf="checkGroup(group)">
+            <div *ngFor="let room of group.rooms" class="ion-padding">
+              {{room.name}}
+            </div>
+          </ion-list>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ion-card>
+    </ion-content>
+  
 </ion-content>
