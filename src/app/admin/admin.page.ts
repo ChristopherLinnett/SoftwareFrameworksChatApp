@@ -19,6 +19,7 @@ export class AdminPage implements OnInit {
     rooms: { name: string; id: string }[];
   }[];
   totalPath: any = [];
+  addGroup = false;
 
   secondaryInput = 'username';
   @ViewChild('userToCheck') input1;
@@ -43,6 +44,22 @@ export class AdminPage implements OnInit {
         }
       );
   }
+
+
+  createGroup(name){
+      this.httpClient
+        .post<any>('http://localhost:3000/admin/newordeletegroup', {
+          groupName: name, id: '1', add: true
+        })
+        .subscribe((res: { success: Boolean }) => {
+          if (res.success) {
+            this.ngOnInit();
+            this.addGroup = false;
+          } else {
+            console.log('bad response');
+          }
+        });
+    }
 
   /**
    * If the queryPath is not empty, then check if the group id is in the queryPath. If it is, return

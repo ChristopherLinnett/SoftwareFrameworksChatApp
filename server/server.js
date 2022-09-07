@@ -1,6 +1,7 @@
 const fs = require("fs");
 const express = require("express");
 const app = express();
+const { v4: uuidv4 } = require('uuid');
 var cors = require("cors");
 var http = require("http").Server(app);
 const bodyParser = require("body-parser");
@@ -32,6 +33,7 @@ var deleteuser = require('./routes/deleteuser')(app,fs);
 var updaterole = require('./routes/updaterole')(app,fs);
 var getgroups = require('./routes/getgroups')(app,fs);
 var inviteremove = require('./routes/addremovegroup')(app,fs);
+var newordeletegroup = require('./routes/newordeletegroup')(app,fs,uuidv4);
 
 
 

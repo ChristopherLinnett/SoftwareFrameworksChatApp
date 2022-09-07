@@ -51,17 +51,29 @@
         <ion-card>
         <ion-accordion-group style="width:100%; margin-left: 0%; margin-right:0%;">
           <ion-accordion *ngFor="let group of totalPath">
-            <ion-item slot="header" class="ion-text-center">
+            <ion-item slot="header" class="ion-text-center" style="padding: 0%;margin:0%;border:0%;">
               <ion-fab-button translucent="true" color="success" *ngIf="!checkGroup(group) && queryPath" size="small" (click)="addRemoveGroup(queryUser.username,group.id,true)" slot="start"><ion-icon name="person-add"></ion-icon></ion-fab-button>
               <ion-fab-button translucent="true" color="danger" *ngIf="checkGroup(group) && queryPath" size="small" (click)="addRemoveGroup(queryUser.username,group.id,false)" slot="start"><ion-icon name="person-remove"></ion-icon></ion-fab-button>
               <ion-label>{{group.name}}</ion-label>
             </ion-item>
-            <ion-list slot="content" *ngIf="checkGroup(group)">
-            <div *ngFor="let room of group.rooms" class="ion-padding">
+            <ion-list slot="content" *ngIf="checkGroup(group)" style="padding: 0%;margin:0%;border:0%;">
+            <div *ngFor="let room of group.rooms" style="padding: 0%;margin:0%;border:0%;">
               {{room.name}}
             </div>
           </ion-list>
           </ion-accordion>
+          <ion-accordion toggleIcon="options" *ngIf="!addGroup">
+            <ion-item class="ion-text-right" slot="header" (click)="addGroup=true">
+              <ion-label>New Group</ion-label>
+            </ion-item>
+          </ion-accordion>
+          <ion-item *ngIf="addGroup==true">
+            <ion-item slot="start" class="ion-text-left" style="max-width:80%;">
+            <ion-label position="floating">Group Name</ion-label>
+            <ion-input #newGroup class="ion-text-left"></ion-input>
+            </ion-item>
+            <ion-fab-button (click)="createGroup(newGroup.value)"><ion-icon name="plus"></ion-icon></ion-fab-button>
+          </ion-item>
         </ion-accordion-group>
       </ion-card>
     </ion-content>
