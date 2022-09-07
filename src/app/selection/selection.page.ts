@@ -16,10 +16,13 @@ export class SelectionPage implements OnInit {
     private httpClient: HttpClient,
     private router: Router
   ) {}
+  logout(){
+    this.authService.logout()
+  }
 
   navigateaway(){
     console.log('testing')
-    this.router.navigate(['tabs/tabs/chat']);
+    this.router.navigate(['/chat']);
   }
 
   async ngOnInit() {

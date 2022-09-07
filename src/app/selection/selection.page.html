@@ -2,8 +2,11 @@
   <ion-toolbar>
     <ion-title>selection</ion-title>
     <ion-buttons slot="end">
-    <ion-button *ngIf="checkRole()!='user'" slot="end" size='small' fill="clear" [routerLink]="'../../admin'">
+    <ion-button *ngIf="checkRole()!='user'" slot="end" size='small' fill="clear" [routerLink]="'admin'">
       <ion-icon slot="icon-only" name="settings"></ion-icon>
+    </ion-button>
+    <ion-button slot="end" size="small" fill="clear" (click)="logout()">
+      <ion-icon slot="icon-only" name="person-remove-sharp"></ion-icon>
     </ion-button>
   </ion-buttons>
   </ion-toolbar>

@@ -8,7 +8,6 @@ const routes: Routes = [
     path: '',
     canActivate: [AuthGuard],
     loadChildren: () => import('./selection/selection.module').then( m => m.SelectionPageModule)
-
   },
   {
     path: 'auth', component: AuthPage  },
@@ -17,10 +16,9 @@ const routes: Routes = [
     loadChildren: () => import('./admin/admin.module').then( m => m.AdminPageModule)
   },
   {
-    path: 'tabs',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
-  }
-
+    path: 'chat',
+    loadChildren: () => import('./chat/chat.module').then(m => m.ChatPageModule)
+  },
 ];
 @NgModule({
   imports: [
