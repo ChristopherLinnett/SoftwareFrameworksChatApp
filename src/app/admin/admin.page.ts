@@ -283,6 +283,18 @@ export class AdminPage implements OnInit {
     }
   }
 
+  isGroupAssistant(groupid){
+    var userid = this.queryUser.id
+    var groupIDlist = this.totalPath.map((group)=>{return group.id})
+    var groupIndex = groupIDlist.indexOf(groupid)
+    console.log(this.totalPath[groupIndex].assistants.includes(userid))
+    // console.log(this.userPath[groupIndex])
+    if (this.totalPath[groupIndex].assistants.includes(userid)){
+      return true
+    }
+    return false
+  }
+
   /**
    * It takes a string as an argument, and if the string is '+', it increments the value of the
    * input2.value property by one, and if the string is '-', it decrements the value of the

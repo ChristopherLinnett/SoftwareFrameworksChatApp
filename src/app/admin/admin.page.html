@@ -62,7 +62,7 @@
               <ion-icon name="trash"></ion-icon>
             </ion-fab-button>
             <ion-label>{{group.name}}{{i}}</ion-label>
-            <ion-fab-button fill="clear" slot="end" *ngIf="!group.editRoom && queryPath" (click)="addRemoveGroupAssist(group.id, true)" color="warning" slot="end" size="small">
+            <ion-fab-button fill="clear" slot="end" *ngIf="!group.editRoom && queryPath" (click)="addRemoveGroupAssist(group.id, isGroupAssistant(group.id) ? false : true)" [color]="isGroupAssistant(group.id) ? 'success' : 'warning'" slot="end" size="small">
               <ion-icon name="clipboard-sharp"></ion-icon>
             </ion-fab-button>
           </ion-item>
