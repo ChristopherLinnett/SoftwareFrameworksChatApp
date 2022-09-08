@@ -34,6 +34,7 @@ var updaterole = require('./routes/updaterole')(app,fs);
 var getgroups = require('./routes/getgroups')(app,fs);
 var inviteremove = require('./routes/addremovegroup')(app,fs);
 var newordeletegroup = require('./routes/newordeletegroup')(app,fs,uuidv4);
+var newordeleteroom = require('./routes/newordeleteroom')(app,fs,uuidv4);
 
 
 

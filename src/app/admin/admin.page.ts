@@ -20,6 +20,7 @@ export class AdminPage implements OnInit {
   }[];
   totalPath: any = [];
   addGroup = false;
+  editGroup = false
 
   secondaryInput = 'username';
   @ViewChild('userToCheck') input1;
@@ -43,6 +44,33 @@ export class AdminPage implements OnInit {
           this.totalPath = res;
         }
       );
+  }
+
+  deleteRoom(groupid,roomid){
+    this.httpClient
+      .post<any>('http://localhost:3000/admin/newordeleteroom', {
+        roomname: 'nil', groupid: groupid, roomid: roomid, add: false
+      })
+      .subscribe((res: { success: Boolean }) => {
+        if (res.success) {
+          this.ngOnInit();
+        } else {
+          console.log('bad response');
+        }
+      });
+  }
+  createRoom(groupid, name){
+    this.httpClient
+      .post<any>('http://localhost:3000/admin/newordeleteroom', {
+        roomName: name, channelid: '1', groupid, add: true
+      })
+      .subscribe((res: { success: Boolean }) => {
+        if (res.success) {
+          this.ngOnInit();
+        } else {
+          console.log('bad response');
+        }
+      });
   }
 
   deleteGroup(id){

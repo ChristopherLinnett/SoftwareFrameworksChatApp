@@ -24,7 +24,7 @@ export class AuthService {
         if (res.loginSuccess) {
             this.loggedIn = true;
             this.savedUser = {username: res.username, email: res.email, id: res.id, role: res.role, access: res.access}
-            localStorage.setItem('savedUser', JSON.stringify(res));
+            sessionStorage.setItem('savedUser', JSON.stringify(res));
             console.log(res.access)
           }
           this.loggedIn ? this.router.navigate(['']) : alert("incorrect details, try again");
@@ -38,7 +38,7 @@ export class AuthService {
   logout() {
     this.savedUser = null;
     this.loggedIn = false;
-    localStorage.clear();
+    sessionStorage.clear();
     this.router.navigate(['/auth']);
   }
   /**
