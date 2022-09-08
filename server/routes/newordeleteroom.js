@@ -1,17 +1,22 @@
 module.exports = (app, fs,uuidv4) => {
   app.post("/admin/newordeleteroom", (req, res) => {
     dummyData = JSON.parse(fs.readFileSync("./dummydb.json"));
+    creator = req.body.creator
     roomName = req.body.roomName;
-    console.log(roomName)
     groupid = req.body.groupid;
     add = req.body.add;
     var allid = dummyData.groups.map((group)=>{return group.id});
+    groupIndex = allid.indexOf(groupid);
 
+    if (creator){
+      defaultuser = dummyData.users[`${creator}`].ID
+      console.log(`defaultuser is ${defaultuser}`)}
+      else { defaultuser = {}; console.log('No Creator')}
+    
     if (add) {
-      groupIndex = allid.indexOf(groupid);
       roomid = uuidv4();
-
-      dummyData.groups[groupIndex].rooms.push({name: roomName, id: roomid, users : {}});
+      dummyData.groups[groupIndex].rooms.push({name: roomName, id: roomid, users : {[`${defaultuser}`]: creator}});
+      console.log(dummyData.groups[groupIndex].rooms)
       fs.writeFileSync("./dummydb.json", JSON.stringify(dummyData));
       return res.send({success: true});
     } else {

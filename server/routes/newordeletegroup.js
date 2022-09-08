@@ -6,7 +6,7 @@ module.exports = (app, fs,uuidv4) => {
     if (add) {
       groupid = uuidv4();
       console.log(groupid)
-      dummyData.groups.push({name: groupname, id: groupid, users : {},rooms: [], assistants: {}});
+      dummyData.groups.push({name: groupname, id: groupid, users : {},rooms: [], assistants: []});
       fs.writeFileSync("./dummydb.json", JSON.stringify(dummyData));
       return res.send({success: true});
     } else {

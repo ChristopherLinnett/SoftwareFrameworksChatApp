@@ -4,7 +4,6 @@ module.exports = (app, fs, sendAccess) => {
     username = req.body.username;
     if (!username.includes("@") && dummyData.users[username]) {
       savedUser = dummyData.users[username];
-      console.log(savedUser)
       if (dummyData["superUsers"][savedUser.ID]) {
         role = "superuser";
       }
@@ -33,7 +32,6 @@ module.exports = (app, fs, sendAccess) => {
     for (let email of emailList) {
       if (username == email[0]) {
         savedUser = dummyData.users[email[1]];
-        console.log(savedUser)
         var role;
         if (dummyData.superUsers[`${savedUser.ID}`]) {
           role = "superuser";

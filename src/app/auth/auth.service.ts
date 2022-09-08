@@ -19,7 +19,7 @@ export class AuthService {
      * @param passwordInput - string
      */
     login(usernameInput, passwordInput): void {
-      this.httpClient.post<any>('http://localhost:3000/auth', 
+      this.httpClient.post<any>('http://192.168.8.95:3000/auth', 
       {username: usernameInput.toLowerCase(), password: passwordInput.toLowerCase() }).subscribe((res: {username: string, id: string, email: string, role: string, access: any, loginSuccess: boolean}) => {
         if (res.loginSuccess) {
             this.loggedIn = true;

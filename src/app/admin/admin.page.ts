@@ -39,7 +39,7 @@ export class AdminPage implements OnInit {
   ngOnInit() {
     this.role = this.authService.getRole();
     var httpSub = this.httpClient
-      .get<any>('http://localhost:3000/admin/getgroups')
+      .get<any>('http://192.168.8.95:3000/admin/getgroups')
       .subscribe(
         (res: { name: string; rooms: { name: string; id: string }[] }[]) => {
           this.totalPath = res;
@@ -52,7 +52,7 @@ export class AdminPage implements OnInit {
 
   deleteRoom(groupid,roomid){
     this.httpClient
-      .post<any>('http://localhost:3000/admin/newordeleteroom', {
+      .post<any>('http://192.168.8.95:3000/admin/newordeleteroom', {
         roomname: 'nil', groupid: groupid, roomid: roomid, add: false
       })
       .subscribe((res: { success: Boolean }) => {
@@ -65,7 +65,7 @@ export class AdminPage implements OnInit {
   }
   createRoom(groupid, name){
     this.httpClient
-      .post<any>('http://localhost:3000/admin/newordeleteroom', {
+      .post<any>('http://192.168.8.95:3000/admin/newordeleteroom', {
         roomName: name, channelid: '1', groupid, add: true
       })
       .subscribe((res: { success: Boolean }) => {
@@ -79,7 +79,7 @@ export class AdminPage implements OnInit {
 
   deleteGroup(id){
     this.httpClient
-      .post<any>('http://localhost:3000/admin/newordeletegroup', {
+      .post<any>('http://192.168.8.95:3000/admin/newordeletegroup', {
         groupName: 'nil', id: id, add: false
       })
       .subscribe((res: { success: Boolean }) => {
@@ -92,13 +92,26 @@ export class AdminPage implements OnInit {
       });
   }
   generateRoomUsers(roomUsers){
-    console.log(this.queryUser)
     return Object.keys(roomUsers).includes(this.queryUser.id);
   }
 
+  addRemoveGroupAssist(groupid,add){
+    this.httpClient
+        .post<any>('http://192.168.8.95:3000/admin/createordeleteassist', {
+          userid: this.queryUser.id, groupid: groupid, add: add
+        })
+        .subscribe((res: { success: Boolean }) => {
+          if (res.success) {
+            this.ngOnInit();
+          } else {
+            console.log('bad response');
+          }
+        });
+    }
+
   createGroup(name){
       this.httpClient
-        .post<any>('http://localhost:3000/admin/newordeletegroup', {
+        .post<any>('http://192.168.8.95:3000/admin/newordeletegroup', {
           groupName: name, id: '1', add: true
         })
         .subscribe((res: { success: Boolean }) => {
@@ -154,7 +167,7 @@ export class AdminPage implements OnInit {
   addRemoveGroup(username, groupid, addTrue) {
     console.log(username, groupid, addTrue);
     this.httpClient
-      .post<any>('http://localhost:3000/admin/inviteremoveuser', {
+      .post<any>('http://192.168.8.95:3000/admin/inviteremoveuser', {
         username: username,
         id: groupid,
         add: addTrue,
@@ -170,7 +183,7 @@ export class AdminPage implements OnInit {
 
   addRemoveRoom(username, groupid, roomid, addTrue) {
     this.httpClient
-      .post<any>('http://localhost:3000/admin/inviteremoveroomuser', {
+      .post<any>('http://192.168.8.95:3000/admin/inviteremoveroomuser', {
         username: username,
         userid: this.queryUser.id,
         groupid: groupid,
@@ -195,7 +208,7 @@ export class AdminPage implements OnInit {
   updateRole() {
     console.log(this.queryUser.id);
     this.httpClient
-      .post<any>('http://localhost:3000/admin/updaterole', {
+      .post<any>('http://192.168.8.95:3000/admin/updaterole', {
         username: this.queryUser.username,
         oldRole: this.queryUser.role,
         newRole: this.input2.value,
@@ -220,7 +233,7 @@ export class AdminPage implements OnInit {
   checkUser(user): void {
     if (user.length > 2 && user != this.authService.getUser()) {
       this.httpClient
-        .post<any>('http://localhost:3000/admin/usercheck', {
+        .post<any>('http://192.168.8.95:3000/admin/usercheck', {
           username: user.toLowerCase(),
         })
         .subscribe(
@@ -251,7 +264,6 @@ export class AdminPage implements OnInit {
                 this.queryUser['username'].toLocaleUpperCase();
               this.input1.value = this.queryUser['email'];
               this.input2.value = this.queryUser['role'];
-              console.log(this.queryPath);
             } else {
               this.currentState = 'createMode';
               if (!user.includes('@')) {
@@ -299,7 +311,7 @@ export class AdminPage implements OnInit {
    */
   async deleteUser() {
     await this.httpClient
-      .post<any>('http://localhost:3000/admin/deleteuser', {
+      .post<any>('http://192.168.8.95:3000/admin/deleteuser', {
         user: this.title.el.textContent.toLowerCase(),
       })
       .subscribe((res: { success: Boolean }) => {
@@ -336,7 +348,7 @@ export class AdminPage implements OnInit {
       newUser = { username: input2.toLowerCase(), email: input1.toLowerCase() };
     }
     await this.httpClient
-      .post<any>('http://localhost:3000/admin/newuser', newUser)
+      .post<any>('http://192.168.8.95:3000/admin/newuser', newUser)
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.presentAlert('Success', `${newUser.username} has been created`);

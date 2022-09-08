@@ -36,6 +36,7 @@ var inviteremove = require('./routes/addremovegroup')(app,fs);
 var newordeletegroup = require('./routes/newordeletegroup')(app,fs,uuidv4);
 var newordeleteroom = require('./routes/newordeleteroom')(app,fs,uuidv4);
 var inviteremoveroom = require('./routes/addorremovefromchannel')(app,fs);
+var createordeleteassist = require('./routes/createordeleteassistant')(app,fs);
 
 
 
@@ -54,7 +55,7 @@ infoToSend = {groups: []}
     if (!group.users[`${userID}`]){
       continue
     }
-    infoToSend.groups.push({name: group.name, id: group.id, rooms: []})
+    infoToSend.groups.push({name: group.name,assistants: group.assistants, id: group.id, rooms: []})
       for (let room of group.rooms){
         if (!room.users[`${userID}`]){
           continue

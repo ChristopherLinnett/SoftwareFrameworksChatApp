@@ -19,9 +19,31 @@
         <ion-label>{{group.name}}</ion-label>
       </ion-item>
       <ion-list slot="content">
-      <div *ngFor="let room of group.rooms" class="ion-padding" (click)="navigateaway()">
-        {{room.name}}
-      </div>
+      <ion-item *ngFor="let room of group.rooms" >
+        <ion-label (click)="navigateaway()">{{room.name}}</ion-label>      
+        <ion-fab-button *ngIf="group.editRoom && isGroupAssistant(group.id)" color="danger" slot="end" size="small" (click)="deleteRoom(group.id, room.id)">
+          <ion-icon name="trash"></ion-icon>
+        </ion-fab-button>
+      </ion-item>
+      <ion-item *ngIf="!group.editRoom && isGroupAssistant(group.id)" class="ion-text-right"(click)="group.editRoom=true">
+        <ion-label>Edit Rooms</ion-label>
+        <ion-icon name="options" slot="end"></ion-icon>
+      </ion-item>
+      <ion-item *ngIf="group.editRoom==true && isGroupAssistant(group.id)">
+        <ion-item>
+          <ion-label position="floating">Room Name</ion-label>
+          <ion-input #newChannel class="ion-text-left"></ion-input>
+        </ion-item>
+        <ion-buttons>
+        <ion-fab-button slot="end" color="success" size="small" (click)="createRoom(group.id,newChannel.value)">
+          <ion-icon name="checkmark"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button slot="end" color="warning" size="small" (click)="group.editRoom=false">
+          <ion-icon name="close"></ion-icon>
+        </ion-fab-button>
+      </ion-buttons>
+      
+      </ion-item>
     </ion-list>
     </ion-accordion>
   </ion-accordion-group>

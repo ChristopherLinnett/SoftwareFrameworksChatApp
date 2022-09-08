@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable} from 'rxjs';
 import io from 'socket.io-client';
-const SERVER_URL = 'http://localhost:3000'
+const SERVER_URL = 'http://192.168.8.95:3000'
 
 @Injectable({
   providedIn: 'root'
