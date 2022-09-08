@@ -34,7 +34,7 @@ export class SelectionPage implements OnInit {
   }
 
   checkUser(){
-    this.userPath = JSON.parse(localStorage.getItem('savedUser')).access.groups
+    this.userPath = this.authService.getSavedUser().access.groups
   }
     
   

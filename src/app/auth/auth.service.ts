@@ -30,6 +30,9 @@ export class AuthService {
           this.loggedIn ? this.router.navigate(['']) : alert("incorrect details, try again");
       });      
 }
+  getSavedUser(){
+    return this.savedUser
+  }
 
   /**
    * The logout function clears the user object, sets the loggedIn variable to false, clears the

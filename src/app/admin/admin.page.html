@@ -72,11 +72,25 @@
           <ion-list slot="content" style="padding: 0%;margin:0%;border:0%;">
             <ion-item *ngFor="let room of group.rooms" style="display:inline-block; padding: 0%;margin:0%;border:0%; width:100%;">
               <ion-label>{{room.name}}</ion-label>
-              <ion-fab-button color="danger" slot="end" size="small" (click)="deleteRoom(group.id, room.id)">
+
+              <ion-fab-button *ngIf="!group.editRoom && queryPath && !generateRoomUsers(room.users)" color="success" slot="end" size="small" (click)="addRemoveRoom(this.queryUser.username,group.id, room.id, true)">
+                <ion-icon name="person-add"></ion-icon>
+              </ion-fab-button>
+
+              <ion-fab-button *ngIf="!group.editRoom && queryPath && generateRoomUsers(room.users)" color="danger" slot="end" size="small" (click)="addRemoveRoom(this.queryUser.username,group.id, room.id, false)">
+                <ion-icon name="person-remove"></ion-icon>
+              </ion-fab-button>
+              
+
+
+              <ion-fab-button *ngIf="group.editRoom" color="danger" slot="end" size="small" (click)="deleteRoom(group.id, room.id)">
                 <ion-icon name="trash"></ion-icon>
               </ion-fab-button>
             </ion-item>
-            <ion-item>
+            <ion-item *ngIf="!group.editRoom" class="ion-text-right"(click)="group.editRoom=true">
+              <ion-label>Edit Rooms</ion-label>
+            </ion-item>
+            <ion-item *ngIf="group.editRoom">
               <ion-item slot="start" class="ion-text-left" style="max-width:70%;">
                 <ion-label position="floating">Room Name</ion-label>
                 <ion-input #newChannel class="ion-text-left"></ion-input>

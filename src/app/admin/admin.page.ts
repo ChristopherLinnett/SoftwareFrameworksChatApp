@@ -20,7 +20,8 @@ export class AdminPage implements OnInit {
   }[];
   totalPath: any = [];
   addGroup = false;
-  editGroup = false
+  editGroup = false;
+  roomEdit = false;
 
   secondaryInput = 'username';
   @ViewChild('userToCheck') input1;
@@ -42,6 +43,9 @@ export class AdminPage implements OnInit {
       .subscribe(
         (res: { name: string; rooms: { name: string; id: string }[] }[]) => {
           this.totalPath = res;
+          this.totalPath = this.totalPath.map((group)=>{
+            group[`editRoom`]=false; 
+            return group});
         }
       );
   }
@@ -86,6 +90,10 @@ export class AdminPage implements OnInit {
           console.log('bad response');
         }
       });
+  }
+  generateRoomUsers(roomUsers){
+    console.log(this.queryUser)
+    return Object.keys(roomUsers).includes(this.queryUser.id);
   }
 
   createGroup(name){
@@ -154,6 +162,26 @@ export class AdminPage implements OnInit {
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.checkUser(username);
+        } else {
+          console.log('bad response');
+        }
+      });
+  }
+
+  addRemoveRoom(username, groupid, roomid, addTrue) {
+    this.httpClient
+      .post<any>('http://localhost:3000/admin/inviteremoveroomuser', {
+        username: username,
+        userid: this.queryUser.id,
+        groupid: groupid,
+        roomid: roomid,
+        add: addTrue,
+      })
+      .subscribe((res: { success: Boolean }) => {
+        if (res.success) {
+          console.log(this.queryUser.username)
+          this.ngOnInit();
+          this.checkUser(this.queryUser.username);
         } else {
           console.log('bad response');
         }

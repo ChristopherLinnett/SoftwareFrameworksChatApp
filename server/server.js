@@ -35,6 +35,7 @@ var getgroups = require('./routes/getgroups')(app,fs);
 var inviteremove = require('./routes/addremovegroup')(app,fs);
 var newordeletegroup = require('./routes/newordeletegroup')(app,fs,uuidv4);
 var newordeleteroom = require('./routes/newordeleteroom')(app,fs,uuidv4);
+var inviteremoveroom = require('./routes/addorremovefromchannel')(app,fs);
 
 
 
