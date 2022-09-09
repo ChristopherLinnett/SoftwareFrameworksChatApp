@@ -20,6 +20,15 @@ roomUsers: {id: string, name: string}[]
     
   }
 
+  /**
+   * This function is used to add or remove a user from a room
+   * @param username - The username of the user you want to add or remove
+   * @param userid - The userid of the user you want to add or remove
+   * @param groupid - the id of the group
+   * @param roomid - the id of the room you want to add/remove the user from
+   * @param addTrue - true if you want to add a user, false if you want to remove a user
+   * @param i - the index of the user in the roomUsers array
+   */
   addRemoveRoomUser(username, userid, groupid, roomid, addTrue, i) {
     this.httpClient
       .post<any>('http://192.168.8.95:3000/admin/inviteremoveroomuser', {
@@ -43,6 +52,11 @@ roomUsers: {id: string, name: string}[]
       });
   }
 
+  /**
+   * This function creates an alert with a header of "Error" and a message of whatever is passed into
+   * the function
+   * @param message - The message you want to display in the alert.
+   */
   async presentAlert(message) {
     const alert = await this.alertController.create({
       header: "Error",
@@ -53,6 +67,11 @@ roomUsers: {id: string, name: string}[]
     await alert.present();
   }
 
+  /**
+   * This function is called when the user clicks on a room in the list of rooms. It sends a post
+   * request to the server with the groupid and roomid of the room that was clicked on. The server then
+   * returns a list of users in that room
+   */
   getRoomUsers(){
     var httpSub = this.httpClient
       .post<any>('http://192.168.8.95:3000/admin/getroomusers', {groupid: this.groupid, roomid: this.roomid})

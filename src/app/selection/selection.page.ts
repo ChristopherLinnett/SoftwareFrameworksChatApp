@@ -19,23 +19,35 @@ export class SelectionPage implements OnInit {
     private router: Router,
     private modalController: ModalController
   ) {}
+
+  /**
+   * The logout function is called when the user clicks the logout button. The logout function calls
+   * the logout function in the auth service
+   */
   logout(){
     this.authService.logout()
   }
 
   navigateaway(){
-    console.log('testing')
     this.router.navigate(['/chat']);
   }
+
 
   async ngOnInit() {
     this.checkUser();
   }
 
+  /**
+   * The function checks the role of the user and returns it
+   * @returns The role of the user.
+   */
   checkRole(){
     return this.authService.getRole()
   }
 
+  /**
+   * The function checks the user's access level and returns the groups that the user has access to
+   */
   checkUser(): void {
       this.httpClient
         .post<any>('http://192.168.8.95:3000/admin/usercheck', {
@@ -48,6 +60,12 @@ export class SelectionPage implements OnInit {
                 return group})
           });
         }
+
+  /**
+   * This function checks if the user is an assistant of the group
+   * @param groupid - the id of the group you want to check
+   * @returns A boolean value.
+   */
   isGroupAssistant(groupid){
     var userid = this.authService.getSavedUser().id
     var groupIDlist = this.userPath.map((group)=>{return group.id})
@@ -59,6 +77,11 @@ export class SelectionPage implements OnInit {
     return false
   }
 
+  /**
+   * It sends a post request to the server with the roomid and groupid of the room to be deleted
+   * @param groupid - the id of the group that the room is in
+   * @param roomid - the id of the room to be deleted
+   */
   deleteRoom(groupid,roomid){
     this.httpClient
       .post<any>('http://192.168.8.95:3000/admin/newordeleteroom', {
@@ -74,6 +97,13 @@ export class SelectionPage implements OnInit {
   }
 
 
+  /**
+   * This function creates a modal, passes in the groupid, roomid, and roomname, and then presents the
+   * modal
+   * @param groupid - the id of the group
+   * @param roomid - the id of the room you want to add the user to
+   * @param roomname - The name of the room
+   */
   async launchUserManager(groupid, roomid, roomname) {
     const modal = await this.modalController.create({
       component: AssistantModalComponent,
@@ -91,6 +121,13 @@ export class SelectionPage implements OnInit {
   }
  
   
+  /**
+   * This function is called when the user clicks the "Create Room" button. It sends a POST request to
+   * the server with the room name, group id, and the user's username. The server then creates the room
+   * and sends back a success message
+   * @param groupid - the id of the group you want to add the room to
+   * @param name - The name of the room
+   */
   createRoom(groupid, name){
     this.httpClient
       .post<any>('http://192.168.8.95:3000/admin/newordeleteroom', {

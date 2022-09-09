@@ -57,6 +57,10 @@ export class ChatPage {
     this.authService.logout()
   }
 
+  /**
+   * It returns the role of the user from the authService.
+   * @returns The function getRole() is being returned.
+   */
   checkRole(){
     return this.authService.getRole()
   }
