@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { SelectionPageRoutingModule } from './selection-routing.module';
 
 import { SelectionPage } from './selection.page';
+import { AssistantModalComponent } from './assistant-modal/assistant-modal.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { SelectionPage } from './selection.page';
     IonicModule,
     SelectionPageRoutingModule
   ],
-  declarations: [SelectionPage]
+  declarations: [SelectionPage, AssistantModalComponent]
 })
 export class SelectionPageModule {}

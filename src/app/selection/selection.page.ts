@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import { AuthService } from '../auth/auth.service';
+import { AssistantModalComponent } from './assistant-modal/assistant-modal.component';
 
 @Component({
   selector: 'app-selection',
@@ -14,7 +16,8 @@ export class SelectionPage implements OnInit {
   constructor(
     private authService: AuthService,
     private httpClient: HttpClient,
-    private router: Router
+    private router: Router,
+    private modalController: ModalController
   ) {}
   logout(){
     this.authService.logout()
@@ -69,6 +72,24 @@ export class SelectionPage implements OnInit {
         }
       });
   }
+
+
+  async launchUserManager(groupid, roomid, roomname) {
+    const modal = await this.modalController.create({
+      component: AssistantModalComponent,
+      cssClass: 'mymodal',
+      componentProps: { 
+        groupid: groupid,
+        roomid: roomid,
+        roomname: roomname
+      }
+    });
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+
+  }
+ 
   
   createRoom(groupid, name){
     this.httpClient

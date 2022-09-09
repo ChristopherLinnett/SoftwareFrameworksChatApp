@@ -24,6 +24,9 @@
         <ion-fab-button *ngIf="group.editRoom && isGroupAssistant(group.id)" color="danger" slot="end" size="small" (click)="deleteRoom(group.id, room.id)">
           <ion-icon name="trash"></ion-icon>
         </ion-fab-button>
+        <ion-fab-button *ngIf="!group.editRoom && isGroupAssistant(group.id)" color="warning" slot="end" size="small" (click)="launchUserManager(group.id, room.id, room.name)">
+          <ion-icon name="person-remove"></ion-icon>
+        </ion-fab-button>
       </ion-item>
       <ion-item *ngIf="!group.editRoom && isGroupAssistant(group.id)" class="ion-text-right"(click)="group.editRoom=true">
         <ion-label>Edit Rooms</ion-label>

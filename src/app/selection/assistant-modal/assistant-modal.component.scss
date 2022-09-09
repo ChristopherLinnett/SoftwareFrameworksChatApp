@@ -1,0 +1,15 @@
+ion-card {
+    ion-content {
+        min-height:30%;
+        max-height:50%;
+        --background:transparent;
+    }
+    height: 60%;
+    margin-left: 5%;
+    margin-top: 30%;
+    width:90%;
+    border-radius: 10%;
+    padding-top: 10%;
+    border:solid;
+    border:rgb(24, 9, 98);
+}
