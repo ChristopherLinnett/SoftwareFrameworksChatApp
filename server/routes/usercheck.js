@@ -42,12 +42,15 @@ module.exports = (app, fs, sendAccess) => {
         if (role == undefined) {
           role = "user";
         }
+        accessPath = sendAccess(savedUser.ID, dummyData)
+
         return res.send({
           username: savedUser.username,
           id: savedUser.ID,
           email: savedUser.email,
           role: role,
           validUser: true,
+          access: accessPath
         });
       }
     }

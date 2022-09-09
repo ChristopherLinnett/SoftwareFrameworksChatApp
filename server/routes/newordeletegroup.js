@@ -11,7 +11,6 @@ module.exports = (app, fs,uuidv4) => {
       return res.send({success: true});
     } else {
       groupid = req.body.id
-      console.log(dummyData.groups)
       var allid = dummyData.groups.map((group)=>{return group.id});
       groupindex = allid.indexOf(groupid);
       dummyData.groups.splice(groupindex,1);
