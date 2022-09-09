@@ -165,7 +165,6 @@ export class AdminPage implements OnInit {
    * @param addTrue - boolean
    */
   addRemoveGroup(username, groupid, addTrue) {
-    console.log(username, groupid, addTrue);
     this.httpClient
       .post<any>('http://192.168.8.95:3000/admin/inviteremoveuser', {
         username: username,
@@ -192,7 +191,6 @@ export class AdminPage implements OnInit {
       })
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
-          console.log(this.queryUser.username)
           this.ngOnInit();
           this.checkUser(this.queryUser.username);
         } else {
@@ -206,7 +204,6 @@ export class AdminPage implements OnInit {
    * user's role.
    */
   updateRole() {
-    console.log(this.queryUser.id);
     this.httpClient
       .post<any>('http://192.168.8.95:3000/admin/updaterole', {
         username: this.queryUser.username,
@@ -287,7 +284,6 @@ export class AdminPage implements OnInit {
     var userid = this.queryUser.id
     var groupIDlist = this.totalPath.map((group)=>{return group.id})
     var groupIndex = groupIDlist.indexOf(groupid)
-    console.log(this.totalPath[groupIndex].assistants.includes(userid))
     // console.log(this.userPath[groupIndex])
     if (this.totalPath[groupIndex].assistants.includes(userid)){
       return true
