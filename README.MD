@@ -3,10 +3,10 @@
 ## Git
 
 ## Git Layout
-The git repository contains the project folder, a readme file and the server folder. The default branch is called main.
+The git repository contains the project folder, a readme file and the server folder. The default branch is called master.
 
 ## Version Control Approach
-When developing, a commit is added whenever a small feature is added, a milestone or functionality of a new function has been implemented. For most of the project, this was done in the main branch but for a few larger features, seperate branches were created then merged back into the main branch.
+When developing, a commit is added whenever a small feature is added, a milestone or functionality of a new function has been implemented. For most of the project, this was done in the main branch but for a few larger features, seperate branches were created then merged back into the main branch. These were the selection screen, this was a large feature that displayed the groups/channels and empowered group assistants, then had its own modal. Then the admin functions. This constituted most of the functionality for this project
 ___
 ## Data Structures
 
