@@ -37,6 +37,8 @@ var newordeletegroup = require('./routes/newordeletegroup')(app,fs,uuidv4);
 var newordeleteroom = require('./routes/newordeleteroom')(app,fs,uuidv4);
 var inviteremoveroom = require('./routes/addorremovefromchannel')(app,fs);
 var createordeleteassist = require('./routes/createordeleteassistant')(app,fs);
+var getroomusers = require('./routes/getroomusers')(app,fs);
+
 
 
 
