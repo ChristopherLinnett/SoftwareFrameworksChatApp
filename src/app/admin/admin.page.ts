@@ -22,7 +22,6 @@ export class AdminPage implements OnInit {
   addGroup = false;
   editGroup = false;
   roomEdit = false;
-
   secondaryInput = 'username';
   @ViewChild('userToCheck') input1;
   @ViewChild('input2') input2;
@@ -50,6 +49,11 @@ export class AdminPage implements OnInit {
       );
   }
 
+  /**
+   * It sends a post request to the server with the roomid and groupid of the room to be deleted.
+   * @param groupid - the id of the group that the room is in
+   * @param roomid - the id of the room to be deleted
+   */
   deleteRoom(groupid,roomid){
     this.httpClient
       .post<any>('http://192.168.8.95:3000/admin/newordeleteroom', {
@@ -63,6 +67,13 @@ export class AdminPage implements OnInit {
         }
       });
   }
+
+  /**
+   * It sends a post request to the server with the room name and group id, and if the server responds
+   * with a success message, it refreshes the page.
+   * @param groupid - the id of the group that the room is being added to
+   * @param name - the name of the room
+   */
   createRoom(groupid, name){
     this.httpClient
       .post<any>('http://192.168.8.95:3000/admin/newordeleteroom', {
@@ -77,6 +88,11 @@ export class AdminPage implements OnInit {
       });
   }
 
+  /**
+   * It sends a post request to the server with the group name and id, and the server deletes the group
+   * from the database.
+   * @param id - the id of the group
+   */
   deleteGroup(id){
     this.httpClient
       .post<any>('http://192.168.8.95:3000/admin/newordeletegroup', {
@@ -95,6 +111,16 @@ export class AdminPage implements OnInit {
     return Object.keys(roomUsers).includes(this.queryUser.id);
   }
 
+  /**
+   * It takes a groupid and a boolean, and sends a post request to the server with the userid, groupid,
+   * and boolean. 
+   * 
+   * If the response is successful, it refreshes the page. 
+   * 
+   * If the response is unsuccessful, it logs an error.
+   * @param groupid - the id of the group
+   * @param add - true or false
+   */
   addRemoveGroupAssist(groupid,add){
     this.httpClient
         .post<any>('http://192.168.8.95:3000/admin/createordeleteassist', {
@@ -109,6 +135,10 @@ export class AdminPage implements OnInit {
         });
     }
 
+  /**
+   * It takes a string, sends it to the server, and then refreshes the page.
+   * @param name - the name of the group
+   */
   createGroup(name){
       this.httpClient
         .post<any>('http://192.168.8.95:3000/admin/newordeletegroup', {
@@ -180,6 +210,16 @@ export class AdminPage implements OnInit {
       });
   }
 
+  /**
+   * It takes a username, groupid, roomid, and a boolean value. 
+   * It then sends a post request to the server with the given parameters. 
+   * If the server responds with a success message, it refreshes the page. 
+   * If the server responds with a failure message, it logs a message to the console.
+   * @param username - username of the user you want to add/remove
+   * @param groupid - the id of the group
+   * @param roomid - the id of the room
+   * @param addTrue - boolean
+   */
   addRemoveRoom(username, groupid, roomid, addTrue) {
     this.httpClient
       .post<any>('http://192.168.8.95:3000/admin/inviteremoveroomuser', {
@@ -280,6 +320,11 @@ export class AdminPage implements OnInit {
     }
   }
 
+  /**
+   * If the user is an assistant in the group, return true, otherwise return false.
+   * @param groupid - the id of the group
+   * @returns A boolean value.
+   */
   isGroupAssistant(groupid){
     var userid = this.queryUser.id
     var groupIDlist = this.totalPath.map((group)=>{return group.id})
@@ -348,6 +393,12 @@ export class AdminPage implements OnInit {
     await alert.present();
   }
 
+  /**
+   * It takes two inputs, and depending on the value of a variable, it creates an object with the two
+   * inputs in different properties, and then sends that object to a server.
+   * @param input1 - the username
+   * @param input2 - string;
+   */
   async createUser(input1, input2) {
     var newUser;
     if (this.secondaryInput == 'email') {
