@@ -13,6 +13,7 @@ const io = require("socket.io")(http, {
 });
 const socket = require("./socket.js");
 const server = require("./listen.js");
+const { MongoClient } = require("mongodb");
 var dummyData = fs.readFileSync('dummydb.json');
 dummyData = JSON.parse(dummyData)
 const PORT = 3000;
@@ -20,26 +21,33 @@ const PORT = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+const MongoClient = require('mongodb').MongoClient;
+const url = 'mongodb://localhost:27017';
+MongoClient.connect(url, {useNewUrlParser: true}, (err, client)=>{
+    if (err) {return console.log(err)}
+    const dbname = 'ChatApp';
+    const db = client.db(dbname);
+
 /* Connecting to the socket.js file. */
 socket.connect(io, PORT);
 
 /* Listening for a connection on port 3000. */
 server.listen(http, PORT);
 
-var usercheck = require('./routes/usercheck')(app, fs, sendAccess);
-var auth = require('./routes/auth')(app, fs, sendAccess);
-var newuser = require('./routes/newuser')(app,fs);
-var deleteuser = require('./routes/deleteuser')(app,fs);
-var updaterole = require('./routes/updaterole')(app,fs);
-var getgroups = require('./routes/getgroups')(app,fs);
-var inviteremove = require('./routes/addremovegroup')(app,fs);
-var newordeletegroup = require('./routes/newordeletegroup')(app,fs,uuidv4);
-var newordeleteroom = require('./routes/newordeleteroom')(app,fs,uuidv4);
-var inviteremoveroom = require('./routes/addorremovefromchannel')(app,fs);
-var createordeleteassist = require('./routes/createordeleteassistant')(app,fs);
-var getroomusers = require('./routes/getroomusers')(app,fs);
+require('./routes/usercheck')(app, fs, sendAccess);
+require('./routes/auth')(app, fs, sendAccess);
+require('./routes/newuser')(app,fs);
+require('./routes/deleteuser')(app,fs);
+require('./routes/updaterole')(app,fs);
+require('./routes/getgroups')(app,fs);
+require('./routes/addremovegroup')(app,fs);
+require('./routes/newordeletegroup')(app,fs,uuidv4);
+require('./routes/newordeleteroom')(app,fs,uuidv4);
+require('./routes/addorremovefromchannel')(app,fs);
+require('./routes/createordeleteassistant')(app,fs);
+require('./routes/getroomusers')(app,fs);
 
-
+})
 
 
 /**
