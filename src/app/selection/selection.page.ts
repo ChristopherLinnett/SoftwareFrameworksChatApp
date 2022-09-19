@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from '../auth/auth.service';
+import { HttpService } from '../shared/services/http.service';
 import { AssistantModalComponent } from './assistant-modal/assistant-modal.component';
 
 @Component({
@@ -15,7 +15,7 @@ export class SelectionPage implements OnInit {
   userPath;
   constructor(
     private authService: AuthService,
-    private httpClient: HttpClient,
+    private httpService: HttpService,
     private router: Router,
     private modalController: ModalController
   ) {}
@@ -49,10 +49,8 @@ export class SelectionPage implements OnInit {
    * The function checks the user's access level and returns the groups that the user has access to
    */
   checkUser(): void {
-      this.httpClient
-        .post<any>('http://192.168.8.95:3000/admin/usercheck', {
-          username: this.authService.getUser().toLowerCase()
-        })
+    const username: string = this.authService.getUser().toLowerCase()
+    this.httpService.verifyUser(username)
         .subscribe(
           (res) => {
               this.userPath = res.access.groups.map((group)=>{
@@ -83,10 +81,7 @@ export class SelectionPage implements OnInit {
    * @param roomid - the id of the room to be deleted
    */
   deleteRoom(groupid,roomid){
-    this.httpClient
-      .post<any>('http://192.168.8.95:3000/admin/newordeleteroom', {
-        roomname: 'nil', groupid: groupid, roomid: roomid, add: false
-      })
+    this.httpService.addOrDeleteRoom(null, groupid, roomid, false)
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();
@@ -129,10 +124,7 @@ export class SelectionPage implements OnInit {
    * @param name - The name of the room
    */
   createRoom(groupid, name){
-    this.httpClient
-      .post<any>('http://192.168.8.95:3000/admin/newordeleteroom', {
-        roomName: name, roomid: '1', groupid: groupid, add: true, creator: this.authService.getUser()
-      })
+    this.httpService.addOrDeleteRoom(name, null, null, true, this.authService.getUser())
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();

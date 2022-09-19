@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpService } from '../shared/services/http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AuthService {  
   loggedIn = false;
   savedUser : {username: string, id: string, email: string, role: string, access: any};
-    constructor(private httpClient: HttpClient, private router: Router, private activatedRoute: ActivatedRoute) { }
+    constructor(private httpService: HttpService, private router: Router, private activatedRoute: ActivatedRoute) { }
     
   
     /**
@@ -19,8 +19,8 @@ export class AuthService {
      * @param passwordInput - string
      */
     login(usernameInput, passwordInput): void {
-      this.httpClient.post<any>('http://192.168.8.95:3000/auth', 
-      {username: usernameInput.toLowerCase(), password: passwordInput.toLowerCase() }).subscribe((res: {username: string, id: string, email: string, role: string, access: any, loginSuccess: boolean}) => {
+      this.httpService.login(usernameInput.toLowerCase(), passwordInput.toLowerCase())
+      .subscribe((res: {username: string, id: string, email: string, role: string, access: any, loginSuccess: boolean}) => {
         if (res.loginSuccess) {
             this.loggedIn = true;
             this.savedUser = {username: res.username, email: res.email, id: res.id, role: res.role, access: res.access}

@@ -11,46 +11,25 @@
       "email": "superadmin",
       "ID": "ee011684-be58-4819-a955-296b4b3a9035",
       "password": "superadmin"
-    },
-    "chris": {
-      "username": "chris",
-      "email": "chris",
-      "ID": "08b6fba9-882a-4abd-a58b-3c8041431a5f",
-      "password": "chris"
     }
   },
   "superUsers": {
-    "0b78a6b6-78fe-468b-8789-bf9cf70785ab": "superuser",
-    "ee011684-be58-4819-a955-296b4b3a9035": "superadmin",
-    "c5ea9543-f4cf-4280-8a2b-0eb217d7c6a3": "kaile",
-    "c3ab2a64-83e6-4ede-8227-bc17cdaa37cd": "chris",
+    "ee011684-be58-4819-a955-296b4b3a9035": "superadmin"
+  },
+  "groupUsers": {
     "332a233a-a3c2-48eb-9916-1ab18c825985": "groupadmin"
   },
-  "groupUsers": { "cce892dd-ce3a-48a9-976e-944f8cd54eb2": "tom123" },
   "groups": [
     {
       "name": "Group 1",
       "id": "40b4f271-d3aa-430f-8a78-b3bf91a296ac",
       "users": {
         "08b6fba9-882a-4abd-a58b-3c8041431a5f": "chris",
-        "ee011684-be58-4819-a955-296b4b3a9035": "superadmin"
+        "ee011684-be58-4819-a955-296b4b3a9035": "superadmin",
+        "332a233a-a3c2-48eb-9916-1ab18c825985": "groupadmin"
       },
-      "rooms": [
-        {
-          "name": "Room1",
-          "id": "0098b09d-70a9-4cdc-89a5-d7b1d255f512",
-          "users": {
-            "08b6fba9-882a-4abd-a58b-3c8041431a5f": "chris",
-            "ee011684-be58-4819-a955-296b4b3a9035": "superadmin"
-          }
-        },
-        {
-          "name": "Room2",
-          "id": "a1aa0962-990e-41ca-ab70-c73d4118f824",
-          "users": { "08b6fba9-882a-4abd-a58b-3c8041431a5f": "chris" }
-        }
-      ],
-      "assistants": ["08b6fba9-882a-4abd-a58b-3c8041431a5f"]
+      "rooms": [],
+      "assistants": []
     }
   ]
 }

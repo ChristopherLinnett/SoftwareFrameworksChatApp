@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from '../auth/auth.service';
+import { Group } from '../shared/classes/accessPath';
+import { HttpService } from '../shared/services/http.service';
 
 @Component({
   selector: 'app-admin',
@@ -27,7 +28,7 @@ export class AdminPage implements OnInit {
   @ViewChild('input2') input2;
   @ViewChild('title') title;
   constructor(
-    private httpClient: HttpClient,
+    private httpService: HttpService,
     private alertController: AlertController,
     private authService: AuthService
   ) {}
@@ -37,9 +38,7 @@ export class AdminPage implements OnInit {
    */
   ngOnInit() {
     this.role = this.authService.getRole();
-    var httpSub = this.httpClient
-      .get<any>('http://192.168.8.95:3000/admin/getgroups')
-      .subscribe(
+    var httpSub = this.httpService.getGroups().subscribe(
         (res: { name: string; rooms: { name: string; id: string }[] }[]) => {
           this.totalPath = res;
           this.totalPath = this.totalPath.map((group)=>{
@@ -55,11 +54,7 @@ export class AdminPage implements OnInit {
    * @param roomid - the id of the room to be deleted
    */
   deleteRoom(groupid,roomid){
-    this.httpClient
-      .post<any>('http://192.168.8.95:3000/admin/newordeleteroom', {
-        roomname: 'nil', groupid: groupid, roomid: roomid, add: false
-      })
-      .subscribe((res: { success: Boolean }) => {
+    this.httpService.addOrDeleteRoom(null, groupid, roomid, false).subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();
         } else {
@@ -75,11 +70,7 @@ export class AdminPage implements OnInit {
    * @param name - the name of the room
    */
   createRoom(groupid, name){
-    this.httpClient
-      .post<any>('http://192.168.8.95:3000/admin/newordeleteroom', {
-        roomName: name, channelid: '1', groupid, add: true
-      })
-      .subscribe((res: { success: Boolean }) => {
+    this.httpService.addOrDeleteRoom(name,groupid,null,true).subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();
         } else {
@@ -94,11 +85,7 @@ export class AdminPage implements OnInit {
    * @param id - the id of the group
    */
   deleteGroup(id){
-    this.httpClient
-      .post<any>('http://192.168.8.95:3000/admin/newordeletegroup', {
-        groupName: 'nil', id: id, add: false
-      })
-      .subscribe((res: { success: Boolean }) => {
+    this.httpService.addOrDeleteGroup(null,id,false).subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();
           this.addGroup = false;
@@ -122,10 +109,7 @@ export class AdminPage implements OnInit {
    * @param add - true or false
    */
   addRemoveGroupAssist(groupid,add){
-    this.httpClient
-        .post<any>('http://192.168.8.95:3000/admin/createordeleteassist', {
-          userid: this.queryUser.id, groupid: groupid, add: add
-        })
+    this.httpService.addOrDeleteGroupAssistant(this.queryUser.id,groupid, add)
         .subscribe((res: { success: Boolean }) => {
           if (res.success) {
             this.ngOnInit();
@@ -140,10 +124,7 @@ export class AdminPage implements OnInit {
    * @param name - the name of the group
    */
   createGroup(name){
-      this.httpClient
-        .post<any>('http://192.168.8.95:3000/admin/newordeletegroup', {
-          groupName: name, id: '1', add: true
-        })
+    this.httpService.addOrDeleteGroup(name, null, true)
         .subscribe((res: { success: Boolean }) => {
           if (res.success) {
             this.ngOnInit();
@@ -194,13 +175,8 @@ export class AdminPage implements OnInit {
    * @param groupid - the id of the group
    * @param addTrue - boolean
    */
-  addRemoveGroup(username, groupid, addTrue) {
-    this.httpClient
-      .post<any>('http://192.168.8.95:3000/admin/inviteremoveuser', {
-        username: username,
-        id: groupid,
-        add: addTrue,
-      })
+  addRemoveGroup(username, groupid, add) {
+    this.httpService.addOrRemoveGroupUser(username, groupid, add)
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.checkUser(username);
@@ -220,15 +196,8 @@ export class AdminPage implements OnInit {
    * @param roomid - the id of the room
    * @param addTrue - boolean
    */
-  addRemoveRoom(username, groupid, roomid, addTrue) {
-    this.httpClient
-      .post<any>('http://192.168.8.95:3000/admin/inviteremoveroomuser', {
-        username: username,
-        userid: this.queryUser.id,
-        groupid: groupid,
-        roomid: roomid,
-        add: addTrue,
-      })
+  addRemoveRoom(username, groupid, roomid, add) {
+    this.httpService.addOrDeleteRoomUser(username, this.queryUser.id, groupid, roomid, add)
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();
@@ -244,13 +213,7 @@ export class AdminPage implements OnInit {
    * user's role.
    */
   updateRole() {
-    this.httpClient
-      .post<any>('http://192.168.8.95:3000/admin/updaterole', {
-        username: this.queryUser.username,
-        oldRole: this.queryUser.role,
-        newRole: this.input2.value,
-        userId: this.queryUser.id,
-      })
+    this.httpService.updateUserRole(this.queryUser.username, this.queryUser.role, this.input2.value, this.queryUser.id)
       .subscribe((res: { success: Boolean }) => {
         res.success
           ? this.presentAlert(
@@ -269,11 +232,7 @@ export class AdminPage implements OnInit {
    */
   checkUser(user): void {
     if (user.length > 2 && user != this.authService.getUser()) {
-      this.httpClient
-        .post<any>('http://192.168.8.95:3000/admin/usercheck', {
-          username: user.toLowerCase(),
-        })
-        .subscribe(
+      this.httpService.verifyUser(user.toLowerCase()).subscribe(
           (res: {
             username: string;
             id: string;
@@ -281,11 +240,7 @@ export class AdminPage implements OnInit {
             role: string;
             validUser: boolean;
             access: {
-              groups: {
-                name: string;
-                id: string;
-                rooms: { name: string; id: string }[];
-              }[];
+              groups: Group[];
             };
           }) => {
             if (res.validUser) {
@@ -362,12 +317,8 @@ export class AdminPage implements OnInit {
    * It sends a post request to the server with the username of the user to be deleted, and if the
    * server responds with a success message, it will display an alert to the user, and reset the form.
    */
-  async deleteUser() {
-    await this.httpClient
-      .post<any>('http://192.168.8.95:3000/admin/deleteuser', {
-        user: this.title.el.textContent.toLowerCase(),
-      })
-      .subscribe((res: { success: Boolean }) => {
+  deleteUser() {
+    this.httpService.addOrDeleteUser(this.title.el.textContext.toLowerCase(), false).subscribe((res: { success: Boolean }) => {
         res.success
           ? this.presentAlert(
               'Success',
@@ -406,8 +357,7 @@ export class AdminPage implements OnInit {
     } else {
       newUser = { username: input2.toLowerCase(), email: input1.toLowerCase() };
     }
-    await this.httpClient
-      .post<any>('http://192.168.8.95:3000/admin/newuser', newUser)
+    this.httpService.addOrDeleteUser(newUser, true)
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.presentAlert('Success', `${newUser.username} has been created`);
