@@ -1,12 +1,10 @@
-const { randomUUID } = require("crypto");
-
-module.exports = (app, db) => {
+module.exports = (app, db, uuid) => {
   app.post("/admin/newordeletegroup", (req, res) => {
     groupname = req.body.groupName;
     add = req.body.add;
 
     if (add) {
-      id = randomUUID()
+      id = uuid()
       db.collection("Groups").insertOne({id: id, name: groupname, users : {},rooms: [], assistants: []})
       return res.send({success: true});
     }

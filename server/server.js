@@ -34,12 +34,12 @@ server.listen(http, PORT);
 
 require('./routes/usercheck')(app, db, sendAccess);
 require('./routes/auth')(app, db, sendAccess);
-require('./routes/newuser')(app,db);
+require('./routes/newuser')(app,db, uuidv4);
 require('./routes/deleteuser')(app,db);
 require('./routes/updaterole')(app,db);
 require('./routes/getgroups')(app,db);
 require('./routes/addremovegroup')(app,fs);
-require('./routes/newordeletegroup')(app,db);
+require('./routes/newordeletegroup')(app,db, uuidv4);
 require('./routes/newordeleteroom')(app,fs,uuidv4);
 require('./routes/addorremovefromchannel')(app,fs);
 require('./routes/createordeleteassistant')(app,fs);
