@@ -3,13 +3,16 @@ module.exports = (app, db, sendAccess) => {
     username = req.body.username;
     let role = "user";
     usersCollection = db.collection("Users");
+    
     usersCollection
       .find({ $or: [{ username: username }, { email: username }] })
-      .toArray((err, res) => {
-        if (res.length != 1) {
+      .toArray((err, dbres) => {
+        if (dbres.length != 1) {
+          console.log(dbres)
           return res.send({ validUser: false });
         }
-        let savedUser = res[0];
+        console.log(dbres)
+        let savedUser = dbres[0];
         superAdminCollection = db.collection("SuperAdmins");
         superAdminCollection
           .find({ _id: savedUser._id })
@@ -24,7 +27,6 @@ module.exports = (app, db, sendAccess) => {
               });
             }
           });
-      });
       var accessPath = sendAccess(savedUser._id, db);
       return res.send({
         username: savedUser.username,
@@ -34,5 +36,6 @@ module.exports = (app, db, sendAccess) => {
         validUser: true,
         access: accessPath,
       });
+    })
   });
 };
