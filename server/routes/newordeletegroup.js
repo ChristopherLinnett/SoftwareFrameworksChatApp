@@ -1,22 +1,19 @@
-module.exports = (app, fs,uuidv4) => {
+const { randomUUID } = require("crypto");
+
+module.exports = (app, db) => {
   app.post("/admin/newordeletegroup", (req, res) => {
-    dummyData = JSON.parse(fs.readFileSync("./dummydb.json"));
     groupname = req.body.groupName;
     add = req.body.add;
+
     if (add) {
-      groupid = uuidv4();
-      console.log(groupid)
-      dummyData.groups.push({name: groupname, id: groupid, users : {},rooms: [], assistants: []});
-      fs.writeFileSync("./dummydb.json", JSON.stringify(dummyData));
+      id = randomUUID()
+      db.collection("Groups").insertOne({id: id, name: groupname, users : {},rooms: [], assistants: []})
       return res.send({success: true});
-    } else {
-      groupid = req.body.id
-      var allid = dummyData.groups.map((group)=>{return group.id});
-      groupindex = allid.indexOf(groupid);
-      dummyData.groups.splice(groupindex,1);
-      fs.writeFileSync("./dummydb.json", JSON.stringify(dummyData));
+    }
+    groupid = req.body.id
+    db.collection("Groups").find({id: groupid}).toArray((err,testRes)=>{console.log(testRes)})
+      db.collection("Groups").findOneAndDelete({'id': groupid}).then((delRes)=>{console.log(delRes)})
       return res.send({success: true});
-  }
     });
 }
 

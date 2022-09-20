@@ -16,13 +16,12 @@ const server = require("./listen.js");
 var dummyData = fs.readFileSync('dummydb.json');
 dummyData = JSON.parse(dummyData)
 const PORT = 3000;
-
 app.use(cors());
 app.use(bodyParser.json());
 
-const MongoClient = require('mongodb').MongoClient;
+const Mongo = require('mongodb');
 const url = 'mongodb://localhost:27017';
-MongoClient.connect(url, {useNewUrlParser: true}, (err, client)=>{
+Mongo.MongoClient.connect(url, {useNewUrlParser: true}, (err, client)=>{
     if (err) {return console.log(err)}
     const dbname = 'ChatApp';
     const db = client.db(dbname);
@@ -37,10 +36,10 @@ require('./routes/usercheck')(app, db, sendAccess);
 require('./routes/auth')(app, db, sendAccess);
 require('./routes/newuser')(app,db);
 require('./routes/deleteuser')(app,db);
-require('./routes/updaterole')(app,fs);
-require('./routes/getgroups')(app,fs);
+require('./routes/updaterole')(app,db);
+require('./routes/getgroups')(app,db);
 require('./routes/addremovegroup')(app,fs);
-require('./routes/newordeletegroup')(app,fs,uuidv4);
+require('./routes/newordeletegroup')(app,db);
 require('./routes/newordeleteroom')(app,fs,uuidv4);
 require('./routes/addorremovefromchannel')(app,fs);
 require('./routes/createordeleteassistant')(app,fs);
