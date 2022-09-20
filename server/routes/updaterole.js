@@ -8,7 +8,6 @@ module.exports = (app, db) => {
 
         oldRole = req.body.oldRole
         role = req.body.newRole;
-        console.log(oldRole)
 
         if (oldRole == 'superuser'){
           db.collection("SuperAdmins").findOneAndDelete({'_id': user._id})

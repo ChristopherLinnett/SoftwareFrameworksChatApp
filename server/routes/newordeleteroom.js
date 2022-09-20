@@ -10,13 +10,12 @@ module.exports = (app, fs,uuidv4) => {
 
     if (creator){
       defaultuser = dummyData.users[`${creator}`].ID
-      console.log(`defaultuser is ${defaultuser}`)}
+     }
       else { defaultuser = {}; console.log('No Creator')}
     
     if (add) {
       roomid = uuidv4();
       dummyData.groups[groupIndex].rooms.push({name: roomName, id: roomid, users : {[`${defaultuser}`]: creator}});
-      console.log(dummyData.groups[groupIndex].rooms)
       fs.writeFileSync("./dummydb.json", JSON.stringify(dummyData));
       return res.send({success: true});
     } else {

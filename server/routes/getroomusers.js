@@ -2,7 +2,6 @@ module.exports = (app, fs)=> {
     app.post("/admin/getroomusers", (req,res) => {
       groupid = req.body.groupid
       roomid = req.body.roomid
-      console.log(groupid, roomid)
         dummyData = JSON.parse(fs.readFileSync('./dummydb.json'));
         var allid = dummyData.groups.map((group)=>{return group.id});
         groupIndex = allid.indexOf(groupid);

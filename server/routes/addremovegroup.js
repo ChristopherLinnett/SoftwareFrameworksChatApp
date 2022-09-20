@@ -4,7 +4,6 @@ module.exports = (app, fs) => {
     username = req.body.username;
     groupid = req.body.id;
     add = req.body.add;
-    console.log(username, groupid, add);
     userID = dummyData.users[`${username}`].ID;
     for (let group of dummyData.groups) {
       if (group.id == groupid) {

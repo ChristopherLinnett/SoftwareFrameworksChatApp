@@ -8,7 +8,6 @@ module.exports = (app, db, sendAccess) => {
       .find({ $or: [{ username: username }, { email: username }] })
       .toArray((err, dbres) => {
         if (dbres.length != 1) {
-          console.log(dbres);
           return res.send({ validUser: false });
         }
         let savedUser = dbres[0];

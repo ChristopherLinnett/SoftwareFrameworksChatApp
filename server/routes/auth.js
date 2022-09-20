@@ -29,7 +29,6 @@ module.exports = (app, db, sendAccess) => {
         })
       }
         accessInfo = sendAccess(savedUser._id, db);
-        console.log(role)
         return res.send({
           username: savedUser.username,
           id: savedUser._id,
