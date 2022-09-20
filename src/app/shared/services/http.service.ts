@@ -27,7 +27,7 @@ export class HttpService {
     );
   }
 
-  addOrDeleteGroup(name, id, add) {
+  addOrDeleteGroup(name: string, id: string, add: boolean) {
     return this.httpClient.post<any>(
       'http://localhost:3000/admin/newordeletegroup',
       {

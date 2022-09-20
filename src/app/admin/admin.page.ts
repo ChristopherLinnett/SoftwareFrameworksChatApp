@@ -84,7 +84,7 @@ export class AdminPage implements OnInit {
    * from the database.
    * @param id - the id of the group
    */
-  deleteGroup(id){
+  deleteGroup(id: string){
     this.httpService.addOrDeleteGroup(null,id,false).subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();
