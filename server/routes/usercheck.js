@@ -1,59 +1,38 @@
-module.exports = (app, fs, sendAccess) => {
+module.exports = (app, db, sendAccess) => {
   app.post("/admin/usercheck", (req, res) => {
-    dummyData = JSON.parse(fs.readFileSync('./dummydb.json'));    
     username = req.body.username;
-    if (!username.includes("@") && dummyData.users[username]) {
-      savedUser = dummyData.users[username];
-      if (dummyData["superUsers"][savedUser.ID]) {
-        role = "superuser";
-      }
-      if (dummyData["groupUsers"][savedUser.ID]) {
-        role = "groupuser";
-      }
-      if (!role) {
-        role = "user";
-      }
-      accessPath = sendAccess(savedUser.ID, dummyData)
+    let role = "user";
+    usersCollection = db.collection("Users");
+    usersCollection
+      .find({ $or: [{ username: username }, { email: username }] })
+      .toArray((err, res) => {
+        if (res.length != 1) {
+          return res.send({ validUser: false });
+        }
+        let savedUser = res[0];
+        superAdminCollection = db.collection("SuperAdmins");
+        superAdminCollection
+          .find({ _id: savedUser._id })
+          .toArray((err, res) => {
+            if (res.length == 1) {
+              role = "superuser";
+            } else {
+              db.collection("GroupAdmins").find({ _id: savedUser._id }).toArray((err, res) => {
+                if (res.length == 1) {
+                  role = "groupuser";
+                }
+              });
+            }
+          });
+      });
+      var accessPath = sendAccess(savedUser._id, db);
       return res.send({
         username: savedUser.username,
-        id: savedUser.ID,
+        _id: savedUser._id,
         email: savedUser.email,
         role: role,
         validUser: true,
-        access: accessPath
+        access: accessPath,
       });
-    }
-    processList = Object.keys(dummyData.users).map((username) => {
-      return dummyData.users[username];
-    });
-    emailList = processList.map((userprofile) => {
-      return [userprofile.email, userprofile.username];
-    });
-    for (let email of emailList) {
-      if (username == email[0]) {
-        savedUser = dummyData.users[email[1]];
-        var role;
-        if (dummyData.superUsers[`${savedUser.ID}`]) {
-          role = "superuser";
-        }
-        if (dummyData.groupUsers[`${savedUser.ID}`]) {
-          role = "groupuser";
-        }
-        if (role == undefined) {
-          role = "user";
-        }
-        accessPath = sendAccess(savedUser.ID, dummyData)
-
-        return res.send({
-          username: savedUser.username,
-          id: savedUser.ID,
-          email: savedUser.email,
-          role: role,
-          validUser: true,
-          access: accessPath
-        });
-      }
-    }
-    res.send({ validUser: false });
   });
 };

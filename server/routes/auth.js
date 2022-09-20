@@ -1,32 +1,43 @@
-module.exports = (app, fs, sendAccess) => {
+module.exports = (app, db, sendAccess) => {
   app.post("/auth", (req, res) => {
-    dummyData = JSON.parse(fs.readFileSync("./dummydb.json"));
     username = req.body.username;
     password = req.body.password;
-    if (dummyData.users[username]) {
-      savedUser = dummyData.users[username];
-      if (password == savedUser.password) {
-        if (dummyData.superUsers[`${savedUser.ID}`]) {
-          role = "superuser";
-        } else {
-          if (dummyData.groupUsers[`${savedUser.ID}`]) {
-            role = "groupuser";
-          } else {
-            role = "user";
-          }
+    userCollection = db.collection("Users")
+    userCollection.find({username: username, password: password}).toArray((err, docs)=>{
+
+      if (err) {
+        return res.send(error)
+      }
+      if (docs.length!=1){return res.send({loginSuccess: false})}
+      savedUser = docs[0]
+      let role;
+      superAdminCollection = db.collection('SuperAdmins')
+      superAdminCollection.find({_id: savedUser._id}).toArray((err,docs)=>{
+        if (err) {return res.send(err)}
+        if (docs.length > 0){
+          role = "superuser"
         }
-        accessInfo = sendAccess(savedUser.ID, dummyData);
+        else {
+          groupAdminCollection = db.collection('GroupAdmins')
+          groupAdminCollection.find({_id: savedUser._id}).toArray((err,docs)=>{
+            if (err) {return res.send(err)}
+            if (docs.length > 0){
+              role = "groupuser"
+            }
+            else {role = "user"}
+        })
+      }
+    })
+        accessInfo = sendAccess(savedUser._id, db);
         return res.send({
           username: savedUser.username,
-          id: savedUser.ID,
+          id: savedUser._id,
           email: savedUser.email,
           role: role,
           access: accessInfo,
           loginSuccess: true,
         });
-      }
-    }
-
-    res.send({ loginSuccess: false });
+    })
   });
-};
+}
+
