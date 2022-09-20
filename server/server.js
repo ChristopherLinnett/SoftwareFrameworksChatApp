@@ -13,7 +13,6 @@ const io = require("socket.io")(http, {
 });
 const socket = require("./socket.js");
 const server = require("./listen.js");
-const { MongoClient } = require("mongodb");
 var dummyData = fs.readFileSync('dummydb.json');
 dummyData = JSON.parse(dummyData)
 const PORT = 3000;
@@ -34,10 +33,10 @@ socket.connect(io, PORT);
 /* Listening for a connection on port 3000. */
 server.listen(http, PORT);
 
-require('./routes/usercheck')(app, fs, sendAccess);
-require('./routes/auth')(app, fs, sendAccess);
-require('./routes/newuser')(app,fs);
-require('./routes/deleteuser')(app,fs);
+require('./routes/usercheck')(app, db, sendAccess);
+require('./routes/auth')(app, db, sendAccess);
+require('./routes/newuser')(app,db);
+require('./routes/deleteuser')(app,db);
 require('./routes/updaterole')(app,fs);
 require('./routes/getgroups')(app,fs);
 require('./routes/addremovegroup')(app,fs);
@@ -60,18 +59,28 @@ require('./routes/getroomusers')(app,fs);
  * array has a name and id property.
  */
 function sendAccess(userID, db){
-infoToSend = {groups: []}
-  for (let group of db.groups){
-    if (!group.users[`${userID}`]){
-      continue
-    }
-    infoToSend.groups.push({name: group.name,assistants: group.assistants, id: group.id, rooms: []})
-      for (let room of group.rooms){
+let infoToSend = {groups: []}
+let groupsCollection = db.collection("Groups")
+groupsCollection.find(
+  { users: { $in: [ "6328fc2e7e8b2c327a09777a"] } }
+).toArray((err,res)=>{
+  let newGroups = []
+    infoToSend.groups = res.map((group)=>{
+      var newGroup = {}
+      newGroup.name = group.name
+      newGroup.assistants = group.assistants
+      newGroup.id = group._id
+      newGroup.rooms = []
+      newGroups.push(newGroup)
+    })
+    for (let index = 0; index>res.length ; index++){
+      for (let room of res[index].rooms){
         if (!room.users[`${userID}`]){
           continue
         }
-        infoToSend.groups[infoToSend.groups.length-1].rooms.push({name: room.name, id: room.id})
+        infoToSend.groups[index].rooms.push({name: room.name, id: room.id})
       }
+    }
+    })
+    return infoToSend
   }
-  return infoToSend
-}

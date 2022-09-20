@@ -318,7 +318,7 @@ export class AdminPage implements OnInit {
    * server responds with a success message, it will display an alert to the user, and reset the form.
    */
   deleteUser() {
-    this.httpService.addOrDeleteUser(this.title.el.textContext.toLowerCase(), false).subscribe((res: { success: Boolean }) => {
+    this.httpService.addOrDeleteUser(String(this.title.el.textContext).toLowerCase(), false).subscribe((res: { success: Boolean }) => {
         res.success
           ? this.presentAlert(
               'Success',

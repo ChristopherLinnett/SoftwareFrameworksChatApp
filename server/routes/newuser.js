@@ -1,15 +1,15 @@
 const { randomUUID } = require("crypto");
 
-module.exports = (app, fs)=> {
+module.exports = (app, db)=> {
     app.post("/admin/newuser", (req, res) => {
-        dummyData = JSON.parse(fs.readFileSync('./dummydb.json'));    
+        userCollection = db.collection("Users")
         username = req.body.username;
         email = req.body.email
         password = username
-        newUser = {username: username, email: email, ID: randomUUID(), password: password}
-        dummyData.users[`${username}`] = newUser
-        fs.writeFileSync('./dummydb.json', JSON.stringify(dummyData))
-
+        newUser = {username: username, email: email, password: password}
+        userCollection.insertOne(newUser, (err, result)=>{
+          console.log(res)
+        })
         res.send({ success: true });
       });
       

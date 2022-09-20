@@ -1,9 +1,6 @@
-module.exports = (app, fs)=> {
+module.exports = (app, db)=> {
     app.post("/admin/deleteuser", (req, res) => {
-        dummyData = JSON.parse(fs.readFileSync('./dummydb.json'));    
-        username = req.body.user;
-        delete dummyData['users'][`${username}`]
-        fs.writeFileSync('./dummydb.json', JSON.stringify(dummyData))
+        db.collection("Users").findOneAndDelete({username: username})
         res.send({ success: true });
       });
       
