@@ -1,24 +1,29 @@
-module.exports = (app, fs) => {
+module.exports = (app, db) => {
   app.post("/admin/updaterole", (req, res) => {
-        dummyData = JSON.parse(fs.readFileSync('./dummydb.json'));    
+        userCollection = db.collection("Users")   
         username = req.body.username
-        userID = dummyData.users[`${username}`].ID
+        
+        userCollection.find({"username": username}).toArray((error,userRes)=>{
+          user = userRes[0]
+
         oldRole = req.body.oldRole
         role = req.body.newRole;
+        console.log(oldRole)
+
         if (oldRole == 'superuser'){
-          delete dummyData.superUsers[`${userID}`]
+          db.collection("SuperAdmins").findOneAndDelete({'_id': user._id})
         } 
         if (oldRole == 'groupuser'){
-          delete dummyData.groupUsers[`${userID}`]
+          db.collection("GroupAdmins").findOneAndDelete({'_id': user._id})
         } 
         if (role == 'superuser'){
-        dummyData.superUsers[`${userID}`]=username
+          db.collection("SuperAdmins").insertOne({'_id': user._id})
         }
         if (role == 'groupuser'){
-          dummyData.groupUsers[`${userID}`]=username
+          db.collection("GroupAdmins").insertOne({'_id': user._id})
         }
-        fs.writeFileSync('./dummydb.json', JSON.stringify(dummyData))
         res.send({ success: true });
+      })
       });
       
       

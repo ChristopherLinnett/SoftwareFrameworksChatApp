@@ -3,39 +3,35 @@ module.exports = (app, db, sendAccess) => {
     username = req.body.username;
     let role = "user";
     usersCollection = db.collection("Users");
-    
+
     usersCollection
       .find({ $or: [{ username: username }, { email: username }] })
       .toArray((err, dbres) => {
         if (dbres.length != 1) {
-          console.log(dbres)
+          console.log(dbres);
           return res.send({ validUser: false });
         }
-        console.log(dbres)
         let savedUser = dbres[0];
-        superAdminCollection = db.collection("SuperAdmins");
-        superAdminCollection
+        db.collection("GroupAdmins")
           .find({ _id: savedUser._id })
-          .toArray((err, res) => {
-            if (res.length == 1) {
-              role = "superuser";
-            } else {
-              db.collection("GroupAdmins").find({ _id: savedUser._id }).toArray((err, res) => {
-                if (res.length == 1) {
-                  role = "groupuser";
-                }
+          .toArray((err, resGroup) => {
+            resGroup.length == 1 ? (role = "groupuser") : role == "user";
+            db.collection("SuperAdmins")
+              .find({ _id: savedUser._id })
+              .toArray((err, resSuper) => {
+                resSuper.length == 1 ? (role = "superuser") : null;
+
+                var accessPath = sendAccess(savedUser._id, db);
+                return res.send({
+                  username: savedUser.username,
+                  _id: savedUser._id,
+                  email: savedUser.email,
+                  role: role,
+                  validUser: true,
+                  access: accessPath,
+                });
               });
-            }
           });
-      var accessPath = sendAccess(savedUser._id, db);
-      return res.send({
-        username: savedUser.username,
-        _id: savedUser._id,
-        email: savedUser.email,
-        role: role,
-        validUser: true,
-        access: accessPath,
       });
-    })
   });
 };

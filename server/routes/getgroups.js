@@ -1,7 +1,7 @@
-module.exports = (app, fs)=> {
+module.exports = (app, db)=> {
     app.get("/admin/getgroups", (req,res) => {
-        dummyData = JSON.parse(fs.readFileSync('./dummydb.json'));   
-        groups = dummyData.groups 
-            return res.send(groups);
+        db.collection("Groups").find({}).toArray((err, response)=>{
+            return res.send(response)
+        })
           });     
 }
