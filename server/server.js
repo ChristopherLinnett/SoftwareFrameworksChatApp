@@ -15,7 +15,7 @@ const socket = require("./socket.js");
 const server = require("./listen.js");
 var dummyData = fs.readFileSync('dummydb.json');
 dummyData = JSON.parse(dummyData)
-const PORT = 3000;
+const PORT = 80;
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -38,7 +38,7 @@ require('./routes/newuser')(app,db, uuidv4);
 require('./routes/deleteuser')(app,db);
 require('./routes/updaterole')(app,db);
 require('./routes/getgroups')(app,db);
-require('./routes/addremovegroup')(app,fs);
+require('./routes/addremovegroup')(app,db);
 require('./routes/newordeletegroup')(app,db, uuidv4);
 require('./routes/newordeleteroom')(app,fs,uuidv4);
 require('./routes/addorremovefromchannel')(app,fs);
@@ -57,29 +57,10 @@ require('./routes/getroomusers')(app,fs);
  * a name, id, and rooms property. The rooms property is an array of objects. Each object in the rooms
  * array has a name and id property.
  */
-function sendAccess(userID, db){
-let infoToSend = {groups: []}
+async function sendAccess(userId, db){
+  let myGroups
+
 let groupsCollection = db.collection("Groups")
-groupsCollection.find(
-  { users: { $in: [ "6328fc2e7e8b2c327a09777a"] } }
-).toArray((err,res)=>{
-  let newGroups = []
-    infoToSend.groups = res.map((group)=>{
-      var newGroup = {}
-      newGroup.name = group.name
-      newGroup.assistants = group.assistants
-      newGroup.id = group._id
-      newGroup.rooms = []
-      newGroups.push(newGroup)
-    })
-    for (let index = 0; index>res.length ; index++){
-      for (let room of res[index].rooms){
-        if (!room.users[`${userID}`]){
-          continue
-        }
-        infoToSend.groups[index].rooms.push({name: room.name, id: room.id})
-      }
-    }
-    })
-    return infoToSend
-  }
+ myGroups = await groupsCollection.find({ users: { $in: [ userId] } }).toArray()
+ return {groups: myGroups}
+}
