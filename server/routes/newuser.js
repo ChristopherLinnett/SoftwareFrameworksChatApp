@@ -1,5 +1,3 @@
-const { randomUUID } = require("crypto");
-
 module.exports = (app, db, uuid)=> {
     app.post("/admin/newuser", (req, res) => {
         userCollection = db.collection("Users")

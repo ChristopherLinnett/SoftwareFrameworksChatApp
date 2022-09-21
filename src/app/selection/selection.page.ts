@@ -68,7 +68,6 @@ export class SelectionPage implements OnInit {
     var userid = this.authService.getSavedUser().id
     var groupIDlist = this.userPath.map((group)=>{return group.id})
     var groupIndex = groupIDlist.indexOf(groupid)
-    // console.log(this.userPath[groupIndex])
     if (this.userPath[groupIndex].assistants.includes(userid)){
       return true
     }

@@ -5,12 +5,11 @@ module.exports = (app, db, uuid) => {
 
     if (add) {
       id = uuid()
-      db.collection("Groups").insertOne({id: id, name: groupname, users : {},rooms: [], assistants: []})
+      db.collection("Groups").insertOne({id: id, name: groupname, users : [],rooms: [], assistants: []})
       return res.send({success: true});
     }
     groupid = req.body.id
-    db.collection("Groups").find({id: groupid}).toArray((err,testRes)=>{console.log(testRes)})
-      db.collection("Groups").findOneAndDelete({'id': groupid}).then((delRes)=>{console.log(delRes)})
+      db.collection("Groups").findOneAndDelete({'id': groupid})
       return res.send({success: true});
     });
 }

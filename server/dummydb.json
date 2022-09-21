@@ -13,12 +13,8 @@
       "password": "superadmin"
     }
   },
-  "superUsers": {
-    "ee011684-be58-4819-a955-296b4b3a9035": "superadmin"
-  },
-  "groupUsers": {
-    "332a233a-a3c2-48eb-9916-1ab18c825985": "groupadmin"
-  },
+  "superUsers": { "ee011684-be58-4819-a955-296b4b3a9035": "superadmin" },
+  "groupUsers": { "332a233a-a3c2-48eb-9916-1ab18c825985": "groupadmin" },
   "groups": [
     {
       "name": "Group 1",
@@ -28,6 +24,13 @@
         "ee011684-be58-4819-a955-296b4b3a9035": "superadmin",
         "332a233a-a3c2-48eb-9916-1ab18c825985": "groupadmin"
       },
+      "rooms": [],
+      "assistants": []
+    },
+    {
+      "name": "group1",
+      "id": "9332addd-e6da-4952-a568-240a4e0ded98",
+      "users": {},
       "rooms": [],
       "assistants": []
     }
