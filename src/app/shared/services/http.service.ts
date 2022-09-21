@@ -5,19 +5,24 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class HttpService {
+  URL = 'http://10.20.61.150:80/'
   constructor(private httpClient: HttpClient) {}
 
+  getURL(){
+    return this.URL
+  }
+
   login(username: string, password: string){
-    return this.httpClient.post<any>('http://localhost:3000/auth', 
+    return this.httpClient.post<any>(`${this.URL}auth`, 
     {username: username, password: password})
   }
 
   getGroups() {
-    return this.httpClient.get<any>('http://localhost:3000/admin/getgroups');
+    return this.httpClient.get<any>(`${this.URL}admin/getgroups`);
   }
   addOrDeleteRoom(name, groupid, roomid, add, creator=null) {
     return this.httpClient.post<any>(
-      'http://localhost:3000/admin/newordeleteroom',
+      `${this.URL}admin/newordeleteroom`,
       {
         roomname: name,
         groupid: groupid,
@@ -29,7 +34,7 @@ export class HttpService {
 
   addOrDeleteGroup(name: string, id: string, add: boolean) {
     return this.httpClient.post<any>(
-      'http://localhost:3000/admin/newordeletegroup',
+      `${this.URL}admin/newordeletegroup`,
       {
         groupName: name,
         id: id,
@@ -39,7 +44,7 @@ export class HttpService {
   }
   addOrDeleteGroupAssistant(userid, groupid, add) {
     return this.httpClient.post<any>(
-      'http://localhost:3000/admin/createordeleteassist',
+      `${this.URL}admin/createordeleteassist`,
       {
         userid: userid,
         groupid: groupid,
@@ -50,7 +55,7 @@ export class HttpService {
 
   addOrRemoveGroupUser(username, groupid, add) {
     return this.httpClient.post<any>(
-      'http://localhost:3000/admin/inviteremoveuser',
+      `${this.URL}admin/inviteremoveuser`,
       {
         username: username,
         id: groupid,
@@ -61,7 +66,7 @@ export class HttpService {
 
   addOrDeleteRoomUser(username, userid, groupid, roomid, add) {
     return this.httpClient.post<any>(
-      'http://localhost:3000/admin/inviteremoveroomuser',
+      `${this.URL}admin/inviteremoveroomuser`,
       {
         username: username,
         userid: userid,
@@ -74,7 +79,7 @@ export class HttpService {
 
   updateUserRole(username, oldRole, newRole, userid) {
     return this.httpClient.post<any>(
-      'http://localhost:3000/admin/updaterole',
+      `${this.URL}admin/updaterole`,
       {
         username: username,
         oldRole: oldRole,
@@ -85,7 +90,7 @@ export class HttpService {
   }
   verifyUser(user) {
     return this.httpClient.post<any>(
-      'http://localhost:3000/admin/usercheck',
+      `${this.URL}admin/usercheck`,
       {
         username: user,
       }
@@ -94,12 +99,12 @@ export class HttpService {
   addOrDeleteUser(user, add) {
     if (add) {
       return this.httpClient.post<any>(
-        'http://localhost:3000/admin/newuser',
+        `${this.URL}admin/newuser`,
         user
       );
     }
     return this.httpClient.post<any>(
-      'http://localhost:3000/admin/deleteuser',
+      `${this.URL}admin/deleteuser`,
       {
         user: user,
       }

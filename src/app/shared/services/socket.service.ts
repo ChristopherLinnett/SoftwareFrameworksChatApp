@@ -1,21 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Observable} from 'rxjs';
 import io from 'socket.io-client';
-const SERVER_URL = 'http://192.168.8.95:3000'
+import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketService {
+  SERVER_URL;
   private socket: any;
-  constructor(){}
+  constructor(private httpService: HttpService){
+    this.SERVER_URL = this.httpService.getURL()
+
+  }
 
 /**
  * The function returns a function that disconnects the socket
  * @returns A function that will disconnect the socket.
  */
 initSocket() {
-  this.socket = io(SERVER_URL);
+  this.socket = io(this.SERVER_URL);
   return ()=> {this.socket.disconnect();}
 }
 
