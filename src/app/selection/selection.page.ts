@@ -123,7 +123,7 @@ export class SelectionPage implements OnInit {
    * @param name - The name of the room
    */
   createRoom(groupid, name){
-    this.httpService.addOrDeleteRoom(name, null, null, true, this.authService.getUser())
+    this.httpService.addOrDeleteRoom(name, groupid, null, true, this.authService.getUser())
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();

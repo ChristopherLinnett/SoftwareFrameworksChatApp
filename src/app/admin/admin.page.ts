@@ -95,7 +95,7 @@ export class AdminPage implements OnInit {
       });
   }
   generateRoomUsers(roomUsers){
-    return Object.keys(roomUsers).includes(this.queryUser.id);
+    return roomUsers.includes(this.queryUser.id);
   }
 
   /**

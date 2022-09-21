@@ -1,16 +1,31 @@
-module.exports = (app, fs)=> {
-    app.post("/admin/getroomusers", (req,res) => {
-      groupid = req.body.groupid
-      roomid = req.body.roomid
-        dummyData = JSON.parse(fs.readFileSync('./dummydb.json'));
-        var allid = dummyData.groups.map((group)=>{return group.id});
-        groupIndex = allid.indexOf(groupid);
-        roomlist = dummyData.groups[groupIndex].rooms.map((room)=>{return room.id})
-        roomindex = roomlist.indexOf(roomid);
+module.exports = (app, db) => {
+  app.post("/admin/getroomusers", (req, res) => {
+    groupid = req.body.groupid;
+    roomid = req.body.roomid;
 
-        roomUserObjects = dummyData.groups[groupIndex].rooms[roomindex].users
-        roomUsersArray = Object.keys(roomUserObjects)
-        idsandnames = roomUsersArray.map((id)=>{return {id: id, name: roomUserObjects[`${id}`]}})
-            return res.send(idsandnames);
-          });     
-}
+    db.collection("Groups")
+      .find({ id: groupid, "rooms.id": roomid })
+      .toArray()
+      .then((data) => {
+        let userList;
+        data[0].rooms.map((room) => {
+          if (room.id == roomid) {
+            userList = room.users;
+          }
+        });
+        return userList;
+      })
+      .then((userList) => {
+        let returnData = [];
+        db.collection("Users")
+          .find({ id: { $in: userList } })
+          .toArray((err, usersResult) => {
+            responseData = [];
+            responseData = usersResult.map((user) => {
+              return { id: user.id, name: user.username };
+            });
+            res.send(responseData);
+          });
+      });
+  });
+};

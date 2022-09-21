@@ -64,6 +64,10 @@ export class HttpService {
       }
     );
   }
+  getRoomUsers(groupid: string, roomid: string){
+    return this.httpClient
+      .post<any>(`${this.URL}admin/getroomusers`, {groupid: groupid, roomid: roomid})
+        }
 
   addOrDeleteRoomUser(username, userid, groupid, roomid, add) {
     return this.httpClient.post<any>(

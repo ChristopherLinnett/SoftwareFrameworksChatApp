@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { HttpService } from 'src/app/shared/services/http.service';
 @Component({
   selector: 'app-assistant-modal',
   templateUrl: './assistant-modal.component.html',
@@ -12,7 +12,7 @@ roomname: string;
 groupid: string;
 editUser: boolean = false;
 roomUsers: {id: string, name: string}[]
-  constructor(private httpClient: HttpClient, private alertController: AlertController) { }
+  constructor(private httpService: HttpService, private alertController: AlertController) { }
 
   ngOnInit() {
     this.getRoomUsers()
@@ -29,16 +29,8 @@ roomUsers: {id: string, name: string}[]
    * @param addTrue - true if you want to add a user, false if you want to remove a user
    * @param i - the index of the user in the roomUsers array
    */
-  addRemoveRoomUser(username, userid, groupid, roomid, addTrue, i) {
-    this.httpClient
-      .post<any>('http://192.168.8.95:3000/admin/inviteremoveroomuser', {
-        username: username,
-        userid: userid,
-        groupid: groupid,
-        roomid: roomid,
-        add: addTrue,
-      })
-      .subscribe((res: { success: Boolean, userid: string, message: string }) => {
+   addRemoveRoomUser(username, userid, groupid, roomid, addTrue, i) {
+    this.httpService.addOrDeleteRoomUser(username, userid, groupid, roomid, addTrue).subscribe((res: { success: Boolean, userid: string, message: string }) => {
         if (res.success) {
           if (!addTrue){
           this.roomUsers.splice(i,1)
@@ -57,7 +49,7 @@ roomUsers: {id: string, name: string}[]
    * the function
    * @param message - The message you want to display in the alert.
    */
-  async presentAlert(message) {
+  async presentAlert(message): Promise<void> {
     const alert = await this.alertController.create({
       header: "Error",
       buttons: ['OK'],
@@ -72,12 +64,12 @@ roomUsers: {id: string, name: string}[]
    * request to the server with the groupid and roomid of the room that was clicked on. The server then
    * returns a list of users in that room
    */
-  getRoomUsers(){
-    var httpSub = this.httpClient
-      .post<any>('http://192.168.8.95:3000/admin/getroomusers', {groupid: this.groupid, roomid: this.roomid})
-      .subscribe(
+
+   getRoomUsers(): void{
+    this.httpService.getRoomUsers(this.groupid, this.roomid).subscribe(
         (res) => {
           this.roomUsers = res});
         }
 
   }
+
