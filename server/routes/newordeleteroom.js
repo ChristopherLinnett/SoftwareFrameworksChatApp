@@ -1,31 +1,29 @@
-module.exports = (app, fs,uuidv4) => {
+
+module.exports = (app, db,uuidv4) => {
   app.post("/admin/newordeleteroom", (req, res) => {
-    dummyData = JSON.parse(fs.readFileSync("./dummydb.json"));
+    groupsCollection = db.collection("Groups")
     creator = req.body.creator
-    roomName = req.body.roomName;
+    roomName = req.body.roomname;
     groupid = req.body.groupid;
     add = req.body.add;
-    var allid = dummyData.groups.map((group)=>{return group.id});
-    groupIndex = allid.indexOf(groupid);
-
-    if (creator){
-      defaultuser = dummyData.users[`${creator}`].ID
-     }
-      else { defaultuser = {}; console.log('No Creator')}
     
     if (add) {
-      roomid = uuidv4();
-      dummyData.groups[groupIndex].rooms.push({name: roomName, id: roomid, users : {[`${defaultuser}`]: creator}});
-      fs.writeFileSync("./dummydb.json", JSON.stringify(dummyData));
-      return res.send({success: true});
+      db.collection("Users").find({'username': creator}).toArray().then((userArray)=>{
+        creatorID = userArray[0].id
+        roomid = uuidv4();
+        newRoom = {
+        name: roomName,
+        id: roomid,
+        users: [creatorID]
+      }
+      db.collection("Groups").updateOne({id: groupid}, {$push: {rooms: newRoom}})
+       res.send({success: true});
+    })
     } else {
       groupid = req.body.groupid
       roomid = req.body.roomid
-      
-      var allrooms = dummyData.groups[groupIndex].rooms.map((room)=>{return room.id})
-      roomIndex = allrooms.indexOf(roomid)
-      dummyData.groups[groupIndex].rooms.splice(roomIndex,1);
-      fs.writeFileSync("./dummydb.json", JSON.stringify(dummyData));
+
+      db.collection("Groups").updateOne({id: groupid}, {$pull: {rooms: {id: roomid}}})
       return res.send({success: true});
   }
     });

@@ -70,7 +70,7 @@ export class AdminPage implements OnInit {
    * @param name - the name of the room
    */
   createRoom(groupid, name){
-    this.httpService.addOrDeleteRoom(name,groupid,null,true).subscribe((res: { success: Boolean }) => {
+    this.httpService.addOrDeleteRoom(name,groupid,null,true,this.authService.getUser()).subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();
         } else {

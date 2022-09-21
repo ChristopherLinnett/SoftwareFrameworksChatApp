@@ -40,10 +40,10 @@ require('./routes/updaterole')(app,db);
 require('./routes/getgroups')(app,db);
 require('./routes/addremovegroup')(app,db);
 require('./routes/newordeletegroup')(app,db, uuidv4);
-require('./routes/newordeleteroom')(app,fs,uuidv4);
+require('./routes/newordeleteroom')(app,db,uuidv4);
 require('./routes/addorremovefromchannel')(app,fs);
 require('./routes/createordeleteassistant')(app,db);
-require('./routes/getroomusers')(app,fs);
+require('./routes/getroomusers')(app,db);
 
 })
 

@@ -27,6 +27,7 @@ export class HttpService {
         roomname: name,
         groupid: groupid,
         roomid: roomid,
+        creator: creator,
         add: add,
       }
     );
