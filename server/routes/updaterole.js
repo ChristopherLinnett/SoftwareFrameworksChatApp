@@ -10,16 +10,16 @@ module.exports = (app, db) => {
         role = req.body.newRole;
 
         if (oldRole == 'superuser'){
-          db.collection("SuperAdmins").findOneAndDelete({'_id': user._id})
+          db.collection("SuperAdmins").findOneAndDelete({'id': user.id})
         } 
         if (oldRole == 'groupuser'){
-          db.collection("GroupAdmins").findOneAndDelete({'_id': user._id})
+          db.collection("GroupAdmins").findOneAndDelete({'id': user.id})
         } 
         if (role == 'superuser'){
-          db.collection("SuperAdmins").insertOne({'_id': user._id})
+          db.collection("SuperAdmins").insertOne({'id': user.id})
         }
         if (role == 'groupuser'){
-          db.collection("GroupAdmins").insertOne({'_id': user._id})
+          db.collection("GroupAdmins").insertOne({'id': user.id})
         }
         res.send({ success: true });
       })
