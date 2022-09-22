@@ -30,7 +30,12 @@ roomUsers: {id: string, name: string}[]
    * @param i - the index of the user in the roomUsers array
    */
    addRemoveRoomUser(username, userid, groupid, roomid, addTrue, i) {
-    this.httpService.addOrDeleteRoomUser(username, userid, groupid, roomid, addTrue).subscribe((res: { success: Boolean, userid: string, message: string }) => {
+    if (addTrue){
+    username = username.toLowerCase()
+    if (this.roomUsers.map((user)=>{return user.name}).includes(username)){
+      return this.presentAlert(`${username} is already in this room`)
+    }}
+    this.httpService.addOrDeleteRoomUser(username.toLowerCase(), userid, groupid, roomid, addTrue).subscribe((res: { success: Boolean, userid: string, message: string }) => {
         if (res.success) {
           if (!addTrue){
           this.roomUsers.splice(i,1)

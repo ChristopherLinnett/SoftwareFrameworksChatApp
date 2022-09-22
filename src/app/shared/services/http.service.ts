@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class HttpService {
-  URL = 'http://10.20.61.150:80/'
+  URL = 'http://192.168.111.95:80/'
   constructor(private httpClient: HttpClient) {}
 
   getURL(){
