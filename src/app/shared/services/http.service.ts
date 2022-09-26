@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class HttpService {
-  URL = 'http://192.168.111.95:80/'
+  URL = 'https://sfchatapp.loca.lt'
   constructor(private httpClient: HttpClient) {}
 
   getURL(){

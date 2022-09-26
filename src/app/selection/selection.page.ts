@@ -28,8 +28,8 @@ export class SelectionPage implements OnInit {
     this.authService.logout()
   }
 
-  navigateaway(){
-    this.router.navigate(['/chat']);
+  navigateaway(roomid){
+    this.router.navigate(['/chat', roomid]);
   }
 
 

@@ -28,9 +28,27 @@ initSocket() {
    * message text and the username of the user who sent the message
    * @param {string} messageText - The message that the user wants to send.
    */
-  sendMessage(messageText: string) {
-    this.socket.emit('message', {message: messageText, user: JSON.parse(sessionStorage.getItem('savedUser')).username})
+  sendMessage(messageText: string, roomid) {
+    this.socket.emit('message', {message: messageText, user: JSON.parse(sessionStorage.getItem('savedUser')).username, roomid: roomid})
     }
+
+  joinRoom(roomid){
+    this.socket.emit('joinroom', {roomid: roomid, username: JSON.parse(sessionStorage.getItem('savedUser')).username})
+  }
+  leaveRoom(roomid){
+    this.socket.emit('leaveroom',{roomid: roomid, username: JSON.parse(sessionStorage.getItem('savedUser')).username})
+  }
+
+  getJoinNotifications(){
+    return new Observable(observer=>{
+      this.socket.on("joinnotify",(joinMsg: string)=>{observer.next(joinMsg)})
+    })
+  }
+  getLeaveNotifications(){
+    return new Observable(observer=>{
+      this.socket.on("leavenotify",(leaveMsg: string)=>{observer.next(leaveMsg)})
+    })
+  }
     
   /**
    * The function returns an observable that listens for a message event from the server and then emits

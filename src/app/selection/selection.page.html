@@ -20,7 +20,7 @@
       </ion-item>
       <ion-list slot="content">
       <ion-item *ngFor="let room of group.rooms" >
-        <ion-label (click)="navigateaway()">{{room.name}}</ion-label>      
+        <ion-label (click)="navigateaway(room.id)">{{room.name}}</ion-label>      
         <ion-fab-button *ngIf="group.editRoom && isGroupAssistant(group.id)" color="danger" slot="end" size="small" (click)="deleteRoom(group.id, room.id)">
           <ion-icon name="trash"></ion-icon>
         </ion-fab-button>

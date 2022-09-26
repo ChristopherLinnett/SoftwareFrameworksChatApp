@@ -16,7 +16,7 @@ const routes: Routes = [
     loadChildren: () => import('./admin/admin.module').then( m => m.AdminPageModule)
   },
   {
-    path: 'chat',
+    path: 'chat/:roomid',
     loadChildren: () => import('./chat/chat.module').then(m => m.ChatPageModule)
   },
 ];
