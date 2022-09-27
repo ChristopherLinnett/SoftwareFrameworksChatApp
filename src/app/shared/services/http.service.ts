@@ -1,15 +1,34 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
-  URL = 'https://sfchatapp.loca.lt'
+  URL = 'https://sfchatapp.loca.lt/'
+
+  loadingObserver: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  loadingRequestMap: Map<string, boolean> = new Map<string, boolean>();
   constructor(private httpClient: HttpClient) {}
 
   getURL(){
     return this.URL
+  }
+  setLoading(loading: boolean, url: string): void {
+    if (!url) {
+      throw new Error('The request URL must be provided');
+    }
+    if (loading === true) {
+      this.loadingRequestMap.set(url, loading);
+      this.loadingObserver.next(true);
+    }else if (loading === false && this.loadingRequestMap.has(url)) {
+      this.loadingRequestMap.delete(url);
+    }
+    if (this.loadingRequestMap.size === 0) {
+      this.loadingObserver.next(false);
+    }
   }
 
   login(username: string, password: string){

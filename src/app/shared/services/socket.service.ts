@@ -35,8 +35,8 @@ initSocket() {
   joinRoom(roomid){
     this.socket.emit('joinroom', {roomid: roomid, username: JSON.parse(sessionStorage.getItem('savedUser')).username})
   }
-  leaveRoom(roomid){
-    this.socket.emit('leaveroom',{roomid: roomid, username: JSON.parse(sessionStorage.getItem('savedUser')).username})
+  leaveRoom(roomid,username){
+    this.socket.emit('leaveroom',{roomid: roomid, username: username})
   }
 
   getJoinNotifications(){

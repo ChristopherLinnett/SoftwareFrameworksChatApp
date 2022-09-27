@@ -22,6 +22,7 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
   leaveNotifSub: Subscription;
   messages: { text: string | number; time: string }[];
   data: { message: string; time: string };
+  user;
   constructor(private socketService: SocketService, public authService: AuthService, private activatedRoute: ActivatedRoute) {
   }
   /**
@@ -38,6 +39,7 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
    * function.
    */
   ngOnInit() {
+    this.user = this.authService.getUser()
     this.routeSub = this.activatedRoute.params.subscribe((params)=>{
       this.roomid = params.roomid
     })
@@ -49,7 +51,7 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
   }
 
   ngOnDestroy() {
-    this.socketService.leaveRoom(this.roomid)
+    this.socketService.leaveRoom(this.roomid, this.user)
     this.ioConnection.unsubscribe()
     this.routeSub.unsubscribe()
     this.joinNotifSub.unsubscribe()
