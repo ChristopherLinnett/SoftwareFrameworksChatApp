@@ -18,7 +18,11 @@ const routes: Routes = [
   {
     path: 'chat/:roomid',
     loadChildren: () => import('./chat/chat.module').then(m => m.ChatPageModule)
+  },  {
+    path: 'profile',
+    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
   },
+
 ];
 @NgModule({
   imports: [

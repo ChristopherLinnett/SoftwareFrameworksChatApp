@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar mode='md' ><ion-buttons slot="start">
+    <ion-back-button defaultHref="/"></ion-back-button>
+  </ion-buttons>
+    <ion-title  mode="ios">profile</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleEditMode()">
+        <ion-icon [name]="editMode ? 'close' :'create'" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="imagecontainer">
+      <ion-avatar src="enterimagepath"></ion-avatar>
+    </ion-card>
+    <ion-card class="formholder">
+      <ion-item>
+        <ion-label class="formdesc" for="name">Name</ion-label>
+        <ion-input id="name" class="inputlabelcomb" *ngIf="editMode" [value]="user.username" id="name"></ion-input>
+        <ion-label class="inputlabelcomb" *ngIf="!editMode">{{user.username}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label class="formdesc" for="email">Email</ion-label>
+        <ion-input id="email" class="inputlabelcomb" *ngIf="editMode" [value]="user.email" id="name"></ion-input>
+        <ion-label class="inputlabelcomb" *ngIf="!editMode">{{user.email}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label class="formdesc" for="password">Password</ion-label>
+        <ion-input id="password" type="password" class="inputlabelcomb" *ngIf="editMode" placeholder="*************" id="name"></ion-input>
+        <ion-label class="inputlabelcomb" *ngIf="!editMode">[Hidden]</ion-label>
+      </ion-item>
+    </ion-card>
+    <ion-toolbar *ngIf="editMode" class="profilebuttonsholder">
+      <ion-button class="sharedrowbutton" color="success" slot="end"><ion-icon name="checkmark"></ion-icon></ion-button>
+      <ion-button class="sharedrowbutton" color="danger" slot="start" (click)="toggleEditMode()"><ion-icon slot="icon-only" name="close"></ion-icon></ion-button>
+  </ion-toolbar>
+
+</ion-content>
