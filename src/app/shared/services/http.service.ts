@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class HttpService {
-  URL = 'https://sfchatapp.loca.lt/'
+  URL = 'http://192.168.20.2:80/'
 
   loadingObserver: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loadingRequestMap: Map<string, boolean> = new Map<string, boolean>();

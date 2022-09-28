@@ -1,33 +1,43 @@
- 
 <ion-card>
+<div style="display: flex;  justify-content: space-between;">
+  <ion-button style="margin-left: auto; margin-right: 0% ;" size="small" fill="clear">
+    <ion-icon slot="icon-only" [name]="editMode ? 'close' : 'create'"></ion-icon>
+  </ion-button>
+</div>
   <ion-card-title>Manage Users</ion-card-title>
   <ion-card-subtitle>{{roomname}}</ion-card-subtitle>
-    <ion-content>
-      <ion-list>
-  <ion-item *ngFor="let user of roomUsers, index as i">
-  <ion-label>{{user.name}}</ion-label>
-  <ion-fab-button translucent="true" color="danger" *ngIf="editUser" size="small"
-              (click)="addRemoveRoomUser(user.name, user.id, groupid, roomid, false, i)" slot="end">
-              <ion-icon name="trash"></ion-icon>
-            </ion-fab-button>
-  </ion-item>
-</ion-list>
-</ion-content>
+  <ion-content>
+    <ion-list>
+      <ion-item *ngFor="let user of roomUsers, index as i">
+        <ion-label>{{user.name}}</ion-label>
+        <ion-fab-button translucent="true" color="danger" *ngIf="editUser" size="small"
+          style="padding-left:0%;margin-left:0%;margin-right:0%;padding-right:0%;"
+          (click)="addRemoveRoomUser(user.name, user.id, groupid, roomid, false, i)" slot="end">
+          <ion-icon name="trash"></ion-icon>
+        </ion-fab-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
   <ion-item *ngIf="!editUser" class="ion-text-right" (click)="editUser=true">
     <ion-label>Modify Users</ion-label>
   </ion-item>
-<ion-item *ngIf="editUser==true">
-  <ion-item style="width:55%">
-    <ion-label position="floating">username</ion-label>
-    <ion-input #newUser class="ion-text-left"></ion-input>
+  <ion-item-divider *ngIf="editUser==true" color="#051924">Enter Username Below</ion-item-divider>
+
+  <ion-item *ngIf="editUser==true">
+
+    <ion-item>
+      <ion-input #newUser placeholder="username" class="ion-text-left"></ion-input>
+    </ion-item>
+    <ion-buttons slot="end" style="margin-left: auto;">
+      <ion-fab-button style="padding-left:0%;margin-left:0%;margin-right:0%;padding-right:0%;" color="success"
+        slot="end" size="small"
+        (click)="addRemoveRoomUser(newUser.value, 'nil', groupid, roomid, true, 0);editUser=false">
+        <ion-icon name="checkmark"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button style="padding-left:0%;margin-left:0%;margin-right:0%;padding-right:0%;" color="warning"
+        slot="end" size="small" (click)="editUser=false">
+        <ion-icon name="close"></ion-icon>
+      </ion-fab-button>
+    </ion-buttons>
   </ion-item>
-  <ion-buttons style="width:45%; padding-top:10%; padding: bottom 10%;">
-  <ion-fab-button color="success" slot="end" size="small" (click)="addRemoveRoomUser(newUser.value, 'nil', groupid, roomid, true, 0);editUser=false">
-    <ion-icon name="checkmark"></ion-icon>
-  </ion-fab-button>
-  <ion-fab-button color="warning" slot="end" size="small" (click)="editUser=false">
-    <ion-icon name="close"></ion-icon>
-  </ion-fab-button>
-</ion-buttons>
-</ion-item>
 </ion-card>

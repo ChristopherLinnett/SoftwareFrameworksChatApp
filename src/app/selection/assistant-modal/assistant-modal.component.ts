@@ -12,6 +12,7 @@ roomname: string;
 groupid: string;
 editUser: boolean = false;
 roomUsers: {id: string, name: string}[]
+editMode: boolean = false;
   constructor(private httpService: HttpService, private alertController: AlertController) { }
 
   ngOnInit() {

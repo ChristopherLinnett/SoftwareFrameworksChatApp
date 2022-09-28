@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
     <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title mode="ios">Chat Page</ion-title>
+    <ion-title mode="ios">{{groupname}} - {{roomname}}</ion-title>
     <ion-buttons slot="end">
     <ion-button *ngIf="checkRole()!='user'" slot="end" size='small' fill="clear" [routerLink]="'/admin'">
       <ion-icon slot="icon-only" name="settings"></ion-icon>
@@ -16,18 +16,19 @@
 </ion-header>
 
 <ion-content #chatWindow>
-  <div *ngFor="let message of messageList,index as i" [ngClass]="{'rightAlign' : message.user == authService.getUser()}">
-  <ion-card (mouseup)="message.timeVisible = false" (mousedown)="message.timeVisible = true">
-    <ion-card-header class="ion-text-center" *ngIf="i<1 || message.user != messageList[i-1].user">{{message.user == authService.getUser() ? 'You' : message.user}}</ion-card-header>
+  <div style="height:20px;"></div>
+
+  <div *ngFor="let message of messageList,index as i" class="leftalign"  [ngClass]="{'rightalign' : message.user == authService.getUser()}">
+  <!-- <ion-card (mouseup)="message.timeVisible = false" (mousedown)="message.timeVisible = true"> -->
+    <p class="abovediv" *ngIf="i<1 || message.user != messageList[i-1].user">{{message.user == authService.getUser() ? 'You' : message.user}}</p>
     <ion-card-content>
       {{ message.message }}
     </ion-card-content>
     <div class="matching">
       <p class="timetext" *ngIf="message.timeVisible">{{message.time}}</p>
         </div>
-  </ion-card>
+  <!-- </ion-card> -->
   </div>
-  <div style="height:10%"></div>
 </ion-content>
 
 <ion-footer>

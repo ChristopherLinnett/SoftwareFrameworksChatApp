@@ -16,9 +16,10 @@ const routes: Routes = [
     loadChildren: () => import('./admin/admin.module').then( m => m.AdminPageModule)
   },
   {
-    path: 'chat/:roomid',
+    path: 'chat/:groupname/:id/:name',
     loadChildren: () => import('./chat/chat.module').then(m => m.ChatPageModule)
-  },  {
+  },
+  {
     path: 'profile',
     loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
   },

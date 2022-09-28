@@ -13,10 +13,12 @@ import { SocketService } from '../shared/services/socket.service';
 export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
   @ViewChild('chatWindow') chatWindow: IonContent;
   hideTime = true;
+  groupname;
   messageList: any[] = [];
   ioConnection: any;
   message;
   roomid;
+  roomname;
   routeSub: Subscription;
   joinNotifSub: Subscription;
   leaveNotifSub: Subscription;
@@ -41,7 +43,9 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
   ngOnInit() {
     this.user = this.authService.getUser()
     this.routeSub = this.activatedRoute.params.subscribe((params)=>{
-      this.roomid = params.roomid
+      this.groupname = params.groupname
+      this.roomid = params.id
+      this.roomname = params.name
     })
     this.initIoConnection();
   }

@@ -27,7 +27,7 @@ export class AuthService {
             sessionStorage.setItem('savedUser', JSON.stringify(res));
             console.log(res.access)
           }
-          this.loggedIn ? this.router.navigate(['']) : alert("incorrect details, try again");
+          this.loggedIn ? this.router.navigate([''],{ replaceUrl: true }) : alert("incorrect details, try again");
       });      
 }
   getSavedUser(){

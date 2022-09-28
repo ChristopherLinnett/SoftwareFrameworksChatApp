@@ -12,9 +12,9 @@
 </ion-header>
 
 <ion-content>
-  <ion-card class="imagecontainer">
-      <ion-avatar src="enterimagepath"></ion-avatar>
-    </ion-card>
+  <div class="imagecontainer" (click)="editMode ? selectImage() : null">
+      <ion-avatar><img *ngIf="images.length>0" [src]="images[0].data"></ion-avatar>
+    </div>
     <ion-card class="formholder">
       <ion-item>
         <ion-label class="formdesc" for="name">Name</ion-label>

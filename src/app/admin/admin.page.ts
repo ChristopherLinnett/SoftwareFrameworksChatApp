@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonAccordionGroup } from '@ionic/angular';
 import { AuthService } from '../auth/auth.service';
 import { Group } from '../shared/classes/accessPath';
 import { HttpService } from '../shared/services/http.service';
@@ -10,6 +10,7 @@ import { HttpService } from '../shared/services/http.service';
   styleUrls: ['./admin.page.scss'],
 })
 export class AdminPage implements OnInit {
+  editMode: Boolean = false;
   role: string;
   usertypes = ['user', 'groupuser', 'superuser'];
   currentState = 'unchecked';
@@ -27,6 +28,7 @@ export class AdminPage implements OnInit {
   @ViewChild('userToCheck') input1;
   @ViewChild('input2') input2;
   @ViewChild('title') title;
+  @ViewChild('groupsAccordion') groupsAccordion: IonAccordionGroup;
   constructor(
     private httpService: HttpService,
     private alertController: AlertController,
@@ -38,12 +40,15 @@ export class AdminPage implements OnInit {
    */
   ngOnInit() {
     this.role = this.authService.getRole();
-    var httpSub = this.httpService.getGroups().subscribe(
+    var httpSub = this.httpService
+      .getGroups()
+      .subscribe(
         (res: { name: string; rooms: { name: string; id: string }[] }[]) => {
           this.totalPath = res;
-          this.totalPath = this.totalPath.map((group)=>{
-            group[`editRoom`]=false; 
-            return group});
+          this.totalPath = this.totalPath.map((group) => {
+            group[`editRoom`] = false;
+            return group;
+          });
         }
       );
   }
@@ -53,8 +58,10 @@ export class AdminPage implements OnInit {
    * @param groupid - the id of the group that the room is in
    * @param roomid - the id of the room to be deleted
    */
-  deleteRoom(groupid,roomid){
-    this.httpService.addOrDeleteRoom(null, groupid, roomid, false).subscribe((res: { success: Boolean }) => {
+  deleteRoom(groupid, roomid) {
+    this.httpService
+      .addOrDeleteRoom(null, groupid, roomid, false)
+      .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();
         } else {
@@ -69,8 +76,10 @@ export class AdminPage implements OnInit {
    * @param groupid - the id of the group that the room is being added to
    * @param name - the name of the room
    */
-  createRoom(groupid, name){
-    this.httpService.addOrDeleteRoom(name,groupid,null,true,this.authService.getUser()).subscribe((res: { success: Boolean }) => {
+  createRoom(groupid, name) {
+    this.httpService
+      .addOrDeleteRoom(name, groupid, null, true, this.authService.getUser())
+      .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();
         } else {
@@ -84,8 +93,10 @@ export class AdminPage implements OnInit {
    * from the database.
    * @param id - the id of the group
    */
-  deleteGroup(id: string){
-    this.httpService.addOrDeleteGroup(null,id,false).subscribe((res: { success: Boolean }) => {
+  deleteGroup(id: string) {
+    this.httpService
+      .addOrDeleteGroup(null, id, false)
+      .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();
           this.addGroup = false;
@@ -94,46 +105,48 @@ export class AdminPage implements OnInit {
         }
       });
   }
-  generateRoomUsers(roomUsers){
+  generateRoomUsers(roomUsers) {
     return roomUsers.includes(this.queryUser.id);
   }
 
   /**
    * It takes a groupid and a boolean, and sends a post request to the server with the userid, groupid,
-   * and boolean. 
-   * 
-   * If the response is successful, it refreshes the page. 
-   * 
+   * and boolean.
+   *
+   * If the response is successful, it refreshes the page.
+   *
    * If the response is unsuccessful, it logs an error.
    * @param groupid - the id of the group
    * @param add - true or false
    */
-  addRemoveGroupAssist(groupid,add){
-    this.httpService.addOrDeleteGroupAssistant(this.queryUser.id,groupid, add)
-        .subscribe((res: { success: Boolean }) => {
-          if (res.success) {
-            this.ngOnInit();
-          } else {
-            console.log('bad response');
-          }
-        });
-    }
+  addRemoveGroupAssist(groupid, add) {
+    this.httpService
+      .addOrDeleteGroupAssistant(this.queryUser.id, groupid, add)
+      .subscribe((res: { success: Boolean }) => {
+        if (res.success) {
+          this.ngOnInit();
+        } else {
+          console.log('bad response');
+        }
+      });
+  }
 
   /**
    * It takes a string, sends it to the server, and then refreshes the page.
    * @param name - the name of the group
    */
-  createGroup(name){
-    this.httpService.addOrDeleteGroup(name, null, true)
-        .subscribe((res: { success: Boolean }) => {
-          if (res.success) {
-            this.ngOnInit();
-            this.addGroup = false;
-          } else {
-            console.log('bad response');
-          }
-        });
-    }
+  createGroup(name) {
+    this.httpService
+      .addOrDeleteGroup(name, null, true)
+      .subscribe((res: { success: Boolean }) => {
+        if (res.success) {
+          this.ngOnInit();
+          this.addGroup = false;
+        } else {
+          console.log('bad response');
+        }
+      });
+  }
 
   /**
    * If the queryPath is not empty, then check if the group id is in the queryPath. If it is, return
@@ -176,7 +189,8 @@ export class AdminPage implements OnInit {
    * @param addTrue - boolean
    */
   addRemoveGroup(username, groupid, add) {
-    this.httpService.addOrRemoveGroupUser(username, groupid, add)
+    this.httpService
+      .addOrRemoveGroupUser(username, groupid, add)
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.checkUser(username);
@@ -187,9 +201,9 @@ export class AdminPage implements OnInit {
   }
 
   /**
-   * It takes a username, groupid, roomid, and a boolean value. 
-   * It then sends a post request to the server with the given parameters. 
-   * If the server responds with a success message, it refreshes the page. 
+   * It takes a username, groupid, roomid, and a boolean value.
+   * It then sends a post request to the server with the given parameters.
+   * If the server responds with a success message, it refreshes the page.
    * If the server responds with a failure message, it logs a message to the console.
    * @param username - username of the user you want to add/remove
    * @param groupid - the id of the group
@@ -197,7 +211,8 @@ export class AdminPage implements OnInit {
    * @param addTrue - boolean
    */
   addRemoveRoom(username, groupid, roomid, add) {
-    this.httpService.addOrDeleteRoomUser(username, this.queryUser.id, groupid, roomid, add)
+    this.httpService
+      .addOrDeleteRoomUser(username, this.queryUser.id, groupid, roomid, add)
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.ngOnInit();
@@ -213,7 +228,13 @@ export class AdminPage implements OnInit {
    * user's role.
    */
   updateRole() {
-    this.httpService.updateUserRole(this.queryUser.username, this.queryUser.role, this.input2.value, this.queryUser.id)
+    this.httpService
+      .updateUserRole(
+        this.queryUser.username,
+        this.queryUser.role,
+        this.input2.value,
+        this.queryUser.id
+      )
       .subscribe((res: { success: Boolean }) => {
         res.success
           ? this.presentAlert(
@@ -233,37 +254,37 @@ export class AdminPage implements OnInit {
   checkUser(user): void {
     if (user.length > 2 && user != this.authService.getUser()) {
       this.httpService.verifyUser(user.toLowerCase()).subscribe(
-          (res: {
-            username: string;
-            id: string;
-            email: string;
-            role: string;
-            validUser: boolean;
-            access: {
-              groups: Group[];
+        (res: {
+          username: string;
+          id: string;
+          email: string;
+          role: string;
+          validUser: boolean;
+          access: {
+            groups: Group[];
+          };
+        }) => {
+          if (res.validUser) {
+            this.currentState = 'deleteMode';
+            this.queryUser = {
+              username: res.username,
+              email: res.email,
+              id: res.id,
+              role: res.role,
             };
-          }) => {
-            if (res.validUser) {
-              this.currentState = 'deleteMode';
-              this.queryUser = {
-                username: res.username,
-                email: res.email,
-                id: res.id,
-                role: res.role,
-              };
-              this.queryPath = res.access.groups;
-              this.title.el.textContent =
-                this.queryUser['username'].toLocaleUpperCase();
-              this.input1.value = this.queryUser['email'];
-              this.input2.value = this.queryUser['role'];
-            } else {
-              this.currentState = 'createMode';
-              if (!user.includes('@')) {
-                this.secondaryInput = 'email';
-              }
+            this.queryPath = res.access.groups;
+            this.title.el.textContent =
+              this.queryUser['username'].toLocaleUpperCase();
+            this.input1.value = this.queryUser['email'];
+            this.input2.value = this.queryUser['role'];
+          } else {
+            this.currentState = 'createMode';
+            if (!user.includes('@')) {
+              this.secondaryInput = 'email';
             }
           }
-        );
+        }
+      );
     } else {
       this.presentAlert(
         'Invalid Action',
@@ -280,15 +301,17 @@ export class AdminPage implements OnInit {
    * @param groupid - the id of the group
    * @returns A boolean value.
    */
-  isGroupAssistant(groupid){
-    var userid = this.queryUser.id
-    var groupIDlist = this.totalPath.map((group)=>{return group.id})
-    var groupIndex = groupIDlist.indexOf(groupid)
+  isGroupAssistant(groupid) {
+    var userid = this.queryUser.id;
+    var groupIDlist = this.totalPath.map((group) => {
+      return group.id;
+    });
+    var groupIndex = groupIDlist.indexOf(groupid);
     // console.log(this.userPath[groupIndex])
-    if (this.totalPath[groupIndex].assistants.includes(userid)){
-      return true
+    if (this.totalPath[groupIndex].assistants.includes(userid)) {
+      return true;
     }
-    return false
+    return false;
   }
 
   /**
@@ -318,7 +341,9 @@ export class AdminPage implements OnInit {
    * server responds with a success message, it will display an alert to the user, and reset the form.
    */
   deleteUser() {
-    this.httpService.addOrDeleteUser(String(this.title.el.textContext).toLowerCase(), false).subscribe((res: { success: Boolean }) => {
+    this.httpService
+      .addOrDeleteUser(String(this.title.el.textContext).toLowerCase(), false)
+      .subscribe((res: { success: Boolean }) => {
         res.success
           ? this.presentAlert(
               'Success',
@@ -357,12 +382,31 @@ export class AdminPage implements OnInit {
     } else {
       newUser = { username: input2.toLowerCase(), email: input1.toLowerCase() };
     }
-    this.httpService.addOrDeleteUser(newUser, true)
+    this.httpService
+      .addOrDeleteUser(newUser, true)
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
           this.presentAlert('Success', `${newUser.username} has been created`);
         }
         this.resetform();
       });
+  }
+
+  getValue(){
+    return Array.from(
+      Array(this.totalPath.length),
+      (_, index) => String(index)
+    );
+  }
+  toggleEditMode() {
+    this.editMode = !this.editMode;
+    if (this.editMode) {
+      this.groupsAccordion.value = Array.from(
+        Array(this.totalPath.length),
+        (_, index) => String(index)
+      );
+    }
+
+    // this.groupsAccordion.value = Array.from(this.totalPath.length)
   }
 }

@@ -47,9 +47,48 @@ left: 0;
 right: 0;
 bottom: 1%;
 }
-.rightAlign {
-    display: flex; 
-    // align-items:flex-end;
-    justify-content:right;
-    --ion-card-background: rgb(7, 28, 59);
+
+    .leftalign,
+.rightright {
+    line-height: 100%;
+    display: block;
+    position: relative;
+    padding-bottom: 0;
+    padding-top: -15px;
+    padding-left: 0;
+    padding-right: 0;
+
+
+    -webkit-border-radius: 11px;
+    -moz-border-radius: 11px;
+    border-radius: 11px;
+    margin-bottom: 0.1em;
+    clear: both;
+    max-width:50%;
+}
+
+.leftalign {
+    background: rgb(24, 48, 82);
+    border: rgb(45, 72, 142) solid 3px;
+    float: left;       
+    margin-right:0%;
+}
+.centeralign {
+    text-align: center;
+    width: 100%;
+    background: none;
+    border: none;
+}
+.rightalign {
+    background: rgb(17, 32, 54);
+    border: rgb(1, 32, 111) solid 3px;
+    float:right;
+    margin-left:0%
+}
+.abovediv {
+    margin:0%;
+    padding:0%;
+    border:0%;
+    position: relative;
+    top:-15;
 }
