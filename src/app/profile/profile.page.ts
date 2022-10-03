@@ -4,6 +4,7 @@ import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera
 import { Directory, FileInfo, Filesystem } from '@capacitor/filesystem'
 import { LoadingController } from '@ionic/angular';
 import { SavedImage } from '../shared/classes/savedImage';
+import { HttpService } from '../shared/services/http.service';
 
 const IMAGE_DIR = 'image-storage'
 
@@ -16,15 +17,15 @@ const IMAGE_DIR = 'image-storage'
 export class ProfilePage implements OnInit {
 editMode: boolean = false;
 user: User;
-images = [];
-  constructor(private loadingCtrl: LoadingController) {
+image: { name: string; path: string; data: string; }
+  constructor(private loadingCtrl: LoadingController, private httpService: HttpService) {
     this.user = JSON.parse(sessionStorage.getItem("savedUser"))
   }
   toggleEditMode(){
     this.editMode= !this.editMode
   }
   async ngOnInit() {
-    this.loadFiles().then(()=>{console.log(this.images)})
+    this.loadFiles()
   }
 
   async selectImage() {
@@ -47,10 +48,11 @@ images = [];
       data: photo.base64String
     })
     console.log('saved: ', savedFile)
+    this.loadFiles()
   }
 
   async loadFiles() {
-    this.images = []
+    this.image = null
 
     const loading = await this.loadingCtrl.create({
       message: 'Loading data...'
@@ -79,12 +81,11 @@ images = [];
         directory: Directory.Data,
         path: filePath
       })
-      this.images.push({
+      this.image = {
         name: fileName,
         path: filePath,
         data: `data:image/jpeg;base64,${readFile.data}`
-    })
-    console.log(this.images)
+    }
     }
   }
 
@@ -93,13 +94,18 @@ images = [];
     const blob = await response.blob()
     const formData = new FormData()
     formData.append('file', blob, file.name);
+    formData.append('username', this.user.username)
+    this.uploadData(formData)
   }
   async uploadData(formData: FormData){
     const loading = await this.loadingCtrl.create({
       message: 'Uploading...'
     });
     await loading.present()
-
+    this.httpService.uploadImage(formData).subscribe((res)=>{
+      console.log(res)
+      this.loadingCtrl.dismiss()
+    })
   }
   async deleteImage(file: SavedImage){
     await Filesystem.deleteFile({

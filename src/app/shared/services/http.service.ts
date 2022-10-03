@@ -13,6 +13,9 @@ export class HttpService {
   loadingRequestMap: Map<string, boolean> = new Map<string, boolean>();
   constructor(private httpClient: HttpClient) {}
 
+  uploadImage(img){
+    return this.httpClient.post(this.URL+'profile/updatephoto', img)
+  }
   getURL(){
     return this.URL
   }

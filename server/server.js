@@ -1,5 +1,6 @@
 const fs = require("fs");
 const express = require("express");
+const path = require('path')
 const app = express();
 const { v4: uuidv4 } = require('uuid');
 var cors = require("cors");
@@ -18,7 +19,7 @@ dummyData = JSON.parse(dummyData)
 const PORT = 80;
 app.use(cors());
 app.use(bodyParser.json());
-
+app.use('./images', express.static(path.join(__dirname , '/images')));
 const Mongo = require('mongodb');
 const url = 'mongodb://localhost:27017';
 Mongo.MongoClient.connect(url, {useNewUrlParser: true}, (err, client)=>{
@@ -44,6 +45,8 @@ require('./routes/newordeleteroom')(app,db,uuidv4);
 require('./routes/addorremovefromchannel')(app,db);
 require('./routes/createordeleteassistant')(app,db);
 require('./routes/getroomusers')(app,db);
+require('./routes/photoupload')(app,db, uuidv4);
+
 
 })
 
