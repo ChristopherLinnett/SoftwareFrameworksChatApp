@@ -1,13 +1,16 @@
 module.exports = {
     /* A function that takes two arguments, io and PORT. */
-    connect: function(io){
+    connect: function(io, db){
         io.on('connection',(socket) => {
             socket.on('message',(message)=> {
                 time = Date.now()
                 downMessage = message.message
                 downUser = message.user
                 roomid = message.roomid
-                io.to(roomid).emit('message', {message: downMessage, user: downUser, time: time});
+                db.collection("Users").find({username:message.user}).toArray((err, resArray)=>{
+                    downImg = resArray[0].profileImg
+                    io.to(roomid).emit('message', {message: downMessage, user: downUser, time: time, img: downImg ? downImg : 'None'});
+                })
             })
             let roomid;
             let username;

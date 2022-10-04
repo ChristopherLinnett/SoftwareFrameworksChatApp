@@ -19,7 +19,7 @@
   <div style="height:20px;"></div>
 
   <div *ngFor="let message of messageList,index as i" class="leftalign"  [ngClass]="{'rightalign' : message.user == authService.getUser()}">
-  <!-- <ion-card (mouseup)="message.timeVisible = false" (mousedown)="message.timeVisible = true"> -->
+    <ion-avatar *ngIf="i<1 || message.user != messageList[i-1].user"><ion-img *ngIf="message.user != 'System Message'" [src]="avatarDirectory(message.img)"></ion-img></ion-avatar>
     <p class="abovediv" *ngIf="i<1 || message.user != messageList[i-1].user">{{message.user == authService.getUser() ? 'You' : message.user}}</p>
     <ion-card-content>
       {{ message.message }}
@@ -27,7 +27,6 @@
     <div class="matching">
       <p class="timetext" *ngIf="message.timeVisible">{{message.time}}</p>
         </div>
-  <!-- </ion-card> -->
   </div>
 </ion-content>
 

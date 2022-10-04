@@ -16,8 +16,8 @@ module.exports = (app, db, uuidv4) => {
 
         form.on ('fileBegin', function(formname, file) {
             const uniqueFileName = uuidv4()
-            file.filepath = form.uploadDir + "/" + uniqueFileName +'.png';
-            file.newFilename = file.originalFilename
+            file.filepath = form.uploadDir + "/" + uniqueFileName +'.jpg';
+            file.newFilename = uniqueFileName+'.jpg'
         })
 
         form.on('file', (field, file)=>{
@@ -30,6 +30,8 @@ module.exports = (app, db, uuidv4) => {
             })
         })
 
-        form.parse(req)
+        form.parse(req, (err, fields, files)=>{
+            db.collection("Users").updateOne({username: fields.username}, { $set: {profileImg : files.file.newFilename}})
+        })
     })
 }

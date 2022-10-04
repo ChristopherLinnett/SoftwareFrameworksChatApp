@@ -1,4 +1,5 @@
 const fs = require("fs");
+const Blob = require('buffer').Blob
 const express = require("express");
 const path = require('path')
 const app = express();
@@ -19,7 +20,7 @@ dummyData = JSON.parse(dummyData)
 const PORT = 80;
 app.use(cors());
 app.use(bodyParser.json());
-app.use('./images', express.static(path.join(__dirname , '/images')));
+app.use('/images', express.static(path.join(__dirname , 'images')))
 const Mongo = require('mongodb');
 const url = 'mongodb://localhost:27017';
 Mongo.MongoClient.connect(url, {useNewUrlParser: true}, (err, client)=>{
@@ -28,11 +29,11 @@ Mongo.MongoClient.connect(url, {useNewUrlParser: true}, (err, client)=>{
     const db = client.db(dbname);
 
 /* Connecting to the socket.js file. */
-socket.connect(io, PORT);
+socket.connect(io, db);
 
 /* Listening for a connection on port 3000. */
 server.listen(http, PORT);
-
+require('./routes/getimg')(app,fs, path, Blob)
 require('./routes/usercheck')(app, db, sendAccess);
 require('./routes/auth')(app, db, sendAccess);
 require('./routes/newuser')(app,db, uuidv4);

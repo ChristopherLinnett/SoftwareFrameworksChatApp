@@ -44,7 +44,7 @@ image: { name: string; path: string; data: string; }
     const filename = this.user.id + new Date().getTime()+'.jpeg';
     const savedFile = await Filesystem.writeFile({
       directory: Directory.Data,
-      path: `${IMAGE_DIR}/${filename}`,
+      path: `${IMAGE_DIR}/temp.jpeg`,
       data: photo.base64String
     })
     console.log('saved: ', savedFile)
@@ -62,7 +62,7 @@ image: { name: string; path: string; data: string; }
       directory: Directory.Data,
       path: IMAGE_DIR
     }).then(result => {
-      this.loadFileData(result.files)
+      this.loadFileData(result.files[0])
     }, async err => {
       console.log('error ', err)
       await Filesystem.mkdir({
@@ -73,8 +73,7 @@ image: { name: string; path: string; data: string; }
       loading.dismiss()
     })
   }
-  async loadFileData(fileNames: FileInfo[]){
-    for (let file of fileNames){
+  async loadFileData(file){
       const fileName = file.name
       const filePath = `${IMAGE_DIR}/${fileName}`
       const readFile = await Filesystem.readFile({
@@ -85,7 +84,6 @@ image: { name: string; path: string; data: string; }
         name: fileName,
         path: filePath,
         data: `data:image/jpeg;base64,${readFile.data}`
-    }
     }
   }
 
