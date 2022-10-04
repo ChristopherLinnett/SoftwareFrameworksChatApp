@@ -7,7 +7,7 @@ import { HttpService } from '../shared/services/http.service';
 })
 export class AuthService {  
   loggedIn = false;
-  savedUser : {username: string, id: string, email: string, role: string, access: any};
+  savedUser : {username: string, profileImg: string, id: string, email: string, role: string, access: any};
     constructor(private httpService: HttpService, private router: Router, private activatedRoute: ActivatedRoute) { }
     
   
@@ -20,12 +20,11 @@ export class AuthService {
      */
     login(usernameInput, passwordInput): void {
       this.httpService.login(usernameInput.toLowerCase(), passwordInput.toLowerCase())
-      .subscribe((res: {username: string, id: string, email: string, role: string, access: any, loginSuccess: boolean}) => {
+      .subscribe((res: {username: string, profileImg: string, id: string, email: string, role: string, access: any, loginSuccess: boolean}) => {
         if (res.loginSuccess) {
             this.loggedIn = true;
-            this.savedUser = {username: res.username, email: res.email, id: res.id, role: res.role, access: res.access}
+            this.savedUser = {username: res.username, profileImg: res.profileImg, email: res.email, id: res.id, role: res.role, access: res.access}
             sessionStorage.setItem('savedUser', JSON.stringify(res));
-            console.log(res.access)
           }
           this.loggedIn ? this.router.navigate([''],{ replaceUrl: true }) : alert("incorrect details, try again");
       });      

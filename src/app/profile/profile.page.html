@@ -13,7 +13,7 @@
 
 <ion-content>
   <div class="imagecontainer" (click)="editMode ? selectImage() : null">
-      <img *ngIf="image" [src]="image.data">
+      <img [src]="image ? image.data : avatarDirectory()">
     </div>
     <ion-card class="formholder">
       <ion-item>

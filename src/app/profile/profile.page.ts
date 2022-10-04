@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../shared/classes/User'
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { Directory, FileInfo, Filesystem } from '@capacitor/filesystem'
@@ -14,7 +14,7 @@ const IMAGE_DIR = 'image-storage'
   styleUrls: ['./profile.page.scss'],
 })
 
-export class ProfilePage implements OnInit {
+export class ProfilePage implements OnInit, OnDestroy {
 editMode: boolean = false;
 user: User;
 image: { name: string; path: string; data: string; }
@@ -27,11 +27,20 @@ image: { name: string; path: string; data: string; }
   async ngOnInit() {
     this.loadFiles()
   }
+  avatarDirectory(){
+    if (this.user.profileImg){
+      return this.httpService.URL+ 'images/' + this.user.profileImg
+    } else { return './assets/icon/nouserimage.png'
+  }
+
+  }
 
   async selectImage() {
     const image = await Camera.getPhoto({
       quality: 90,
-      allowEditing: true,
+      width: 350,
+      height: 350,
+      allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Prompt
     });
@@ -62,7 +71,9 @@ image: { name: string; path: string; data: string; }
       directory: Directory.Data,
       path: IMAGE_DIR
     }).then(result => {
+      if (result.files.length>0){
       this.loadFileData(result.files[0])
+      }
     }, async err => {
       console.log('error ', err)
       await Filesystem.mkdir({
@@ -101,7 +112,6 @@ image: { name: string; path: string; data: string; }
     });
     await loading.present()
     this.httpService.uploadImage(formData).subscribe((res)=>{
-      console.log(res)
       this.loadingCtrl.dismiss()
     })
   }
@@ -110,7 +120,11 @@ image: { name: string; path: string; data: string; }
       directory: Directory.Data,
       path: file.path
     })
-    this.loadFiles()
+  }
+  async ngOnDestroy(){
+    if (this.image){
+    await this.deleteImage(this.image)
+  }
   }
 
 }

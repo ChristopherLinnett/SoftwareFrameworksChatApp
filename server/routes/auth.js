@@ -34,6 +34,7 @@ module.exports = (app, db, sendAccess) => {
           sendAccess(savedUser.id, db).then((accessInfo)=>{
           return res.send({
             username: savedUser.username,
+            profileImg: savedUser.profileImg,
             id: savedUser.id,
             email: savedUser.email,
             role: role,

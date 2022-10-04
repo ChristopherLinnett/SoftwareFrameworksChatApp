@@ -51,7 +51,6 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
       this.roomname = params.name
     })
     this.initIoConnection();
-    await this.loadCache()
   }
   ngAfterViewInit(): void {
     this.socketService.joinRoom(this.roomid)
@@ -99,27 +98,6 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
     return this.httpService.URL+ 'images/' + filename
   }
 
-  async loadCache(){
-    const IMAGE_DIR = 'profile-img-cache'
-    const loading = await this.loadingCtrl.create({
-      message: 'Loading data...'
-    });
-    await loading.present()
-    Filesystem.readdir({
-      directory: Directory.Cache,
-      path: IMAGE_DIR
-    }).then(result => {
-    }, async err => {
-      console.log('error ', err)
-      await Filesystem.mkdir({
-        directory: Directory.Cache,
-        path: IMAGE_DIR
-      })
-    }).then(_ => {
-      loading.dismiss()
-    })
-  }
-  
 
   /**
    * The logout function is called when the user clicks the logout button. The logout function calls

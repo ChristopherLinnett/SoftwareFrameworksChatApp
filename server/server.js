@@ -1,5 +1,4 @@
 const fs = require("fs");
-const Blob = require('buffer').Blob
 const express = require("express");
 const path = require('path')
 const app = express();
@@ -15,8 +14,6 @@ const io = require("socket.io")(http, {
 });
 const socket = require("./socket.js");
 const server = require("./listen.js");
-var dummyData = fs.readFileSync('dummydb.json');
-dummyData = JSON.parse(dummyData)
 const PORT = 80;
 app.use(cors());
 app.use(bodyParser.json());
@@ -33,7 +30,6 @@ socket.connect(io, db);
 
 /* Listening for a connection on port 3000. */
 server.listen(http, PORT);
-require('./routes/getimg')(app,fs, path, Blob)
 require('./routes/usercheck')(app, db, sendAccess);
 require('./routes/auth')(app, db, sendAccess);
 require('./routes/newuser')(app,db, uuidv4);
