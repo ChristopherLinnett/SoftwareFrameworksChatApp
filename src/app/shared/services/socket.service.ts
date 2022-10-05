@@ -29,14 +29,25 @@ initSocket() {
    * @param {string} messageText - The message that the user wants to send.
    */
   sendMessage(messageText: string, roomid) {
+
     this.socket.emit('message', {message: messageText, user: JSON.parse(sessionStorage.getItem('savedUser')).username, roomid: roomid})
     }
+
+  sendImage(filename: string, roomid) {
+      this.socket.emit('image', {filename: filename, user: JSON.parse(sessionStorage.getItem('savedUser')).username, roomid: roomid})
+      }
+
 
   joinRoom(roomid){
     this.socket.emit('joinroom', {roomid: roomid, username: JSON.parse(sessionStorage.getItem('savedUser')).username})
   }
   leaveRoom(roomid,username){
     this.socket.emit('leaveroom',{roomid: roomid, username: username})
+  }
+  getImage(){
+    return new Observable(observer=>{
+      this.socket.on('imageMessage',(data: any)=> {observer.next(data)})
+    })
   }
 
   getJoinNotifications(){

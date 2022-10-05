@@ -13,7 +13,9 @@
 
 <ion-content>
   <div class="imagecontainer" (click)="editMode ? selectImage() : null">
-      <img [src]="image ? image.data : avatarDirectory()">
+    <ion-avatar>
+      <img [src]="avatarDirectory()">
+    </ion-avatar>
     </div>
     <ion-card class="formholder">
       <ion-item>

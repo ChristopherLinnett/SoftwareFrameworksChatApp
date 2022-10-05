@@ -19,11 +19,14 @@
   <div style="height:20px;"></div>
 
   <div *ngFor="let message of messageList,index as i" class="leftalign"  [ngClass]="{'rightalign' : message.user == authService.getUser()}">
-    <ion-avatar *ngIf="i<1 || message.user != messageList[i-1].user"><ion-img [src]="message.img && message.img == 'None' ? './assets/icon/nouserimage.png': avatarDirectory(message.img)"></ion-img></ion-avatar>
+    <ion-avatar *ngIf="checkMessage(message,messageList[i-1],i)"><ion-img [src]="avatarDirectory(message.img)"></ion-img></ion-avatar>
       <p class="abovediv" *ngIf="i<1 || message.user != messageList[i-1].user">{{message.user == authService.getUser() ? 'you' : message.user}}</p>
-    <p>
+    <p *ngIf="message.message">
       {{ message.message }}
     </p>
+    <div *ngIf="message.messageImg" style="max-width:100px">
+      <img [src]="getImg(message.messageImg)">
+    </div>
     <div class="matching">
       <p class="timetext" *ngIf="message.timeVisible">{{message.time}}</p>
         </div>
@@ -31,10 +34,15 @@
 </ion-content>
 
 <ion-footer>
+  <div *ngIf="image" style="width: 50%; margin-left: auto; margin-right: auto; height:auto;">
+    <ion-button fill="clear" style="float: right; position: absolute; left: 65%"(click)="deleteImage()">x</ion-button>
+  <ion-img [src]="image.data"></ion-img>
+  </div>
   <ion-item>
+    <ion-button style="margin-left:0%; margin-right:5%;" fill="clear" (click)="selectImage()"><ion-icon slot="icon-only" name="camera"></ion-icon></ion-button>
   <ion-input #messageInput minLength="1" type="text" required class="ion-padding" placeholder="Type your message" (keyup.enter)="sendMessage(messageInput.value); messageInput.value = null">
   </ion-input>
-  <ion-button fill="clear" (click)="sendMessage(messageInput.value); messageInput.value = null">
+  <ion-button fill="clear" (click)="image ? sendImage() : sendMessage(messageInput.value); messageInput.value = ''">
     <ion-icon slot="icon-only" name="send-sharp"></ion-icon>
   </ion-button>
   </ion-item>

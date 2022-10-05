@@ -20,18 +20,25 @@ module.exports = (app, db, uuidv4) => {
             file.newFilename = uniqueFileName+'.jpg'
         })
 
-        form.on('file', (field, file)=>{
-            res.send({
-                result: "OK",
-                filename: file.newFilename,
-                data: {'filename': file.originalFilename, 'size': file.size},
-                numberOfImages: 1,
-                message: 'upload successful'
-            })
-        })
-
         form.parse(req, (err, fields, files)=>{
+            console.log(files.file.newFilename)
+            console.log(fields)
+            if (fields.chatMsg == 'false'){
             db.collection("Users").updateOne({username: fields.username}, { $set: {profileImg : files.file.newFilename}})
+            } 
+            if (fields.chatMsg == 'true'){
+                res.send({
+                    filename: files.file.newFilename,
+                })
+            } else {
+                res.send({
+                    result: "OK",
+                    filename: files.file.newFilename,
+                    data: {'filename': files.file.newFilename, 'size': files.file.size},
+                    numberOfImages: 1,
+                    message: 'upload successful'
+                })
+            }
         })
     })
 }

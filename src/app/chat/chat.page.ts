@@ -6,7 +6,9 @@ import { AuthService } from '../auth/auth.service';
 import { SocketService } from '../shared/services/socket.service';
 import { Directory, FileInfo, Filesystem } from '@capacitor/filesystem'
 import { HttpService } from '../shared/services/http.service';
+import { ImageService } from '../shared/services/image.service';
 
+const IMAGE_DIR = 'image-storage'
 
 @Component({
   selector: 'app-chat',
@@ -19,8 +21,10 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
   groupname;
   messageList: any[] = [];
   ioConnection: any;
+  imageConnection: any;
   message;
   roomid;
+  image;
   roomname;
   routeSub: Subscription;
   joinNotifSub: Subscription;
@@ -28,7 +32,7 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
   messages: { text: string | number; time: string }[];
   data: { message: string; time: string };
   user;
-  constructor(private socketService: SocketService, private httpService: HttpService, public authService: AuthService, private activatedRoute: ActivatedRoute, private loadingCtrl: LoadingController) {
+  constructor(private socketService: SocketService, private httpService: HttpService, public authService: AuthService, private activatedRoute: ActivatedRoute, private loadingCtrl: LoadingController, private imageService: ImageService) {
   }
   /**
    * If the text is not empty, then send the message to the socket service
@@ -39,6 +43,14 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
       this.socketService.sendMessage(text, this.roomid);
     }
   }
+
+  sendImage() {
+    if (this.image){
+      this.imageService.startUpload(this.image,true, this.roomid)
+      this.deleteImage()
+    }
+  }
+
   /**
    * The function is called when the component is initialized. It calls the initIoConnection()
    * function.
@@ -63,6 +75,10 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
     this.routeSub.unsubscribe()
     this.joinNotifSub.unsubscribe()
     this.leaveNotifSub.unsubscribe()
+    if (this.image){
+      this.image = null
+      this.deleteImage()
+    }
 
   }
   /**
@@ -81,6 +97,13 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
           this.chatWindow.scrollToBottom()
       });
 
+
+      this.imageConnection = this.socketService.getImage().subscribe((message: {imgFile: string, time: Date, user: string, img: string}) => {
+        console.log(message)
+        this.messageList.push({messageImg: message.imgFile, time: `${new Date(message.time).getDate()}-${new Date(message.time).getMonth()}-${new Date(message.time).getFullYear().toString().slice(2,4)}`, timeVisible: false, user: message.user, img: message.img ? message.img : null});
+          this.chatWindow.scrollToBottom()
+      });
+
       this.joinNotifSub = this.socketService.getJoinNotifications().subscribe((joinMsg: string)=>{
         if (!joinMsg.includes(JSON.parse(sessionStorage.getItem('savedUser')).username)){
         this.messageList.push({message: joinMsg, time: new Date(Date.now()), timeVisible: false, user: "System Message"})
@@ -94,9 +117,27 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
       })
   }
 
-  avatarDirectory(filename){
-    return this.httpService.URL+ 'images/' + filename
+  checkMessage(message,prevMessage,i){
+    if (message.img == undefined){
+      return false
+    }
+    if (i<1 || message.user != prevMessage.user){
+      return true
+    }
+    return false
+    
   }
+
+  avatarDirectory(filename){
+    if (filename == undefined){
+      return ''
+    }
+    if (filename == 'None'){
+      return './assets/icon/nouserimage.png'
+    }
+    return this.httpService.URL + 'images/' + filename
+  }
+
 
 
   /**
@@ -114,4 +155,49 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
   checkRole(){
     return this.authService.getRole()
   }
+
+  async selectImage() {
+    await this.imageService.selectImage()
+    setTimeout(()=>this.loadFiles(), 100)
+   }
+ 
+   async loadFiles() {
+     Filesystem.readdir({
+       directory: Directory.Data,
+       path: IMAGE_DIR
+     }).then(result => {
+       this.loadFileData(result.files[0])
+     }, async err => {
+       console.log('error ', err)
+       await Filesystem.mkdir({
+         directory: Directory.Data,
+         path: IMAGE_DIR
+       })
+     })
+   }
+   async loadFileData(file){
+       const fileName = file.name
+       const filePath = `${IMAGE_DIR}/${fileName}`
+       const readFile = await Filesystem.readFile({
+         directory: Directory.Data,
+         path: filePath
+       })
+       this.image = {
+         name: fileName,
+         path: filePath,
+         data: `data:image/jpeg;base64,${readFile.data}`
+     }
+   }
+   async deleteImage(){
+    await Filesystem.deleteFile({
+      directory: Directory.Data,
+      path: IMAGE_DIR+ '/temp.jpeg'
+    })
+    this.image = null
+  }
+getImg(filename){
+  return this.httpService.URL + 'images/' + filename
+}
+
+
 }

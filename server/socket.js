@@ -12,6 +12,16 @@ module.exports = {
                     io.to(roomid).emit('message', {message: downMessage, user: downUser, time: time, img: downImg ? downImg : 'None'});
                 })
             })
+            socket.on('image',(imageDetails)=> {
+                time = Date.now()
+                imgFile = imageDetails.filename
+                downUser = imageDetails.user
+                roomid = imageDetails.roomid
+                db.collection("Users").find({username:imageDetails.user}).toArray((err, resArray)=>{
+                    downImg = resArray[0].profileImg
+                    io.to(roomid).emit('imageMessage', {imgFile: imgFile, user: downUser, time: time, img: downImg ? downImg : 'None'});
+                })
+            })
             let roomid;
             let username;
             socket.on('joinroom',(roomidAndUsername)=>{
