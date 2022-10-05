@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from '../auth/auth.service';
@@ -10,9 +10,10 @@ import { AssistantModalComponent } from './assistant-modal/assistant-modal.compo
   templateUrl: './selection.page.html',
   styleUrls: ['./selection.page.scss'],
 })
-export class SelectionPage implements OnInit {
+export class SelectionPage implements OnDestroy {
   groups: any[];
   userPath;
+  userSub;
   constructor(
     private authService: AuthService,
     private httpService: HttpService,
@@ -33,8 +34,11 @@ export class SelectionPage implements OnInit {
   }
 
 
-  async ngOnInit() {
+  ionViewWillEnter() {
     this.checkUser();
+  }
+  ngOnDestroy(): void {
+    this.userSub.unsubscribe()
   }
 
   /**
@@ -50,7 +54,7 @@ export class SelectionPage implements OnInit {
    */
   checkUser(): void {
     const username: string = this.authService.getUser().toLowerCase()
-    this.httpService.verifyUser(username)
+    this.userSub = this.httpService.verifyUser(username)
         .subscribe(
           (res) => {
               this.userPath = res.access.groups.map((group)=>{
@@ -83,7 +87,7 @@ export class SelectionPage implements OnInit {
     this.httpService.addOrDeleteRoom(null, groupid, roomid, false)
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
-          this.ngOnInit();
+          this.checkUser();
         } else {
           console.log('bad response');
         }
@@ -126,7 +130,7 @@ export class SelectionPage implements OnInit {
     this.httpService.addOrDeleteRoom(name, groupid, null, true, this.authService.getUser())
       .subscribe((res: { success: Boolean }) => {
         if (res.success) {
-          this.ngOnInit();
+          this.checkUser();
         } else {
           console.log('bad response');
         }

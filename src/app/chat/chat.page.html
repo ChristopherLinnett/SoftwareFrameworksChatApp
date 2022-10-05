@@ -24,7 +24,7 @@
     <p *ngIf="message.message">
       {{ message.message }}
     </p>
-    <div *ngIf="message.messageImg" style="max-width:100px">
+    <div *ngIf="message.messageImg" style="max-width:400px; min-width:200px;">
       <img [src]="getImg(message.messageImg)">
     </div>
     <div class="matching">
@@ -34,7 +34,7 @@
 </ion-content>
 
 <ion-footer>
-  <div *ngIf="image" style="width: 50%; margin-left: auto; margin-right: auto; height:auto;">
+  <div *ngIf="image" style="max-width: 250px; margin-left: auto; margin-right: auto; height:auto;">
     <ion-button fill="clear" style="float: right; position: absolute; left: 65%"(click)="deleteImage()">x</ion-button>
   <ion-img [src]="image.data"></ion-img>
   </div>
