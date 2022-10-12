@@ -35,7 +35,7 @@
       </ion-item>
     </ion-card>
     <ion-toolbar *ngIf="editMode" class="profilebuttonsholder">
-      <ion-button class="sharedrowbutton" color="success" slot="end" (click)="startUpload(image)"><ion-icon name="checkmark"></ion-icon></ion-button>
+      <ion-button class="sharedrowbutton" color="success" slot="end" (click)="startUpload(image); toggleEditMode()"><ion-icon name="checkmark"></ion-icon></ion-button>
       <ion-button class="sharedrowbutton" color="danger" slot="start" (click)="toggleEditMode()"><ion-icon slot="icon-only" name="close"></ion-icon></ion-button>
   </ion-toolbar>
 
