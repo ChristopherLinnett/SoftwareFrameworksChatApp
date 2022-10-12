@@ -1,12 +1,13 @@
 import { AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { IonContent, LoadingController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IonContent, ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { SocketService } from '../shared/services/socket.service';
 import { Directory, FileInfo, Filesystem } from '@capacitor/filesystem'
 import { HttpService } from '../shared/services/http.service';
 import { ImageService } from '../shared/services/image.service';
+import { VideocallmodalComponent } from './videocallmodal/videocallmodal.component';
 
 const IMAGE_DIR = 'image-storage'
 
@@ -32,7 +33,7 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
   messages: { text: string | number; time: string }[];
   data: { message: string; time: string };
   user;
-  constructor(private socketService: SocketService, private httpService: HttpService, public authService: AuthService, private activatedRoute: ActivatedRoute, private loadingCtrl: LoadingController, private imageService: ImageService) {
+  constructor(private router: Router, private socketService: SocketService, private httpService: HttpService, public authService: AuthService, private activatedRoute: ActivatedRoute, private modalController: ModalController, private imageService: ImageService) {
   }
   /**
    * If the text is not empty, then send the message to the socket service
@@ -69,6 +70,17 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
     console.log('joinCalled')
   }
 
+  async launchVideoChat(userid){
+    // const modal = await this.modalController.create({
+    //   component: VideocallmodalComponent,
+    //   componentProps: { 
+    //     recipient: userid
+    //   }
+    // });
+    // modal.present();
+    this.router.navigate(['video-chat'], userid)
+  }
+
   ngOnDestroy() {
     this.socketService.leaveRoom(this.roomid, this.user)
     this.ioConnection.unsubscribe()
@@ -90,10 +102,10 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
     console.log('initialising')
     this.ioConnection = this.socketService
       .getMessage()
-      .subscribe((message: {message: string, time: Date, user: string, img: string}) => {
+      .subscribe((message: {message: string, time: Date, user: string, userid: string, img: string}) => {
         this.messageList.push({message: message.message, 
           time: `${new Date(message.time).getDate()}-${new Date(message.time).getMonth()}-${new Date(message.time).getFullYear().toString().slice(2,4)}`, 
-          timeVisible: false, user: message.user, img: message.img ? message.img : null});
+          timeVisible: false, user: message.user, userid: message.userid, img: message.img ? message.img : null});
           this.chatWindow.scrollToBottom()
       });
 

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ChatPage } from './chat.page';
 
 import { ChatPageRoutingModule } from './chat-routing.module';
+import { VideocallmodalComponent } from './videocallmodal/videocallmodal.component';
 
 @NgModule({
   imports: [
@@ -13,6 +14,6 @@ import { ChatPageRoutingModule } from './chat-routing.module';
     FormsModule,
     ChatPageRoutingModule
   ],
-  declarations: [ChatPage]
+  declarations: [ChatPage, VideocallmodalComponent]
 })
 export class ChatPageModule {}

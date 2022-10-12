@@ -31,6 +31,7 @@
     "@ionic/angular": "^6.1.9",
     "@ionic/pwa-elements": "^3.1.1",
     "ionicons": "^6.0.3",
+    "peerjs": "^1.4.7",
     "rxjs": "~6.6.0",
     "socket.io-client": "^4.5.1",
     "tslib": "^2.2.0",

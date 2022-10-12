@@ -5,11 +5,12 @@ module.exports = {
             socket.on('message',(message)=> {
                 time = Date.now()
                 downMessage = message.message
+                downId = message.userid
                 downUser = message.user
                 roomid = message.roomid
                 db.collection("Users").find({username:message.user}).toArray((err, resArray)=>{
                     downImg = resArray[0].profileImg
-                    io.to(roomid).emit('message', {message: downMessage, user: downUser, time: time, img: downImg ? downImg : 'None'});
+                    io.to(roomid).emit('message', {message: downMessage, user: downUser,userid: downId, time: time, img: downImg ? downImg : 'None'});
                 })
             })
             socket.on('image',(imageDetails)=> {

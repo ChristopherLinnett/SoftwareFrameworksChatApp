@@ -30,7 +30,7 @@ initSocket() {
    */
   sendMessage(messageText: string, roomid) {
 
-    this.socket.emit('message', {message: messageText, user: JSON.parse(sessionStorage.getItem('savedUser')).username, roomid: roomid})
+    this.socket.emit('message', {message: messageText, user: JSON.parse(sessionStorage.getItem('savedUser')).username,userid:JSON.parse(sessionStorage.getItem('savedUser')).id, roomid: roomid})
     }
 
   sendImage(filename: string, roomid) {

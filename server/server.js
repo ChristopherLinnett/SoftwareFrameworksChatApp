@@ -30,6 +30,7 @@ socket.connect(io, db);
 
 /* Listening for a connection on port 3000. */
 server.listen(http, PORT);
+require('./peer.js')
 require('./routes/usercheck')(app, db, sendAccess);
 require('./routes/auth')(app, db, sendAccess);
 require('./routes/newuser')(app,db, uuidv4);

@@ -1,0 +1,21 @@
+<header>
+<ion-toolbar>
+  <ion-buttons slot="start"><ion-back-button></ion-back-button></ion-buttons>
+  <ion-title>{{recipient}}</ion-title>
+</ion-toolbar>
+</header>
+<ion-content [fullscreen]="true">
+<ion-fab class="ownvideo">
+<video width="25%" #myvideo *ngIf="myVideo != null" [srcObject]="myVideo.srcObject" (loadedmetadata)="onLoadedMetadata($event)" style="border:solid; border:red"></video>
+</ion-fab>
+
+<div *ngIf="otherVideo != null" class="othervideo">
+  <video height="100%"[srcObject]="otherVideo.srcObject" (loadedmetadata)="onLoadedMetadata($event)"></video>
+</div>
+</ion-content>
+<footer>
+<ion-button *ngIf="otherVideo == null || myVideo == null" (click)="streamCamera(recipient)">Call</ion-button>
+<ion-button (click)="endCall()"> End Call</ion-button>
+<ion-button *ngIf="!isApp" (click)="streamScreen(recipient)"> Screen Share</ion-button>
+</footer>
+

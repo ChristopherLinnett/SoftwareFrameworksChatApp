@@ -7,7 +7,9 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class HttpService {
-  URL = 'http://192.168.208.95:80/'
+  PORT = '80'
+  IP = '192.168.113.95'
+  URL = 'http://'+ this.IP + `:${this.PORT}/`
 
   loadingObserver: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loadingRequestMap: Map<string, boolean> = new Map<string, boolean>();
