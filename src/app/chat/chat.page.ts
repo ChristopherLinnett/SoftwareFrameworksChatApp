@@ -62,6 +62,8 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
       this.roomid = params.id
       this.roomname = params.name
       this.getRoomMessages(this.roomid)
+      setTimeout(()=>this.chatWindow.scrollToBottom(), 100)
+
 
     })
     this.subscriptions.push(routeSub)
