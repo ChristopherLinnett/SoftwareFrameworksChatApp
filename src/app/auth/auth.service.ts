@@ -29,6 +29,10 @@ export class AuthService {
           this.loggedIn ? this.router.navigate([''],{ replaceUrl: true }) : alert("incorrect details, try again");
       });      
 }
+  /**
+   * It returns the savedUser property of the UserService class.
+   * @returns The savedUser object
+   */
   getSavedUser(){
     return this.savedUser
   }

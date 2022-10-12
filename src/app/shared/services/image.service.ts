@@ -20,6 +20,10 @@ user: User
 
    }
 
+  /**
+   * This function will open the camera, take a picture, and then save the image to the device's local
+   * storage.
+   */
   async selectImage() {
     const image = await Camera.getPhoto({
       quality: 100,
@@ -34,6 +38,10 @@ user: User
       this.saveImage(image)
     }
   }
+  /**
+   * It takes a photo object, writes the base64String to a file, and returns the file object
+   * @param {Photo} photo - Photo - this is the photo object that is returned from the camera plugin
+   */
   async saveImage(photo: Photo){
     const savedFile = await Filesystem.writeFile({
       directory: Directory.Data,
@@ -43,6 +51,13 @@ user: User
     console.log('saved', savedFile)
   }
   
+  /**
+   * This function takes a file, and uploads it to the server.
+   * @param {SavedImage} file - SavedImage - this is the file that was saved to the device
+   * @param [isChatMsg=false] - boolean, if true, the image is a chat message, if false, it's a profile
+   * image
+   * @param [roomid=false] - the id of the room the image is being uploaded to
+   */
   async startUpload( file: SavedImage, isChatMsg=false, roomid=false){
     const response = await fetch(file.data)
     const blob = await response.blob()
@@ -56,6 +71,13 @@ user: User
     }
     this.uploadData(formData,isChatMsg,roomid)
   }
+  /**
+   * It takes a formData object, a boolean, and a roomid, and uploads the formData to the server, and
+   * if the boolean is true, it sends the filename to the server via socket.io.
+   * @param {FormData} formData - FormData, isChatMsg, roomid
+   * @param isChatMsg - boolean
+   * @param roomid - the id of the room the user is in
+   */
   async uploadData(formData: FormData, isChatMsg, roomid){
     const loading = await this.loadingCtrl.create({
       message: 'Uploading...'

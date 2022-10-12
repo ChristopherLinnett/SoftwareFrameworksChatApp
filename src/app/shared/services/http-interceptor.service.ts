@@ -11,6 +11,13 @@ export class HttpInterceptorService implements HttpInterceptor {
   constructor(private httpService: HttpService){}
 
 
+  /**
+   * It intercepts the request, sets the loading to true, sets a timeout of 1 second, retries the
+   * request 3 times, sets the loading to false, and returns an empty observable if the request fails
+   * @param req - HttpRequest<any> - The request object
+   * @param {HttpHandler} next - HttpHandler - the next interceptor in the chain
+   * @returns Observable<HttpEvent<any>>
+   */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const defaultTimeout = 1000
     console.log('intercepted')

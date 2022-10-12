@@ -105,6 +105,11 @@ export class AdminPage implements OnInit {
         }
       });
   }
+  /**
+   * If the roomUsers array includes the id of the user that is currently logged in, then return true.
+   * @param roomUsers - [{id: 1, name: 'John'}, {id: 2, name: 'Jane'}]
+   * @returns a boolean value.
+   */
   generateRoomUsers(roomUsers) {
     return roomUsers.includes(this.queryUser.id);
   }
@@ -392,12 +397,20 @@ export class AdminPage implements OnInit {
       });
   }
 
-  getValue(){
-    return Array.from(
-      Array(this.totalPath.length),
-      (_, index) => String(index)
+  /**
+   * It creates an array of length `this.totalPath.length` and fills it with strings of the index of
+   * each element.
+   * @returns An array of strings, each string is a number from 0 to the length of the totalPath array.
+   */
+  getValue() {
+    return Array.from(Array(this.totalPath.length), (_, index) =>
+      String(index)
     );
   }
+  /**
+   * If editMode is true, then set the value of groupsAccordion to an array of strings, where each
+   * string is the index of the array.
+   */
   toggleEditMode() {
     this.editMode = !this.editMode;
     if (this.editMode) {
@@ -406,7 +419,5 @@ export class AdminPage implements OnInit {
         (_, index) => String(index)
       );
     }
-
-    // this.groupsAccordion.value = Array.from(this.totalPath.length)
   }
 }

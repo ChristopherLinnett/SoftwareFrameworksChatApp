@@ -7,18 +7,20 @@ import { HttpService } from 'src/app/shared/services/http.service';
   styleUrls: ['./assistant-modal.component.scss'],
 })
 export class AssistantModalComponent implements OnInit {
-roomid: string;
-roomname: string;
-groupid: string;
-editUser: boolean = false;
-roomUsers: {id: string, name: string}[]
-editMode: boolean = false;
-  constructor(private httpService: HttpService, private alertController: AlertController) { }
+  roomid: string;
+  roomname: string;
+  groupid: string;
+  editUser: boolean = false;
+  roomUsers: { id: string; name: string }[];
+  editMode: boolean = false;
+  constructor(
+    private httpService: HttpService,
+    private alertController: AlertController
+  ) {}
 
   ngOnInit() {
-    this.getRoomUsers()
-    console.log('opened')
-    
+    this.getRoomUsers();
+    console.log('opened');
   }
 
   /**
@@ -30,24 +32,41 @@ editMode: boolean = false;
    * @param addTrue - true if you want to add a user, false if you want to remove a user
    * @param i - the index of the user in the roomUsers array
    */
-   addRemoveRoomUser(username, userid, groupid, roomid, addTrue, i) {
-    if (addTrue){
-    username = username.toLowerCase()
-    if (this.roomUsers.map((user)=>{return user.name}).includes(username)){
-      return this.presentAlert(`${username} is already in this room`)
-    }}
-    this.httpService.addOrDeleteRoomUser(username.toLowerCase(), userid, groupid, roomid, addTrue).subscribe((res: { success: Boolean, userid: string, message: string }) => {
-        if (res.success) {
-          if (!addTrue){
-          this.roomUsers.splice(i,1)
+  addRemoveRoomUser(username, userid, groupid, roomid, addTrue, i) {
+    if (addTrue) {
+      username = username.toLowerCase();
+      if (
+        this.roomUsers
+          .map((user) => {
+            return user.name;
+          })
+          .includes(username)
+      ) {
+        return this.presentAlert(`${username} is already in this room`);
+      }
+    }
+    this.httpService
+      .addOrDeleteRoomUser(
+        username.toLowerCase(),
+        userid,
+        groupid,
+        roomid,
+        addTrue
+      )
+      .subscribe(
+        (res: { success: Boolean; userid: string; message: string }) => {
+          if (res.success) {
+            if (!addTrue) {
+              this.roomUsers.splice(i, 1);
+            } else {
+              console.log(res);
+              this.roomUsers.push({ id: res.userid, name: username });
+            }
           } else {
-            console.log(res)
-            this.roomUsers.push({id: res.userid, name: username})
+            this.presentAlert(res.message);
           }
-        } else {
-          this.presentAlert(res.message)
         }
-      });
+      );
   }
 
   /**
@@ -57,7 +76,7 @@ editMode: boolean = false;
    */
   async presentAlert(message): Promise<void> {
     const alert = await this.alertController.create({
-      header: "Error",
+      header: 'Error',
       buttons: ['OK'],
       message: message,
     });
@@ -71,11 +90,11 @@ editMode: boolean = false;
    * returns a list of users in that room
    */
 
-   getRoomUsers(): void{
-    this.httpService.getRoomUsers(this.groupid, this.roomid).subscribe(
-        (res) => {
-          this.roomUsers = res});
-        }
-
+  getRoomUsers(): void {
+    this.httpService
+      .getRoomUsers(this.groupid, this.roomid)
+      .subscribe((res) => {
+        this.roomUsers = res;
+      });
   }
-
+}
