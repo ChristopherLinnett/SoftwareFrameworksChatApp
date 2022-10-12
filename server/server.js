@@ -44,6 +44,8 @@ require('./routes/addorremovefromchannel')(app,db);
 require('./routes/createordeleteassistant')(app,db);
 require('./routes/getroomusers')(app,db);
 require('./routes/photoupload')(app,db, uuidv4);
+require('./routes/getroommessages')(app,db);
+
 
 
 })

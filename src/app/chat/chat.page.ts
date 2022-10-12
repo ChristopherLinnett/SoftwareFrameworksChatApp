@@ -1,6 +1,6 @@
 import { AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonContent, ModalController } from '@ionic/angular';
+import { AlertController, IonContent, ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { SocketService } from '../shared/services/socket.service';
@@ -27,13 +27,12 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
   roomid;
   image;
   roomname;
-  routeSub: Subscription;
-  joinNotifSub: Subscription;
-  leaveNotifSub: Subscription;
+  subscriptions: Subscription[] = []
   messages: { text: string | number; time: string }[];
   data: { message: string; time: string };
   user;
-  constructor(private router: Router, private socketService: SocketService, private httpService: HttpService, public authService: AuthService, private activatedRoute: ActivatedRoute, private modalController: ModalController, private imageService: ImageService) {
+  confirmReqSub: Subscription
+  constructor(private alertController: AlertController, private router: Router, private socketService: SocketService, private httpService: HttpService, public authService: AuthService, private activatedRoute: ActivatedRoute, private modalController: ModalController, private imageService: ImageService) {
   }
   /**
    * If the text is not empty, then send the message to the socket service
@@ -58,13 +57,59 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
    */
   async ngOnInit() {
     this.user = this.authService.getUser()
-    this.routeSub = this.activatedRoute.params.subscribe((params)=>{
+    var routeSub = this.activatedRoute.params.subscribe((params)=>{
       this.groupname = params.groupname
       this.roomid = params.id
       this.roomname = params.name
+      this.getRoomMessages(this.roomid)
+
     })
+    this.subscriptions.push(routeSub)
     this.initIoConnection();
   }
+
+  getRoomMessages(roomid){
+    this.httpService.getRoomMessages(roomid).subscribe((messagelist: [])=>{
+      console.log(messagelist)
+      this.messageList = messagelist
+    })
+  }
+
+  async presentAlert(username,userid) {
+    const startChat = await this.alertController.create({
+      header: `${username} is calling, Answer?`,
+      cssClass: 'custom-alert',
+      buttons: [{
+          text: 'No',
+          cssClass: 'alert-button-cancel',
+          role: 'cancel'
+        },
+        { handler: ()=>{
+          this.socketService.confirmChat(this.authService.getSavedUser().id, userid, this.roomid)
+          this.router.navigate([`video-chat/${userid}`], { relativeTo: this.activatedRoute })
+          return true
+        },
+          text: 'Yes',
+          cssClass: 'alert-button-confirm',
+          role: 'confirm'
+          
+        },
+      ],
+    });
+
+    await startChat.present()
+  }
+  
+  sendChatRequest(recipient){
+    this.socketService.sendChatReq(recipient, this.roomid)
+    this.confirmReqSub = this.socketService.getChatConfirm().subscribe((chatConfirm: any)=>{
+      if (chatConfirm.requester = this.authService.savedUser.id){
+        this.router.navigate([`video-chat/${recipient}`], { relativeTo: this.activatedRoute })
+
+      }
+    })
+  }
+
   ngAfterViewInit(): void {
     this.socketService.joinRoom(this.roomid)
     console.log('joinCalled')
@@ -78,15 +123,14 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
     //   }
     // });
     // modal.present();
-    this.router.navigate(['video-chat'], userid)
+    this.router.navigate(['/video-chat'], userid)
   }
 
   ngOnDestroy() {
     this.socketService.leaveRoom(this.roomid, this.user)
-    this.ioConnection.unsubscribe()
-    this.routeSub.unsubscribe()
-    this.joinNotifSub.unsubscribe()
-    this.leaveNotifSub.unsubscribe()
+    for (let sub of this.subscriptions){
+      sub.unsubscribe()
+    }
     if (this.image){
       this.image = null
       this.deleteImage()
@@ -100,7 +144,7 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
   private initIoConnection() {
     this.socketService.initSocket();
     console.log('initialising')
-    this.ioConnection = this.socketService
+    var ioConnection = this.socketService
       .getMessage()
       .subscribe((message: {message: string, time: Date, user: string, userid: string, img: string}) => {
         this.messageList.push({message: message.message, 
@@ -108,25 +152,32 @@ export class ChatPage implements OnInit, OnDestroy,AfterViewInit {
           timeVisible: false, user: message.user, userid: message.userid, img: message.img ? message.img : null});
           this.chatWindow.scrollToBottom()
       });
+      this.subscriptions.push(ioConnection)
 
-
-      this.imageConnection = this.socketService.getImage().subscribe((message: {imgFile: string, time: Date, user: string, img: string}) => {
+      var imageConnection = this.socketService.getImage().subscribe((message: {imgFile: string, time: Date, user: string, img: string}) => {
         console.log(message)
         this.messageList.push({messageImg: message.imgFile, time: `${new Date(message.time).getDate()}-${new Date(message.time).getMonth()}-${new Date(message.time).getFullYear().toString().slice(2,4)}`, timeVisible: false, user: message.user, img: message.img ? message.img : null});
           this.chatWindow.scrollToBottom()
       });
+      this.subscriptions.push(imageConnection)
 
-      this.joinNotifSub = this.socketService.getJoinNotifications().subscribe((joinMsg: string)=>{
+      var joinNotifSub = this.socketService.getJoinNotifications().subscribe((joinMsg: string)=>{
         if (!joinMsg.includes(JSON.parse(sessionStorage.getItem('savedUser')).username)){
         this.messageList.push({message: joinMsg, time: new Date(Date.now()), timeVisible: false, user: "System Message"})
         this.chatWindow.scrollToBottom()
         }
       })
-      this.leaveNotifSub = this.socketService.getLeaveNotifications().subscribe((leaveMsg)=>{
+      this.subscriptions.push(joinNotifSub)
+      var leaveNotifSub = this.socketService.getLeaveNotifications().subscribe((leaveMsg)=>{
         this.messageList.push({message: leaveMsg, time: new Date(Date.now()), timeVisible: false, user: "System Message"})
         this.chatWindow.scrollToBottom()
-
       })
+      this.subscriptions.push(leaveNotifSub)
+      var chatReqSub = this.socketService.getChatReq().subscribe((req: {user: string , userid: string, receiver: string})=>{
+        if (this.authService.getSavedUser().id != req.receiver){return}
+        this.presentAlert(req.user, req.userid)
+      });
+      this.subscriptions.push(chatReqSub)
   }
 
   checkMessage(message,prevMessage,i){

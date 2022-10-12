@@ -26,13 +26,15 @@ export class VideocallmodalComponent implements OnInit, OnDestroy {
   ngOnInit() {
 this.routeSnap = this.activatedRoute.params.subscribe((params)=>{
   this.recipient = params.recipient
+  this.streamCamera(this.recipient);
+
 })
 if(this.platform.is('android') || this.platform.is('mobileweb') || this.platform.is('ios')){
   this.isApp = true;
 } else {
   this.isApp = false;
-}  }
-  
+}  
+}
   ngOnDestroy() {
     this.endCall()
   }

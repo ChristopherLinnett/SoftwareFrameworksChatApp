@@ -37,7 +37,17 @@ initSocket() {
       this.socket.emit('image', {filename: filename, user: JSON.parse(sessionStorage.getItem('savedUser')).username, roomid: roomid})
       }
 
-
+  sendChatReq(recipient: string, roomid){
+    this.socket.emit('chatReq', {user: JSON.parse(sessionStorage.getItem('savedUser')).username,userid:JSON.parse(sessionStorage.getItem('savedUser')).id, roomid: roomid, recipient: recipient})
+  }
+  confirmChat(confirmer: string, requester: string, roomid: string){
+    this.socket.emit('confirmChat', {confirmer: confirmer, requester: requester, roomid: roomid})
+  }
+  getConfirmChat(){
+    return new Observable(observer=>{
+      this.socket.on('confirmChat', (data: any)=> {observer.next(data)})
+    })
+  }
   joinRoom(roomid){
     this.socket.emit('joinroom', {roomid: roomid, username: JSON.parse(sessionStorage.getItem('savedUser')).username})
   }
@@ -47,6 +57,16 @@ initSocket() {
   getImage(){
     return new Observable(observer=>{
       this.socket.on('imageMessage',(data: any)=> {observer.next(data)})
+    })
+  }
+  getChatReq(){
+    return new Observable(observer=>{
+      this.socket.on('chatReq', (data: any)=> {observer.next(data)})
+    })
+  }
+  getChatConfirm(){
+    return new Observable(observer=>{
+      this.socket.on('confirmChat', (data: any)=> {observer.next(data)})
     })
   }
 

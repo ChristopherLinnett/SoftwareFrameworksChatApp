@@ -19,7 +19,7 @@
   <div style="height:20px;"></div>
 
   <div *ngFor="let message of messageList,index as i" class="leftalign"  [ngClass]="{'rightalign' : message.user == authService.getUser()}">
-    <ion-avatar [routerLink]="'video-chat/'+message.userid" *ngIf="checkMessage(message,messageList[i-1],i)"><ion-img [src]="avatarDirectory(message.img)"></ion-img></ion-avatar>
+    <ion-avatar (click)="sendChatRequest(message.userid)" *ngIf="checkMessage(message,messageList[i-1],i)"><ion-img [src]="avatarDirectory(message.img)"></ion-img></ion-avatar>
       <p class="abovediv" *ngIf="i<1 || message.user != messageList[i-1].user">{{message.user == authService.getUser() ? 'you' : message.user}}</p>
     <p *ngIf="message.message">
       {{ message.message }}

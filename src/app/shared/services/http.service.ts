@@ -15,6 +15,12 @@ export class HttpService {
   loadingRequestMap: Map<string, boolean> = new Map<string, boolean>();
   constructor(private httpClient: HttpClient) {}
 
+
+
+  getRoomMessages(roomid){
+    return this.httpClient.post(this.URL+'roomMessage', {roomid})
+
+  }
   uploadImage(img){
     return this.httpClient.post(this.URL+'profile/updatephoto', img)
   }
